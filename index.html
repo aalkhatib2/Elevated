@@ -187,15 +187,24 @@
 
   /* ---------------- ladder ---------------- */
   /* Background fades lighter from EL to JP, top to bottom, so the
-     climb reads visually as well as in the copy. Stays within the
-     dark theme (slate lightening toward the steel accent) rather
-     than crossing into a light background. */
+     climb reads visually as well as in the copy. The glow lives on
+     the full-bleed section (not a padded inner panel), and eases
+     back down to the page background before the section ends, so
+     there are no hard box edges anywhere, only a soft rise and fall. */
+  #ladder {
+    background: linear-gradient(180deg,
+      var(--bg) 0%,
+      #10151A 20%,
+      #171E25 42%,
+      #1E262F 62%,
+      #232C36 80%,
+      #141A20 93%,
+      var(--bg) 100%);
+  }
   .ladder {
     margin-top: 76px;
     display: flex;
     flex-direction: column;
-    background: linear-gradient(180deg, #0A0B0D 0%, #141A1F 45%, #212B34 100%);
-    padding: 4px 32px 8px;
   }
   .rung {
     display: grid;
@@ -243,15 +252,6 @@
   .trait h3 { font-size: 21px; letter-spacing: -0.005em; line-height: 1.15; }
   .trait p { margin-top: 14px; color: var(--text-2); font-size: 16px; max-width: 44ch; }
 
-  /* ---------------- steps ---------------- */
-  .steps { margin-top: 76px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border-top: 1px solid var(--line); }
-  .step { padding: 40px 30px 0 0; border-right: 1px solid var(--line-soft); padding-left: 0; }
-  .step:first-child { padding-left: 0; }
-  .step:not(:first-child) { padding-left: 30px; }
-  .step:last-child { border-right: none; }
-  .step-mark { width: 34px; height: 2px; background: var(--steel); }
-  .step h3 { margin-top: 26px; font-size: 20px; }
-  .step p { margin-top: 14px; color: var(--text-2); font-size: 15.5px; }
 
   /* ---------------- divisions ---------------- */
   .divs { margin-top: 76px; display: grid; grid-template-columns: 1.35fr 1fr 1fr; gap: 20px; }
@@ -344,10 +344,6 @@
   @media (max-width: 1024px) {
     .divs { grid-template-columns: 1fr 1fr; }
     .div-live { grid-column: 1 / -1; min-height: 260px; }
-    .steps { grid-template-columns: 1fr 1fr; }
-    .step { border-right: none; border-bottom: 1px solid var(--line-soft); padding-bottom: 34px; }
-    .step:nth-child(odd) { padding-left: 0; }
-    .step:nth-child(even) { padding-left: 30px; border-left: 1px solid var(--line-soft); }
     .portal-grid { grid-template-columns: 1fr; gap: 48px; }
   }
 
@@ -365,8 +361,6 @@
     .closing-cta { flex-direction: column; }
     .band-grid { grid-template-columns: 1fr 1fr; }
     .traits { grid-template-columns: 1fr; gap: 44px; }
-    .steps { grid-template-columns: 1fr; }
-    .step, .step:nth-child(even) { padding-left: 0; border-left: none; }
     .divs { grid-template-columns: 1fr; }
     .div-live { grid-column: auto; }
     .div-card { min-height: 0; }
@@ -382,7 +376,6 @@
     <a href="#top" class="wordmark">Elevated</a>
     <div class="nav-links">
       <a href="#ladder">The Ladder</a>
-      <a href="#how">How It Runs</a>
       <a href="#divisions">Divisions</a>
     </div>
     <a href="#join" class="btn btn-primary btn-sm">Join the Team</a>
@@ -468,38 +461,6 @@
       </div>
 
       <p class="ladder-note rise">Exact thresholds are published per division and given to you in writing on day one.</p>
-    </div>
-  </section>
-
-  <!-- STEPS: verb labels, no stage numbering -->
-  <section class="sec" id="how">
-    <div class="wrap">
-      <div class="sec-head rise">
-        <h2>How it runs</h2>
-        <p class="lede">From the first form to your first paid week, without a two week silence in the middle.</p>
-      </div>
-      <div class="steps">
-        <div class="step rise">
-          <div class="step-mark"></div>
-          <h3>Apply</h3>
-          <p>One short form. We are asking what you have sold and where you are, not for a resume.</p>
-        </div>
-        <div class="step rise">
-          <div class="step-mark"></div>
-          <h3>Interview</h3>
-          <p>Booked straight into a calendar from the same link. No waiting on a callback that never comes.</p>
-        </div>
-        <div class="step rise">
-          <div class="step-mark"></div>
-          <h3>Onboard</h3>
-          <p>Paperwork, licensing where the division needs it, and your first territory. All in one place.</p>
-        </div>
-        <div class="step rise">
-          <div class="step-mark"></div>
-          <h3>Sell</h3>
-          <p>Your numbers appear in the portal the day they land. So does what you are owed for them.</p>
-        </div>
-      </div>
     </div>
   </section>
 
@@ -590,7 +551,6 @@
   <div class="foot wrap">
     <div class="foot-links">
       <a href="#ladder">The Ladder</a>
-      <a href="#how">How It Runs</a>
       <a href="#divisions">Divisions</a>
       <a href="#join">Join the Team</a>
     </div>
