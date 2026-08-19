@@ -1,0 +1,993 @@
+<!DOCTYPE html>
+<html lang="en"><head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apply — Elevated Field Sales</title>
+<style>/* Elevated — colour primitives.
+   The identity is a locked dark cinematic monochrome. There is no light theme
+   by design; every value below is authored against #0A0B0D. */
+:root{
+  /* --- surfaces (darkest -> lightest) --- */
+  --bg:#0A0B0D;            /* page ground, hero scrim base, button-primary ink */
+  --bg-2:#101216;          /* raised bands, closing block, standard cards */
+  --bg-3:#15181D;          /* the one "live"/highlighted card surface */
+
+  /* --- hairlines. Elevated separates with 1px rules, never with shadow. --- */
+  --line:rgba(255,255,255,0.10);      /* structural rule (top of a grid) */
+  --line-soft:rgba(255,255,255,0.055);/* section seams, cell dividers */
+
+  /* --- ink (brightest -> dimmest) --- */
+  --white:#F4F5F6;         /* button-primary fill, rung codes, on-photo type */
+  --text:#EDEEF0;          /* body default */
+  --text-2:#A7ADB6;        /* lede + supporting paragraphs */
+  --text-3:#C6CBD3;        /* lede when it sits on photography */
+  --muted:#767D87;         /* eyebrows, mono labels, footer, placeholders */
+
+  /* --- the single accent --- */
+  --steel:#9DB6CE;         /* used identically in every section, never tinted */
+  --steel-34:rgba(157,182,206,0.34); /* border of the live division card */
+  --steel-16:rgba(157,182,206,0.16); /* radial wash inside the live card */
+  --steel-40:rgba(157,182,206,0.40); /* underline on a steel link */
+
+  /* --- interaction washes on dark --- */
+  --ghost-fill:rgba(10,11,13,0.35);   /* ghost button rest */
+  --ghost-line:rgba(255,255,255,0.42);/* ghost button rest border */
+  --ghost-fill-hover:rgba(255,255,255,0.09);
+  --header-fill:rgba(10,11,13,0.82);  /* behind the sticky header blur */
+  --dash-line:rgba(255,255,255,0.22); /* dashed "value not supplied yet" chip */
+}
+</style>
+<style>/* Elevated — type. Three system stacks, no webfonts (see readme.md).
+   Display is a heavy grotesque set in caps; mono carries every label. */
+:root{
+  --display:"Arial Black","Helvetica Neue",Helvetica,"Segoe UI",system-ui,sans-serif; /* @kind font */
+  --body:"Helvetica Neue",Helvetica,"Segoe UI",system-ui,-apple-system,sans-serif; /* @kind font */
+  --mono:ui-monospace,"Cascadia Mono","SF Mono",Consolas,monospace; /* @kind font */
+
+  /* display weight is always 900 — there is no light or regular display */
+  --weight-display:900; /* @kind font */
+  --weight-body:400; /* @kind font */
+
+  /* --- fluid display sizes, exactly as authored on the site --- */
+  --size-hero:clamp(38px,7.4vw,104px);      /* h1, one per page @kind font */
+  --size-closing:clamp(32px,5.6vw,72px);    /* closing h2 @kind font */
+  --size-section:clamp(30px,4.6vw,58px);    /* section h2 @kind font */
+  --size-card-title:clamp(22px,2.4vw,33px); /* division card h3 @kind font */
+  --size-rung:clamp(26px,3.4vw,44px);       /* ladder rung code @kind font */
+
+  /* --- fixed sizes --- */
+  --size-h3:21px;        /* trait heading @kind font */
+  --size-h3-sm:20px;     /* step heading @kind font */
+  --size-h3-xs:18px;     /* portal item heading @kind font */
+  --size-wordmark:17px;  /* @kind font */
+  --size-lede:17px;      /* @kind font */
+  --size-body:16px;      /* @kind font */
+  --size-body-sm:15.5px; /* @kind font */
+  --size-note:15px;      /* @kind font */
+  --size-label:12px;     /* button, mono value chip, closing mail @kind font */
+  --size-label-sm:11px;  /* eyebrow, nav link, rung name, footer, button-sm @kind font */
+  --size-label-xs:10.5px;/* division status, stat label @kind font */
+
+  /* --- line heights --- */
+  /* h1/h2/h3 default */
+  --lh-display:0.95; /* @kind other */
+  --lh-hero:0.94;        /* @kind other */
+  --lh-rung:1;           /* @kind other */
+  --lh-h3:1.15;          /* @kind other */
+  --lh-body:1.6;         /* @kind other */
+  --lh-lede:1.65;        /* @kind other */
+  --lh-label:1.5;        /* @kind other */
+
+  /* --- tracking. Display tightens, labels open right up. --- */
+  --track-display:-0.02em;  /* @kind other */
+  --track-hero:0.005em;     /* @kind other */
+  --track-rung:-0.01em;     /* @kind other */
+  --track-h3:-0.005em;      /* @kind other */
+  --track-wordmark:0.30em;  /* @kind other */
+  --track-eyebrow:0.22em;   /* @kind other */
+  --track-status:0.2em;     /* division status, rung name @kind other */
+  --track-stat:0.18em;      /* @kind other */
+  --track-button:0.16em;    /* @kind other */
+  --track-nav:0.15em;       /* @kind other */
+  --track-foot:0.14em;      /* @kind other */
+
+  /* --- measure --- */
+  --measure-lede:62ch;      /* @kind other */
+  --measure-hero-lede:54ch; /* @kind other */
+  --measure-section:68ch;   /* @kind other */
+  --measure-rung:56ch;      /* @kind other */
+  --measure-note:60ch;      /* @kind other */
+  --measure-portal:46ch;    /* @kind other */
+  --measure-trait:44ch;     /* @kind other */
+  --measure-card:34ch;      /* @kind other */
+  --measure-hero-h1:16ch;   /* @kind other */
+  --measure-closing-h2:18ch;/* @kind other */
+}
+</style>
+<style>/* Elevated — webfonts.
+
+   The source page (Elevated/index.html) names three SYSTEM font stacks and
+   ships no font binaries. Two of the named families are not resolvable from a
+   stylesheet on their own, so they are handled here:
+
+   • "Cascadia Mono" — declared below, self-hosted from assets/fonts/. This is
+     the REAL family, not a substitute: Microsoft/Aaron Bell release it under
+     SIL OFL-1.1, so the exact face the brand names ships with the system.
+     Note that --mono lists `ui-monospace` first, so on macOS/iOS the OS mono
+     face still wins; this rule is what makes the brand's named face reachable
+     everywhere else. Variable, weights 200-700, latin subset.
+
+   • "Arial Black" — NOT declared. It is proprietary (Monotype) and cannot be
+     redistributed here, and substituting a look-alike would change the
+     wordmark. --display therefore keeps pointing at it and falls back through
+     Helvetica Neue -> Helvetica -> Segoe UI -> system-ui. Upload the licensed
+     file to close this gap; see readme.md > Typography. */
+
+@font-face{
+  font-family:"Cascadia Mono";
+  font-style:normal;
+  font-display:swap;
+  font-weight:200 700;
+  src:url("assets/cascadia-mono.woff2") format("woff2-variations");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+</style>
+<style>/* Elevated — measure and rhythm. Wide gutters, tall sections, dense labels. */
+:root{
+  --wrap:1280px;   /* the only content width */
+  --pad:24px;      /* gutter; drops to 18px under 768px */
+
+  --header-h:68px; /* sticky header, matched by hero padding-top offset */
+
+  /* vertical section rhythm */
+  --sec-y:132px;         /* standard section, top and bottom */
+  --sec-y-sm:84px;       /* under 768px */
+  --band-y:62px;         /* the stat band is deliberately shorter */
+  --closing-y-top:148px;
+  --closing-y-bottom:132px;
+  --footer-y-top:56px;
+  --footer-y-bottom:44px;
+  --hero-y:88px;         /* hero inner padding, 64px under 768px */
+
+  /* the step scale actually in use on the site */
+  --space-1:2px;
+  --space-2:9px;
+  --space-3:14px;
+  --space-4:18px;
+  --space-5:20px;
+  --space-6:22px;
+  --space-7:24px;
+  --space-8:26px;
+  --space-9:28px;
+  --space-10:30px;
+  --space-11:34px;
+  --space-12:40px;
+  --space-13:56px;
+  --space-14:72px;
+  --space-15:76px;
+
+  /* recurring gaps */
+  --gap-cta:14px;        /* between buttons */
+  --gap-cards:20px;      /* division grid */
+  --gap-nav:30px;        /* nav links */
+  --gap-rung:40px;       /* rung code column -> body */
+  --gap-traits:56px 72px;/* 2x2 trait grid, row then column */
+  --gap-portal:76px;     /* media <-> copy split */
+  --lead-grid:76px;      /* section head -> the grid beneath it */
+
+  /* fixed component metrics */
+  --rung-col:168px;      /* width of the code column in the ladder */
+  --step-mark-w:34px;    /* the steel tick above a step heading */
+  --step-mark-h:2px;
+  --card-min-h:320px;    /* division card */
+  --media-max-h:560px;   /* portal photograph */
+  --btn-pad:15px 30px;
+  --btn-pad-sm:11px 20px;
+  --cell-pad:30px 26px;  /* stat cell */
+  --card-pad:40px 34px;  /* division card */
+}
+</style>
+<style>/* Elevated — surface treatment. Sharp corners, hairlines, one film grain.
+   There are no box-shadows anywhere in this system. Depth comes from
+   value + 1px rules + a fixed grain plate over everything. */
+:root{
+  --radius:0;            /* every corner, every component, no exceptions @kind radius */
+  --border-w:1px;        /* @kind spacing */
+
+  --grain-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E"); /* @kind other */
+  --grain-size:140px;    /* the noise tile @kind spacing */
+  --grain-opacity:0.035; /* @kind other */
+  --grain-z:60; /* @kind other */ /* above all content, below nothing */
+
+  --blur-header:14px;    /* the only backdrop-filter in the system @kind spacing */
+
+  /* photography is desaturated and pushed, never fully b&w */
+  --img-filter:grayscale(0.35) contrast(1.06); /* @kind other */
+  --img-position:center 58%; /* @kind other */
+
+  /* the two-layer scrim that makes caps type legible over a photograph */
+  --scrim-hero:linear-gradient(180deg,rgba(10,11,13,0.88) 0%,rgba(10,11,13,0.55) 38%,rgba(10,11,13,0.72) 74%,#0A0B0D 100%),radial-gradient(120% 78% at 50% 62%,rgba(10,11,13,0) 30%,rgba(10,11,13,0.66) 100%); /* @kind color */
+
+  /* the single highlight wash, used only on a "live" card */
+  --wash-live:radial-gradient(115% 100% at 12% 0%,rgba(157,182,206,0.16) 0%,rgba(157,182,206,0) 62%); /* @kind color */
+
+  /* the only shadow in the system, and it is a text-shadow */
+  --text-shadow-hero:0 2px 40px rgba(0,0,0,0.55); /* @kind shadow */
+}
+</style>
+<style>/* Elevated — motion. One easing curve. Rise-and-fade on entry, nothing bounces. */
+:root{
+  /* the only custom curve in the system */
+  --ease:cubic-bezier(.16,1,.3,1); /* @kind other */
+  --dur-rise:.75s; /* @kind other */ /* scroll reveal */
+  --dur-hover:.25s; /* @kind other */ /* button fill / border colour */
+  --dur-link:.2s; /* @kind other */ /* text colour on a link */
+  --dur-press:.12s; /* @kind other */ /* the 1px push on :active */
+  --rise-y:22px;        /* how far content travels up on entry @kind spacing */
+  --stagger:0.07s; /* @kind other */ /* per-sibling delay, capped at 5 */
+  --press-y:1px;        /* :active translateY — nothing scales @kind spacing */
+}
+</style>
+<style>/* Elevated — semantic aliases. Reach for these in product code;
+   the primitives above exist so these can be re-pointed in one place. */
+:root{
+  /* text roles */
+  --text-heading:var(--white);
+  --text-body:var(--text);
+  --text-supporting:var(--text-2);
+  --text-on-photo:var(--text-3);
+  --text-label:var(--muted);
+  --text-accent:var(--steel);
+  --text-inverse:var(--bg);
+
+  /* surface roles */
+  --surface-page:var(--bg);
+  --surface-raised:var(--bg-2);
+  --surface-card:var(--bg-2);
+  --surface-card-live:var(--bg-3);
+  --surface-card-quiet:var(--bg);
+  --surface-header:var(--header-fill);
+
+  /* border roles */
+  --border-structural:var(--line);
+  --border-seam:var(--line-soft);
+  --border-card:var(--line);
+  --border-card-live:var(--steel-34);
+  --border-placeholder:var(--dash-line);
+
+  /* control roles */
+  --control-primary-fill:var(--white);
+  --control-primary-text:var(--bg);
+  --control-primary-fill-hover:var(--steel);
+  --control-ghost-fill:var(--ghost-fill);
+  --control-ghost-text:var(--white);
+  --control-ghost-border:var(--ghost-line);
+  --control-ghost-fill-hover:var(--ghost-fill-hover);
+  --control-ghost-border-hover:var(--white);
+
+  /* accent marks */
+  --mark-rule:var(--steel);        /* step tick, note left-border */
+  --mark-rule-w:2px; /* @kind spacing */
+}
+</style>
+<style>/* Elevated — the resets and page furniture that every surface assumes.
+   Kept minimal: box-sizing, the dark ground, and the fixed grain plate. */
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:var(--size-body);line-height:var(--lh-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+/* Grain lives on a fixed pseudo-element so it never scrolls with content. */
+body::after{content:"";position:fixed;inset:0;z-index:var(--grain-z);pointer-events:none;opacity:var(--grain-opacity);background-image:var(--grain-image)}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:var(--weight-display);text-transform:uppercase;letter-spacing:var(--track-display);line-height:var(--lh-display)}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--steel)}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto !important}}
+@media (max-width:767px){:root{--pad:18px}}
+</style>
+<style>/* Elevated Design System — global entry point.
+   Consumers link this one file. Imports only; never inline rules here. */
+/* Elevated — colour primitives.
+   The identity is a locked dark cinematic monochrome. There is no light theme
+   by design; every value below is authored against #0A0B0D. */
+:root{
+  /* --- surfaces (darkest -> lightest) --- */
+  --bg:#0A0B0D;            /* page ground, hero scrim base, button-primary ink */
+  --bg-2:#101216;          /* raised bands, closing block, standard cards */
+  --bg-3:#15181D;          /* the one "live"/highlighted card surface */
+
+  /* --- hairlines. Elevated separates with 1px rules, never with shadow. --- */
+  --line:rgba(255,255,255,0.10);      /* structural rule (top of a grid) */
+  --line-soft:rgba(255,255,255,0.055);/* section seams, cell dividers */
+
+  /* --- ink (brightest -> dimmest) --- */
+  --white:#F4F5F6;         /* button-primary fill, rung codes, on-photo type */
+  --text:#EDEEF0;          /* body default */
+  --text-2:#A7ADB6;        /* lede + supporting paragraphs */
+  --text-3:#C6CBD3;        /* lede when it sits on photography */
+  --muted:#767D87;         /* eyebrows, mono labels, footer, placeholders */
+
+  /* --- the single accent --- */
+  --steel:#9DB6CE;         /* used identically in every section, never tinted */
+  --steel-34:rgba(157,182,206,0.34); /* border of the live division card */
+  --steel-16:rgba(157,182,206,0.16); /* radial wash inside the live card */
+  --steel-40:rgba(157,182,206,0.40); /* underline on a steel link */
+
+  /* --- interaction washes on dark --- */
+  --ghost-fill:rgba(10,11,13,0.35);   /* ghost button rest */
+  --ghost-line:rgba(255,255,255,0.42);/* ghost button rest border */
+  --ghost-fill-hover:rgba(255,255,255,0.09);
+  --header-fill:rgba(10,11,13,0.82);  /* behind the sticky header blur */
+  --dash-line:rgba(255,255,255,0.22); /* dashed "value not supplied yet" chip */
+}
+
+/* Elevated — type. Three system stacks, no webfonts (see readme.md).
+   Display is a heavy grotesque set in caps; mono carries every label. */
+:root{
+  --display:"Arial Black","Helvetica Neue",Helvetica,"Segoe UI",system-ui,sans-serif; /* @kind font */
+  --body:"Helvetica Neue",Helvetica,"Segoe UI",system-ui,-apple-system,sans-serif; /* @kind font */
+  --mono:ui-monospace,"Cascadia Mono","SF Mono",Consolas,monospace; /* @kind font */
+
+  /* display weight is always 900 — there is no light or regular display */
+  --weight-display:900; /* @kind font */
+  --weight-body:400; /* @kind font */
+
+  /* --- fluid display sizes, exactly as authored on the site --- */
+  --size-hero:clamp(38px,7.4vw,104px);      /* h1, one per page @kind font */
+  --size-closing:clamp(32px,5.6vw,72px);    /* closing h2 @kind font */
+  --size-section:clamp(30px,4.6vw,58px);    /* section h2 @kind font */
+  --size-card-title:clamp(22px,2.4vw,33px); /* division card h3 @kind font */
+  --size-rung:clamp(26px,3.4vw,44px);       /* ladder rung code @kind font */
+
+  /* --- fixed sizes --- */
+  --size-h3:21px;        /* trait heading @kind font */
+  --size-h3-sm:20px;     /* step heading @kind font */
+  --size-h3-xs:18px;     /* portal item heading @kind font */
+  --size-wordmark:17px;  /* @kind font */
+  --size-lede:17px;      /* @kind font */
+  --size-body:16px;      /* @kind font */
+  --size-body-sm:15.5px; /* @kind font */
+  --size-note:15px;      /* @kind font */
+  --size-label:12px;     /* button, mono value chip, closing mail @kind font */
+  --size-label-sm:11px;  /* eyebrow, nav link, rung name, footer, button-sm @kind font */
+  --size-label-xs:10.5px;/* division status, stat label @kind font */
+
+  /* --- line heights --- */
+  /* h1/h2/h3 default */
+  --lh-display:0.95; /* @kind other */
+  --lh-hero:0.94;        /* @kind other */
+  --lh-rung:1;           /* @kind other */
+  --lh-h3:1.15;          /* @kind other */
+  --lh-body:1.6;         /* @kind other */
+  --lh-lede:1.65;        /* @kind other */
+  --lh-label:1.5;        /* @kind other */
+
+  /* --- tracking. Display tightens, labels open right up. --- */
+  --track-display:-0.02em;  /* @kind other */
+  --track-hero:0.005em;     /* @kind other */
+  --track-rung:-0.01em;     /* @kind other */
+  --track-h3:-0.005em;      /* @kind other */
+  --track-wordmark:0.30em;  /* @kind other */
+  --track-eyebrow:0.22em;   /* @kind other */
+  --track-status:0.2em;     /* division status, rung name @kind other */
+  --track-stat:0.18em;      /* @kind other */
+  --track-button:0.16em;    /* @kind other */
+  --track-nav:0.15em;       /* @kind other */
+  --track-foot:0.14em;      /* @kind other */
+
+  /* --- measure --- */
+  --measure-lede:62ch;      /* @kind other */
+  --measure-hero-lede:54ch; /* @kind other */
+  --measure-section:68ch;   /* @kind other */
+  --measure-rung:56ch;      /* @kind other */
+  --measure-note:60ch;      /* @kind other */
+  --measure-portal:46ch;    /* @kind other */
+  --measure-trait:44ch;     /* @kind other */
+  --measure-card:34ch;      /* @kind other */
+  --measure-hero-h1:16ch;   /* @kind other */
+  --measure-closing-h2:18ch;/* @kind other */
+}
+
+/* Elevated — webfonts.
+
+   The source page (Elevated/index.html) names three SYSTEM font stacks and
+   ships no font binaries. Two of the named families are not resolvable from a
+   stylesheet on their own, so they are handled here:
+
+   • "Cascadia Mono" — declared below, self-hosted from assets/fonts/. This is
+     the REAL family, not a substitute: Microsoft/Aaron Bell release it under
+     SIL OFL-1.1, so the exact face the brand names ships with the system.
+     Note that --mono lists `ui-monospace` first, so on macOS/iOS the OS mono
+     face still wins; this rule is what makes the brand's named face reachable
+     everywhere else. Variable, weights 200-700, latin subset.
+
+   • "Arial Black" — NOT declared. It is proprietary (Monotype) and cannot be
+     redistributed here, and substituting a look-alike would change the
+     wordmark. --display therefore keeps pointing at it and falls back through
+     Helvetica Neue -> Helvetica -> Segoe UI -> system-ui. Upload the licensed
+     file to close this gap; see readme.md > Typography. */
+
+@font-face{
+  font-family:"Cascadia Mono";
+  font-style:normal;
+  font-display:swap;
+  font-weight:200 700;
+  src:url("assets/cascadia-mono.woff2") format("woff2-variations");
+  unicode-range:U+0000-00FF,U+0131,U+0152-0153,U+02BB-02BC,U+02C6,U+02DA,U+02DC,U+0304,U+0308,U+0329,U+2000-206F,U+20AC,U+2122,U+2191,U+2193,U+2212,U+2215,U+FEFF,U+FFFD;
+}
+
+/* Elevated — measure and rhythm. Wide gutters, tall sections, dense labels. */
+:root{
+  --wrap:1280px;   /* the only content width */
+  --pad:24px;      /* gutter; drops to 18px under 768px */
+
+  --header-h:68px; /* sticky header, matched by hero padding-top offset */
+
+  /* vertical section rhythm */
+  --sec-y:132px;         /* standard section, top and bottom */
+  --sec-y-sm:84px;       /* under 768px */
+  --band-y:62px;         /* the stat band is deliberately shorter */
+  --closing-y-top:148px;
+  --closing-y-bottom:132px;
+  --footer-y-top:56px;
+  --footer-y-bottom:44px;
+  --hero-y:88px;         /* hero inner padding, 64px under 768px */
+
+  /* the step scale actually in use on the site */
+  --space-1:2px;
+  --space-2:9px;
+  --space-3:14px;
+  --space-4:18px;
+  --space-5:20px;
+  --space-6:22px;
+  --space-7:24px;
+  --space-8:26px;
+  --space-9:28px;
+  --space-10:30px;
+  --space-11:34px;
+  --space-12:40px;
+  --space-13:56px;
+  --space-14:72px;
+  --space-15:76px;
+
+  /* recurring gaps */
+  --gap-cta:14px;        /* between buttons */
+  --gap-cards:20px;      /* division grid */
+  --gap-nav:30px;        /* nav links */
+  --gap-rung:40px;       /* rung code column -> body */
+  --gap-traits:56px 72px;/* 2x2 trait grid, row then column */
+  --gap-portal:76px;     /* media <-> copy split */
+  --lead-grid:76px;      /* section head -> the grid beneath it */
+
+  /* fixed component metrics */
+  --rung-col:168px;      /* width of the code column in the ladder */
+  --step-mark-w:34px;    /* the steel tick above a step heading */
+  --step-mark-h:2px;
+  --card-min-h:320px;    /* division card */
+  --media-max-h:560px;   /* portal photograph */
+  --btn-pad:15px 30px;
+  --btn-pad-sm:11px 20px;
+  --cell-pad:30px 26px;  /* stat cell */
+  --card-pad:40px 34px;  /* division card */
+}
+
+/* Elevated — surface treatment. Sharp corners, hairlines, one film grain.
+   There are no box-shadows anywhere in this system. Depth comes from
+   value + 1px rules + a fixed grain plate over everything. */
+:root{
+  --radius:0;            /* every corner, every component, no exceptions @kind radius */
+  --border-w:1px;        /* @kind spacing */
+
+  --grain-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E"); /* @kind other */
+  --grain-size:140px;    /* the noise tile @kind spacing */
+  --grain-opacity:0.035; /* @kind other */
+  --grain-z:60; /* @kind other */ /* above all content, below nothing */
+
+  --blur-header:14px;    /* the only backdrop-filter in the system @kind spacing */
+
+  /* photography is desaturated and pushed, never fully b&w */
+  --img-filter:grayscale(0.35) contrast(1.06); /* @kind other */
+  --img-position:center 58%; /* @kind other */
+
+  /* the two-layer scrim that makes caps type legible over a photograph */
+  --scrim-hero:linear-gradient(180deg,rgba(10,11,13,0.88) 0%,rgba(10,11,13,0.55) 38%,rgba(10,11,13,0.72) 74%,#0A0B0D 100%),radial-gradient(120% 78% at 50% 62%,rgba(10,11,13,0) 30%,rgba(10,11,13,0.66) 100%); /* @kind color */
+
+  /* the single highlight wash, used only on a "live" card */
+  --wash-live:radial-gradient(115% 100% at 12% 0%,rgba(157,182,206,0.16) 0%,rgba(157,182,206,0) 62%); /* @kind color */
+
+  /* the only shadow in the system, and it is a text-shadow */
+  --text-shadow-hero:0 2px 40px rgba(0,0,0,0.55); /* @kind shadow */
+}
+
+/* Elevated — motion. One easing curve. Rise-and-fade on entry, nothing bounces. */
+:root{
+  /* the only custom curve in the system */
+  --ease:cubic-bezier(.16,1,.3,1); /* @kind other */
+  --dur-rise:.75s; /* @kind other */ /* scroll reveal */
+  --dur-hover:.25s; /* @kind other */ /* button fill / border colour */
+  --dur-link:.2s; /* @kind other */ /* text colour on a link */
+  --dur-press:.12s; /* @kind other */ /* the 1px push on :active */
+  --rise-y:22px;        /* how far content travels up on entry @kind spacing */
+  --stagger:0.07s; /* @kind other */ /* per-sibling delay, capped at 5 */
+  --press-y:1px;        /* :active translateY — nothing scales @kind spacing */
+}
+
+/* Elevated — semantic aliases. Reach for these in product code;
+   the primitives above exist so these can be re-pointed in one place. */
+:root{
+  /* text roles */
+  --text-heading:var(--white);
+  --text-body:var(--text);
+  --text-supporting:var(--text-2);
+  --text-on-photo:var(--text-3);
+  --text-label:var(--muted);
+  --text-accent:var(--steel);
+  --text-inverse:var(--bg);
+
+  /* surface roles */
+  --surface-page:var(--bg);
+  --surface-raised:var(--bg-2);
+  --surface-card:var(--bg-2);
+  --surface-card-live:var(--bg-3);
+  --surface-card-quiet:var(--bg);
+  --surface-header:var(--header-fill);
+
+  /* border roles */
+  --border-structural:var(--line);
+  --border-seam:var(--line-soft);
+  --border-card:var(--line);
+  --border-card-live:var(--steel-34);
+  --border-placeholder:var(--dash-line);
+
+  /* control roles */
+  --control-primary-fill:var(--white);
+  --control-primary-text:var(--bg);
+  --control-primary-fill-hover:var(--steel);
+  --control-ghost-fill:var(--ghost-fill);
+  --control-ghost-text:var(--white);
+  --control-ghost-border:var(--ghost-line);
+  --control-ghost-fill-hover:var(--ghost-fill-hover);
+  --control-ghost-border-hover:var(--white);
+
+  /* accent marks */
+  --mark-rule:var(--steel);        /* step tick, note left-border */
+  --mark-rule-w:2px; /* @kind spacing */
+}
+
+/* Elevated — the resets and page furniture that every surface assumes.
+   Kept minimal: box-sizing, the dark ground, and the fixed grain plate. */
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--text);font-family:var(--body);font-size:var(--size-body);line-height:var(--lh-body);-webkit-font-smoothing:antialiased;overflow-x:hidden}
+/* Grain lives on a fixed pseudo-element so it never scrolls with content. */
+body::after{content:"";position:fixed;inset:0;z-index:var(--grain-z);pointer-events:none;opacity:var(--grain-opacity);background-image:var(--grain-image)}
+h1,h2,h3{margin:0;font-family:var(--display);font-weight:var(--weight-display);text-transform:uppercase;letter-spacing:var(--track-display);line-height:var(--lh-display)}
+p{margin:0}
+a{color:inherit;text-decoration:none}
+a:hover{color:var(--steel)}
+@media (prefers-reduced-motion:reduce){*{scroll-behavior:auto !important}}
+@media (max-width:767px){:root{--pad:18px}}
+
+</style>
+<style>/* Elevated — shared chrome for standalone prototype pages (nav, footer, buttons, tags, labels). */
+* { box-sizing: border-box; }
+html, body { margin: 0; background: var(--bg); color: var(--text); font-family: var(--body); }
+a { color: var(--steel); text-decoration: none; }
+a:hover { color: var(--white); }
+h1, h2, h3 { font-family: var(--display); font-weight: var(--weight-display); text-transform: uppercase; letter-spacing: var(--track-display); line-height: var(--lh-display); margin: 0; }
+p { margin: 0; }
+button { font: inherit; }
+
+.wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--pad); }
+
+.proto-flag { background: var(--bg-2); border-bottom: 1px solid var(--line-soft); padding: 10px 0; }
+.proto-flag .wrap { display: flex; justify-content: space-between; gap: 16px; flex-wrap: wrap; font-family: var(--mono); font-size: var(--size-label-xs); letter-spacing: var(--track-stat); text-transform: uppercase; color: var(--muted); }
+.proto-flag b { color: var(--text-2); }
+
+header { position: sticky; top: 0; z-index: 50; background: var(--header-fill); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line-soft); }
+.nav { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+.wordmark { font-family: var(--display); font-weight: var(--weight-display); font-size: var(--size-wordmark); letter-spacing: var(--track-wordmark); text-transform: uppercase; color: var(--white); }
+.wordmark:hover { color: var(--white); }
+.nav-links { display: flex; gap: var(--gap-nav); }
+.nav-links a { font-family: var(--mono); font-size: var(--size-label-sm); letter-spacing: var(--track-nav); text-transform: uppercase; color: var(--text-2); transition: color .2s; }
+.nav-links a:hover { color: var(--white); }
+@media (max-width: 860px) { .nav-links { display: none; } }
+
+.mono-label { font-family: var(--mono); font-size: var(--size-label-sm); letter-spacing: var(--track-eyebrow); text-transform: uppercase; color: var(--muted); }
+.eyebrow { font-family: var(--mono); font-size: var(--size-label-sm); letter-spacing: var(--track-eyebrow); text-transform: uppercase; color: var(--muted); }
+.lede { font-size: var(--size-lede); line-height: var(--lh-lede); color: var(--text-2); max-width: var(--measure-lede); }
+
+.btn { display: inline-flex; align-items: center; justify-content: center; font-family: var(--mono); font-size: var(--size-label); letter-spacing: var(--track-button); text-transform: uppercase; padding: var(--btn-pad); border: 1px solid transparent; cursor: pointer; transition: background .25s, border-color .25s, color .25s; }
+.btn:active { transform: translateY(1px); }
+.btn-primary { background: var(--white); color: var(--bg); }
+.btn-primary:hover { background: var(--steel); }
+.btn-primary:disabled { opacity: 0.4; cursor: not-allowed; transform: none; }
+.btn-primary:disabled:hover { background: var(--white); }
+.btn-ghost { background: var(--ghost-fill); border-color: var(--ghost-line); color: var(--white); }
+.btn-ghost:hover { background: var(--ghost-fill-hover); border-color: var(--white); }
+.btn-sm { padding: var(--btn-pad-sm); font-size: var(--size-label-sm); letter-spacing: var(--track-nav); }
+
+.tag { display: inline-flex; align-items: center; gap: 8px; font-family: var(--mono); font-size: var(--size-label-xs); letter-spacing: var(--track-status); text-transform: uppercase; color: var(--muted); }
+.tag .dot { width: 6px; height: 6px; border-radius: 50%; background: var(--muted); }
+.tag.live { color: var(--steel); }
+.tag.live .dot { background: var(--steel); }
+
+footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 var(--footer-y-bottom); }
+.foot { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
+.foot-links { display: flex; gap: 24px; }
+.foot-links a { font-family: var(--mono); font-size: var(--size-label-sm); letter-spacing: var(--track-foot); text-transform: uppercase; color: var(--muted); transition: color .2s; }
+.foot-links a:hover { color: var(--text); }
+.foot p { font-family: var(--mono); font-size: var(--size-label-xs); letter-spacing: var(--track-foot); color: var(--muted); }
+</style>
+<style>
+  .shell { padding: 56px 0 100px; }
+  .apply-grid { display: grid; grid-template-columns: 1fr 400px; gap: 64px; align-items: start; }
+
+  /* ---- progress rail ---- */
+  .rail { display: flex; gap: 0; margin-bottom: 48px; border-top: 1px solid var(--line-soft); }
+  .rail-step { flex: 1; padding-top: 14px; border-top: 2px solid transparent; margin-top: -1px; transition: border-color .3s, color .3s; }
+  .rail-step .n { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; color: var(--muted); }
+  .rail-step .t { margin-top: 4px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .rail-step.done { border-top-color: var(--line); }
+  .rail-step.done .t, .rail-step.done .n { color: var(--text-2); }
+  .rail-step.active { border-top-color: var(--steel); }
+  .rail-step.active .t { color: var(--white); }
+  .rail-step.active .n { color: var(--steel); }
+
+  /* ---- steps ---- */
+  .step { display: none; animation: fade .4s cubic-bezier(.16,1,.3,1); }
+  .step.on { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .step h2 { font-size: clamp(30px, 4.2vw, 52px); max-width: 18ch; }
+  .step .lede { margin-top: 18px; }
+
+  /* ---- choice chips ---- */
+  .choices { margin-top: 38px; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); }
+  .choice {
+    background: var(--bg-2); padding: 22px 24px; cursor: pointer; text-align: left;
+    border: none; color: var(--text); font-family: var(--body); font-size: 16px;
+    transition: background .2s, color .2s; position: relative;
+  }
+  .choice:hover { background: var(--bg-3); }
+  .choice .ct { font-weight: 600; display: block; }
+  .choice .cs { display: block; margin-top: 5px; font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .choice[aria-pressed="true"] { background: var(--bg-3); box-shadow: inset 3px 0 0 var(--steel); }
+  .choice[aria-pressed="true"] .ct { color: var(--steel); }
+
+  /* ---- inputs ---- */
+  .field { margin-top: 34px; max-width: 460px; }
+  .field label { display: block; }
+  .field input {
+    width: 100%; margin-top: 12px; background: var(--bg-2); border: 1px solid var(--line);
+    color: var(--text); padding: 16px 18px; font-family: var(--body); font-size: 17px; border-radius: 0;
+    transition: border-color .2s;
+  }
+  .field input:focus { outline: none; border-color: var(--steel); }
+  .field input::placeholder { color: var(--muted); }
+
+  /* ---- slots ---- */
+  .slots { margin-top: 34px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 620px; }
+  .slot {
+    background: var(--bg-2); border: 1px solid var(--line-soft); padding: 16px 12px; cursor: pointer;
+    color: var(--text); font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-align: center;
+    transition: all .2s;
+  }
+  .slot:hover { border-color: var(--line); background: var(--bg-3); }
+  .slot .d { display: block; font-size: 10px; color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
+  .slot[aria-pressed="true"] { border-color: var(--steel); color: var(--steel); background: var(--bg-3); }
+
+  .actions { margin-top: 46px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .back { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); cursor: pointer; background: none; border: none; }
+  .back:hover { color: var(--text); }
+
+  /* ---- live match panel ---- */
+  .match { position: sticky; top: 96px; }
+  .match-inner { background: var(--bg-2); border: 1px solid var(--line-soft); padding: 28px; }
+  .match-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line-soft); padding-bottom: 16px; }
+  .match-row { padding: 16px 0; border-bottom: 1px solid var(--line-soft); }
+  .match-row:last-of-type { border-bottom: none; }
+  .match-row .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .match-row .v { margin-top: 6px; font-size: 16px; color: var(--text); font-weight: 600; }
+  .match-row .v.pending { color: var(--muted); font-weight: 400; font-style: italic; }
+  .match-verdict { margin-top: 20px; padding: 20px; background: var(--bg-3); border-left: 2px solid var(--steel); }
+  .match-verdict .h { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: 22px; letter-spacing: -0.02em; }
+  .match-verdict p { margin-top: 8px; font-size: 14px; color: var(--text-2); line-height: 1.55; }
+
+  /* ---- confirmation ---- */
+  .confirm { max-width: 700px; }
+  .confirm h2 { font-size: clamp(34px, 5vw, 64px); }
+  .receipt { margin-top: 40px; border: 1px solid var(--line); }
+  .receipt-head { background: var(--bg-3); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); gap: 16px; flex-wrap: wrap; }
+  .receipt-row { display: flex; justify-content: space-between; gap: 20px; padding: 18px 24px; border-bottom: 1px solid var(--line-soft); font-size: 15px; }
+  .receipt-row:last-child { border-bottom: none; }
+  .receipt-row .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  .receipt-row .v { color: var(--text); font-weight: 600; text-align: right; }
+  .receipt-row .v.steel { color: var(--steel); }
+
+  @media (max-width: 1000px) {
+    .apply-grid { grid-template-columns: 1fr; gap: 44px; }
+    .match { position: static; }
+  }
+  @media (max-width: 640px) {
+    .choices { grid-template-columns: 1fr; }
+    .slots { grid-template-columns: 1fr 1fr; }
+    .rail-step .t { display: none; }
+  }
+</style>
+</head>
+<body>
+
+
+
+<div class="proto-flag">
+</div>
+
+<header>
+  <div class="wrap">
+    <nav class="nav">
+      <a class="wordmark" href="index.html">Elevated</a>
+      <div class="nav-links">
+        <a href="index.html#ladder">Your Growth</a>
+        <a href="index.html#divisions">Campaigns</a>
+        <a href="prototypes/portal.html">Portal</a>
+      </div>
+      <a class="btn btn-ghost btn-sm" href="index.html">Back to Site</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell">
+  <div class="wrap">
+    <div class="apply-grid">
+      <div>
+        <div class="rail" id="rail">
+          <div class="rail-step active" data-s="1"><div class="n">01</div><div class="t">Information</div></div>
+          <div class="rail-step" data-s="2"><div class="n">02</div><div class="t">Experience</div></div>
+          <div class="rail-step" data-s="3"><div class="n">03</div><div class="t">Campaign</div></div>
+          <div class="rail-step" data-s="4"><div class="n">04</div><div class="t">Interview</div></div>
+        </div>
+
+        <!-- STEP 1 -->
+        <section class="step on" data-step="1">
+          <p class="eyebrow">Question one of four</p>
+          <h2 style="margin-top:18px">APPLY</h2>
+          <p class="lede" style="font-family:Times New Roman">Contact Info</p>
+          <div class="field">
+            <label class="mono-label" for="fullName">Full name</label>
+            <input id="fullName" type="text" placeholder="e.g. Jordan Reyes" autocomplete="name">
+          </div>
+          <div class="field">
+            <label class="mono-label" for="phone">Phone number</label>
+            <input id="phone" type="tel" placeholder="e.g. (801) 555-0142" autocomplete="tel">
+          </div>
+          <div class="field">
+            <label class="mono-label" for="email">Email</label>
+            <input id="email" type="email" placeholder="e.g. jordan@email.com" autocomplete="email">
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" data-next="" disabled="">Continue</button>
+          </div>
+        </section>
+
+        <!-- STEP 2 -->
+        <section class="step" data-step="2">
+          <p class="eyebrow">Question two of four</p>
+          <h2 style="margin-top:18px">What have you sold?</h2>
+          <div class="choices" role="group">
+            <button class="choice" data-q="exp" data-val="Door to door" aria-pressed="false">
+              <span class="ct">Door to door</span>
+              <span class="cs">Fiber, solar, alarms, pest, roofing — anything on a doorstep.</span>
+            </button>
+            <button class="choice" data-q="exp" data-val="Virtual Sales" aria-pressed="false">
+              <span class="ct">Virtual Sales</span>
+              <span class="cs">Setter, closer, or full cycle over the phone.</span>
+            </button>
+            <button class="choice" data-q="exp" data-val="Retail or B2B" aria-pressed="false">
+              <span class="ct">Retail or B2B</span>
+              <span class="cs">Floor sales, account work, or business-to-business.</span>
+            </button>
+            <button class="choice" data-q="exp" data-val="Nothing yet" aria-pressed="false">
+              <span class="ct">Nothing yet</span>
+              <span class="cs">No sales history. Everyone starts at EL regardless.</span>
+            </button>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" data-next="" disabled="">Continue</button>
+            <button class="back" data-back="">Back</button>
+          </div>
+        </section>
+
+        <!-- STEP 3 -->
+        <section class="step" data-step="3">
+          <p class="eyebrow">Question three of four</p>
+          <h2 style="margin-top:18px">Which campaign?</h2>
+          <p class="lede" style="font-family:Times New Roman;font-size:27px">Your Future Starts Here</p>
+          <div class="choices" id="campaignChoices" style="grid-template-columns:1fr">
+            <button class="choice" data-q="camp" data-val="Fiber" aria-pressed="false">
+              <span class="ct">Fiber <span class="tag live" style="margin-left:10px"><span class="dot"></span>Live and hiring</span></span>
+              <span class="cs">T-Mobile contracts, door to door. Active territories.</span>
+            </button>
+            <button class="choice" data-q="camp" data-val="Virtual High Ticket" aria-pressed="false">
+              <span class="ct">Virtual High Ticket <span class="tag live" style="margin-left:10px"><span class="dot"></span>Live and hiring</span></span>
+              <span class="cs">Closing peptide packages, fully remote.</span>
+            </button>
+            <button class="choice" data-q="camp" data-val="Life Insurance" aria-pressed="false">
+              <span class="ct">Life Insurance <span class="tag live" style="margin-left:10px"><span class="dot"></span>Live and hiring</span></span>
+              <span class="cs">Remote sales for licensed producers.</span>
+            </button>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" data-next="" disabled="">Continue</button>
+            <button class="back" data-back="">Back</button>
+          </div>
+        </section>
+
+        <!-- STEP 4 -->
+        <section class="step" data-step="4">
+          <p class="eyebrow">Question four of four</p>
+          <h2 style="margin-top:18px">Book the interview</h2>
+          <p class="lede">Straight into a real calendar from this same page. Twenty minutes, on video, with the person who runs the campaign.</p>
+          <div class="slots" id="slots"></div>
+          <div class="actions">
+            <button class="btn btn-primary" data-next="" disabled="">Confirm Interview</button>
+            <button class="back" data-back="">Back</button>
+          </div>
+        </section>
+
+        <!-- DONE -->
+        <section class="step confirm" data-step="5">
+          <p class="eyebrow">Confirmed</p>
+          <h2 style="margin-top:18px">You are booked.</h2>
+          <p class="lede">A calendar invite is on its way. If anything changes, reply to it — a person reads that inbox.</p>
+          <div class="receipt">
+            <div class="receipt-head">
+              <span class="mono-label" style="color:var(--text-2)">Application EL-2026-0871</span>
+              <span class="tag live"><span class="dot"></span>Interview set</span>
+            </div>
+            <div class="receipt-row"><span class="k">Full name</span><span class="v" data-fill="name">—</span></div>
+            <div class="receipt-row"><span class="k">Phone</span><span class="v" data-fill="phone">—</span></div>
+            <div class="receipt-row"><span class="k">Email</span><span class="v" data-fill="email">—</span></div>
+            <div class="receipt-row"><span class="k">Experience</span><span class="v" data-fill="exp">—</span></div>
+            <div class="receipt-row"><span class="k">Campaign</span><span class="v steel" data-fill="camp">—</span></div>
+            <div class="receipt-row"><span class="k">Interview</span><span class="v" data-fill="slot">—</span></div>
+            <div class="receipt-row"><span class="k">Starting rung</span><span class="v">EL — Entry Level</span></div>
+          </div>
+          <div class="actions">
+            <a class="btn btn-primary" href="prototypes/portal.html">Preview the Portal</a>
+            <a class="btn btn-ghost" href="prototypes/calculator.html">Run the Numbers</a>
+          </div>
+        </section>
+      </div>
+
+      <!-- MATCH PANEL -->
+      <aside class="match">
+        <div class="match-inner" style="width:370px;height:584px">
+          <div class="match-head">
+            <span class="mono-label">Your PROFILE</span>
+          </div>
+          <div class="match-row"><div class="k">Applicant</div><div class="v pending" data-panel="name">Not answered</div></div>
+          <div class="match-row"><div class="k">Experience</div><div class="v pending" data-panel="exp">Not answered</div></div>
+          <div class="match-row"><div class="k">Campaign</div><div class="v pending" data-panel="camp">Not answered</div></div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="foot-links">
+      <a href="index.html">Home</a>
+      <a href="prototypes/portal.html">Portal</a>
+      <a href="prototypes/calculator.html">Calculator</a>
+      <a href="mailto:careers@elevatedmgmt.co">Contact</a>
+    </div>
+    <p style="font-family:Courier New">Elevated Management Group</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var answers = { name: null, phone: null, email: null, exp: null, camp: null, slot: null };
+  var current = 1;
+
+  var steps = document.querySelectorAll('.step');
+  var railSteps = document.querySelectorAll('.rail-step');
+
+  function recommend() {
+    if (answers.exp === 'Virtual Sales') return 'Virtual High Ticket';
+    return 'Fiber';
+  }
+
+  function buildSlots() {
+    var host = document.getElementById('slots');
+    if (host.children.length) return;
+    var days  = ['Tue 21', 'Tue 21', 'Wed 22', 'Wed 22', 'Thu 23', 'Thu 23'];
+    var times = ['9:00 AM', '2:30 PM', '10:00 AM', '4:00 PM', '11:30 AM', '1:00 PM'];
+    days.forEach(function (d, i) {
+      var b = document.createElement('button');
+      b.className = 'slot';
+      b.setAttribute('aria-pressed', 'false');
+      b.dataset.q = 'slot';
+      b.dataset.val = d + ' at ' + times[i];
+      b.innerHTML = '<span class="d">' + d + '</span>' + times[i];
+      host.appendChild(b);
+    });
+  }
+
+  function updatePanel() {
+    var map = { name: answers.name, exp: answers.exp, camp: answers.camp };
+
+    Object.keys(map).forEach(function (k) {
+      var el = document.querySelector('[data-panel="' + k + '"]');
+      if (map[k]) { el.textContent = map[k]; el.classList.remove('pending'); }
+      else { el.textContent = 'Not answered'; el.classList.add('pending'); }
+    });
+  }
+
+  function markRecommended() {
+    document.querySelectorAll('#campaignChoices .choice .rec').forEach(function (old) { old.remove(); });
+  }
+
+  function validate() {
+    var btn = document.querySelector('.step[data-step="' + current + '"] [data-next]');
+    if (!btn) return;
+    var rules = { 1: !!(answers.name && answers.phone && answers.email), 2: !!answers.exp, 3: !!answers.camp, 4: !!answers.slot };
+    btn.disabled = !rules[current];
+  }
+
+  function show(n) {
+    current = n;
+    steps.forEach(function (s) { s.classList.toggle('on', +s.dataset.step === n); });
+    railSteps.forEach(function (r) {
+      var i = +r.dataset.s;
+      r.classList.toggle('active', i === n);
+      r.classList.toggle('done', i < n);
+    });
+    if (n === 3) markRecommended();
+    if (n === 4) buildSlots();
+    if (n === 5) {
+      var fills = {
+        name: answers.name,
+        phone: answers.phone,
+        email: answers.email,
+        exp: answers.exp,
+        camp: answers.camp,
+        slot: answers.slot
+      };
+      Object.keys(fills).forEach(function (k) {
+        document.querySelector('[data-fill="' + k + '"]').textContent = fills[k];
+      });
+    }
+    validate();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.addEventListener('click', function (e) {
+    var choice = e.target.closest('[data-q]');
+    if (choice) {
+      var q = choice.dataset.q;
+      choice.parentElement.querySelectorAll('[data-q="' + q + '"]').forEach(function (g) {
+        g.setAttribute('aria-pressed', 'false');
+      });
+      choice.setAttribute('aria-pressed', 'true');
+      answers[q] = choice.dataset.val;
+      updatePanel();
+      validate();
+      return;
+    }
+    if (e.target.closest('[data-next]')) { show(Math.min(current + 1, 5)); return; }
+    if (e.target.closest('[data-back]')) { show(Math.max(current - 1, 1)); return; }
+  });
+
+  ['fullName', 'phone', 'email'].forEach(function (id) {
+    document.getElementById(id).addEventListener('input', function (e) {
+      var key = id === 'fullName' ? 'name' : id;
+      answers[key] = e.target.value.trim() ? e.target.value.trim() : null;
+      updatePanel();
+      validate();
+    });
+  });
+})();
+</script>
+
+
+
+</body></html>

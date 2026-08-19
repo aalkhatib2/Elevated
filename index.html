@@ -369,8 +369,23 @@
     color: var(--muted);
     line-height: 1.7;
   }
-  .portal-media-logo { height: clamp(360px, 44vh, 520px); }
-  .portal-media-logo img { object-fit: cover; filter: none; }
+  /* The monogram is now a transparent mark rather than a photographed
+     plate, so the panel supplies the dark ground the old image had baked
+     in, and the artwork is contained inside it. Cover would crop the
+     letterform, which is the whole subject here. */
+  .portal-media-logo {
+    height: clamp(360px, 44vh, 520px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    background: var(--bg-2);
+    padding: clamp(28px, 5%, 56px);
+  }
+  .portal-media-logo img {
+    width: 100%; height: 100%;
+    object-fit: contain;
+    filter: none;
+  }
 
   /* ---------------- motion ---------------- */
   .rise { opacity: 0; transform: translateY(22px); transition: opacity .75s cubic-bezier(.16,1,.3,1), transform .75s cubic-bezier(.16,1,.3,1); }
@@ -542,7 +557,8 @@
     <div class="wrap">
       <div class="portal-grid">
         <div class="portal-media portal-media-logo rise">
-          <img src="elevated-logo.jpg" alt="The Elevated blackletter monogram" loading="lazy">
+          <img src="elevated-logo.webp" alt="The Elevated blackletter monogram"
+               width="549" height="715" loading="lazy" decoding="async">
         </div>
         <div>
           <div class="sec-head rise">
@@ -613,7 +629,7 @@
       <h2 class="rise">Become Elevated</h2>
       <p class="lede lede-tagline rise">Join the movement.</p>
       <div class="closing-cta rise">
-        <a href="mailto:careers@elevatedmgmt.co" class="btn btn-primary">Book Interview</a>
+        <a href="apply.html" class="btn btn-primary">Book Interview</a>
       </div>
       <p class="closing-mail rise">Or write to <a href="mailto:careers@elevatedmgmt.co">careers@elevatedmgmt.co</a>. Plain reply, one business day.</p>
     </div>
