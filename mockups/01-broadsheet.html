@@ -1,0 +1,456 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elevated Field Sales — Broadsheet</title>
+<style>
+  /* ============================================================
+     MOCKUP 01 — BROADSHEET
+     Editorial newspaper. Ink on cream, dense serif columns,
+     hairline rules, one red accent used like an editor's pen.
+     ============================================================ */
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,500;0,700;0,900;1,500&family=Source+Serif+4:ital,opsz,wght@0,8..60,400;0,8..60,600;1,8..60,400&family=IBM+Plex+Mono:wght@400;500&display=swap');
+
+  :root {
+    --paper:   #F4EFE6;
+    --paper-2: #EDE7DA;
+    --ink:     #1C1A16;
+    --ink-2:   #4A463E;
+    --faint:   #8B8577;
+    --rule:    #1C1A16;
+    --hair:    rgba(28,26,22,0.22);
+    --red:     #B3311F;
+
+    --display: "Playfair Display", Georgia, serif;
+    --body:    "Source Serif 4", Georgia, serif;
+    --mono:    "IBM Plex Mono", ui-monospace, monospace;
+    --wrap: 1200px;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--paper);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.6;
+  }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 28px; }
+  a { color: inherit; text-decoration: none; }
+  h1,h2,h3 { margin: 0; font-family: var(--display); font-weight: 900; line-height: 1.02; letter-spacing: -0.01em; }
+  p { margin: 0; }
+
+  .kicker {
+    font-family: var(--mono);
+    font-size: 11px;
+    letter-spacing: 0.24em;
+    text-transform: uppercase;
+    color: var(--red);
+  }
+
+  /* ---- masthead ---- */
+  .mast-top {
+    border-bottom: 1px solid var(--hair);
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+    color: var(--faint);
+  }
+  .mast-top .wrap { display: flex; justify-content: space-between; padding-top: 10px; padding-bottom: 10px; }
+  .masthead { border-bottom: 3px double var(--rule); }
+  .masthead .wrap { padding: 34px 28px 22px; text-align: center; }
+  .masthead h1 {
+    font-size: clamp(56px, 9vw, 128px);
+    text-transform: uppercase;
+    letter-spacing: 0.02em;
+  }
+  .mast-sub {
+    margin-top: 12px;
+    display: flex; justify-content: center; gap: 22px; flex-wrap: wrap;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ink-2);
+  }
+  .mast-sub span::before { content: "· "; color: var(--red); }
+  .mast-sub span:first-child::before { content: ""; }
+
+  nav.rail {
+    border-bottom: 1px solid var(--rule);
+    background: var(--paper);
+    position: sticky; top: 0; z-index: 40;
+  }
+  nav.rail .wrap { display: flex; justify-content: center; gap: 36px; padding-top: 12px; padding-bottom: 12px; flex-wrap: wrap; }
+  nav.rail a { font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; }
+  nav.rail a:hover { color: var(--red); }
+
+  /* ---- lead story ---- */
+  .lead { border-bottom: 1px solid var(--rule); }
+  .lead .wrap { display: grid; grid-template-columns: 2fr 1fr; gap: 0; }
+  .lead-main { padding: 56px 44px 56px 0; border-right: 1px solid var(--hair); }
+  .lead-main h2 { font-size: clamp(38px, 5vw, 72px); max-width: 16ch; }
+  .lead-main .dek {
+    margin-top: 22px; font-size: 21px; line-height: 1.5; font-style: italic; color: var(--ink-2); max-width: 52ch;
+  }
+  .byline { margin-top: 18px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--faint); }
+  .lead-cta { margin-top: 34px; display: flex; gap: 14px; flex-wrap: wrap; }
+
+  .btn {
+    display: inline-block; padding: 14px 28px;
+    font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase;
+    border: 1px solid var(--ink); cursor: pointer; transition: all .2s;
+  }
+  .btn-ink { background: var(--ink); color: var(--paper); }
+  .btn-ink:hover { background: var(--red); border-color: var(--red); }
+  .btn-line { background: transparent; color: var(--ink); }
+  .btn-line:hover { color: var(--red); border-color: var(--red); }
+
+  .lead-side { padding: 56px 0 56px 40px; display: flex; flex-direction: column; gap: 0; }
+  .side-item { padding: 20px 0; border-bottom: 1px solid var(--hair); }
+  .side-item:first-child { padding-top: 0; }
+  .side-item .n { font-family: var(--display); font-weight: 900; font-size: 34px; line-height: 1; }
+  .side-item .n em { font-style: normal; color: var(--red); }
+  .side-item .l { margin-top: 6px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--faint); }
+
+  /* ---- section headers ---- */
+  .sec { padding: 76px 0; border-bottom: 1px solid var(--rule); }
+  .sec-head { display: flex; align-items: baseline; gap: 24px; border-bottom: 4px solid var(--ink); padding-bottom: 14px; margin-bottom: 40px; }
+  .sec-head h2 { font-size: clamp(28px, 3.4vw, 44px); }
+  .sec-head .kicker { margin-left: auto; }
+  .lede { color: var(--ink-2); max-width: 62ch; font-size: 18px; }
+
+  /* ---- ladder as column rules ---- */
+  .cols-4 { display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; }
+  .col {
+    padding: 26px 26px 30px;
+    border-left: 1px solid var(--hair);
+  }
+  .col:first-child { border-left: none; padding-left: 0; }
+  .col .code {
+    font-family: var(--display); font-weight: 900; font-size: 58px; line-height: 1;
+  }
+  .col .code sup { font-size: 18px; color: var(--red); font-family: var(--mono); font-weight: 500; letter-spacing: 0; }
+  .col .name { margin-top: 8px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--red); }
+  .col p { margin-top: 14px; font-size: 15.5px; color: var(--ink-2); }
+  .footnote { margin-top: 34px; padding-top: 16px; border-top: 1px solid var(--hair); font-style: italic; color: var(--ink-2); font-size: 15.5px; max-width: 74ch; }
+
+  /* ---- traits: classified box ---- */
+  .classified { border: 2px solid var(--ink); padding: 8px; }
+  .classified-inner { border: 1px solid var(--ink); display: grid; grid-template-columns: 1fr 1fr; }
+  .trait { padding: 30px 32px; border-bottom: 1px solid var(--hair); }
+  .trait:nth-child(odd) { border-right: 1px solid var(--hair); }
+  .trait:nth-last-child(-n+2) { border-bottom: none; }
+  .trait h3 { font-size: 23px; font-weight: 700; }
+  .trait h3::before { content: "¶ "; color: var(--red); }
+  .trait p { margin-top: 10px; color: var(--ink-2); font-size: 15.5px; }
+
+  /* ---- steps ---- */
+  .steps { display: grid; grid-template-columns: repeat(4, 1fr); gap: 34px; counter-reset: step; }
+  .step { counter-increment: step; }
+  .step::before {
+    content: counter(step, upper-roman) ".";
+    font-family: var(--display); font-weight: 900; font-size: 40px; color: var(--red); display: block; line-height: 1;
+  }
+  .step h3 { margin-top: 12px; font-size: 22px; font-weight: 700; }
+  .step p { margin-top: 8px; font-size: 15.5px; color: var(--ink-2); }
+
+  /* ---- divisions ---- */
+  .divs { display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 0; border: 1px solid var(--ink); }
+  .div-cell { padding: 34px 32px; border-left: 1px solid var(--hair); display: flex; flex-direction: column; }
+  .div-cell:first-child { border-left: none; background: var(--paper-2); }
+  .status { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .status.live { color: var(--red); }
+  .status.hold { color: var(--faint); }
+  .div-cell h3 { margin-top: 12px; font-size: 30px; }
+  .div-cell p { margin-top: 10px; color: var(--ink-2); font-size: 15.5px; }
+  .div-cell .btn { margin-top: 24px; align-self: flex-start; padding: 10px 20px; font-size: 11px; }
+
+  /* ---- portal ---- */
+  .portal { display: grid; grid-template-columns: 1fr 1.1fr; gap: 60px; align-items: start; }
+  .ledger { border: 1px solid var(--ink); background: var(--paper-2); padding: 26px; }
+  .ledger-head { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; border-bottom: 1px solid var(--ink); padding-bottom: 10px; }
+  .ledger-row { display: flex; justify-content: space-between; padding: 13px 0; border-bottom: 1px dotted var(--hair); font-family: var(--mono); font-size: 13px; }
+  .ledger-row .amt { font-weight: 500; }
+  .ledger-row .amt.pos { color: var(--red); }
+  .p-item { padding: 20px 0; border-bottom: 1px solid var(--hair); }
+  .p-item:first-child { padding-top: 0; }
+  .p-item h3 { font-size: 21px; font-weight: 700; }
+  .p-item p { margin-top: 7px; color: var(--ink-2); font-size: 15.5px; max-width: 48ch; }
+
+  /* ---- closing ---- */
+  .closing { padding: 100px 0; text-align: center; border-bottom: 1px solid var(--rule); }
+  .closing h2 { font-size: clamp(40px, 6vw, 84px); text-transform: none; max-width: 14ch; margin: 0 auto; }
+  .closing h2 em { font-style: italic; color: var(--red); }
+  .closing .lede { margin: 24px auto 0; }
+  .closing-cta { margin-top: 38px; display: flex; justify-content: center; gap: 14px; flex-wrap: wrap; }
+  .closing-mail { margin-top: 28px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.1em; color: var(--faint); }
+  .closing-mail a { border-bottom: 1px solid var(--red); color: var(--red); }
+
+  footer { padding: 36px 0 44px; }
+  .foot { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--faint); }
+  .foot a:hover { color: var(--red); }
+  .foot-links { display: flex; gap: 24px; flex-wrap: wrap; }
+
+  @media (max-width: 960px) {
+    .lead .wrap { grid-template-columns: 1fr; }
+    .lead-main { border-right: none; padding-right: 0; }
+    .lead-side { padding-left: 0; border-top: 1px solid var(--hair); }
+    .cols-4, .steps { grid-template-columns: 1fr 1fr; }
+    .col { padding-left: 0; border-left: none; }
+    .divs { grid-template-columns: 1fr; }
+    .div-cell { border-left: none; border-top: 1px solid var(--hair); }
+    .portal { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .cols-4, .steps { grid-template-columns: 1fr; }
+    .classified-inner { grid-template-columns: 1fr; }
+    .trait:nth-child(odd) { border-right: none; }
+    .trait:nth-last-child(-n+2) { border-bottom: 1px solid var(--hair); }
+    .trait:last-child { border-bottom: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="mast-top">
+  <div class="wrap">
+    <span>Vol. I — Recruiting Edition</span>
+    <span>Field Sales Careers</span>
+    <span>Est. 2026</span>
+  </div>
+</div>
+
+<div class="masthead">
+  <div class="wrap">
+    <h1>Elevated</h1>
+    <div class="mast-sub">
+      <span>Field Sales</span><span>Fiber</span><span>Life Insurance</span><span>Autoglass</span><span>Everyone starts at EL</span>
+    </div>
+  </div>
+</div>
+
+<nav class="rail">
+  <div class="wrap">
+    <a href="#ladder">The Ladder</a>
+    <a href="#how">How It Runs</a>
+    <a href="#divisions">Divisions</a>
+    <a href="#portal">The Portal</a>
+    <a href="#join" style="color:var(--red)">Join the Team →</a>
+  </div>
+</nav>
+
+<section class="lead">
+  <div class="wrap">
+    <div class="lead-main">
+      <p class="kicker">The Lead Story</p>
+      <h2 style="margin-top:16px">Door-to-door, with the numbers printed where you can read them.</h2>
+      <p class="dek">A field sales organization that publishes its comp ladder, tells you which divisions are actually open, and shows you your money the day it lands.</p>
+      <p class="byline">Filed by Elevated Management Group — Careers Desk</p>
+      <div class="lead-cta">
+        <a class="btn btn-ink" href="#join">Join the Team</a>
+        <a class="btn btn-line" href="#ladder">Read the Comp Plan</a>
+      </div>
+    </div>
+    <aside class="lead-side">
+      <div class="side-item">
+        <div class="n"><em>—</em> Add figure</div>
+        <div class="l">Installs, 2026</div>
+      </div>
+      <div class="side-item">
+        <div class="n"><em>—</em> Add figure</div>
+        <div class="l">Paid to reps, 2026</div>
+      </div>
+      <div class="side-item">
+        <div class="n"><em>—</em> Add figure</div>
+        <div class="l">Active territories</div>
+      </div>
+      <div class="side-item" style="border-bottom:none">
+        <div class="n"><em>—</em> Add figure</div>
+        <div class="l">Reps promoted past EL</div>
+      </div>
+    </aside>
+  </div>
+</section>
+
+<section class="sec" id="ladder">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Four rungs. No mystery.</h2>
+      <p class="kicker">The Ladder</p>
+    </div>
+    <p class="lede">Most comp plans are explained once, in a room, by someone who benefits from you misremembering it. This one is written down and it does not move.</p>
+    <div class="cols-4" style="margin-top:44px">
+      <div class="col">
+        <div class="code">EL<sup>01</sup></div>
+        <div class="name">Entry Level</div>
+        <p>You sell, you get paid on what you sell. Everyone starts here and nobody skips it, including the people running divisions today.</p>
+      </div>
+      <div class="col">
+        <div class="code">STL<sup>02</sup></div>
+        <div class="name">Sales Team Leader</div>
+        <p>Your own production plus the first reps you bring in. This is the first rung where your team pays you, not just your own knocks.</p>
+      </div>
+      <div class="col">
+        <div class="code">STC<sup>03</sup></div>
+        <div class="name">Sales Team Captain</div>
+        <p>A team deep enough to run without you in every conversation. You are coaching leaders now, not just closing your own doors.</p>
+      </div>
+      <div class="col">
+        <div class="code">JP<sup>04</sup></div>
+        <div class="name">Junior Partner</div>
+        <p>You are building the organization instead of working inside it. The top of the published ladder, and the start of a different conversation.</p>
+      </div>
+    </div>
+    <p class="footnote">Advancement is your production plus the team you have built. Exact thresholds are published per division and given to you in writing on day one.</p>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>This is not for everyone</h2>
+      <p class="kicker">Notice to Applicants</p>
+    </div>
+    <p class="lede" style="margin-bottom:36px">Plenty of people do well in this work. Not all of them do well here. The reps who last tend to look like this.</p>
+    <div class="classified">
+      <div class="classified-inner">
+        <div class="trait">
+          <h3>You want the numbers in writing</h3>
+          <p>Handshakes are fine. Published thresholds are better. You read the comp plan before you sign it.</p>
+        </div>
+        <div class="trait">
+          <h3>You would rather be measured than managed</h3>
+          <p>Your production speaks for itself, and you prefer it that way. Nobody has to hover.</p>
+        </div>
+        <div class="trait">
+          <h3>You are building a team, not just a check</h3>
+          <p>The ladder pays you for the people you develop, not only the doors you knock yourself.</p>
+        </div>
+        <div class="trait">
+          <h3>You knock when the weather is bad</h3>
+          <p>Consistency beats intensity. The reps who last show up on the days nobody else does.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>How it runs</h2>
+      <p class="kicker">The Process</p>
+    </div>
+    <p class="lede" style="margin-bottom:44px">From the first form to your first paid week, without a two week silence in the middle.</p>
+    <div class="steps">
+      <div class="step">
+        <h3>Apply</h3>
+        <p>One short form. We are asking what you have sold and where you are, not for a resume.</p>
+      </div>
+      <div class="step">
+        <h3>Interview</h3>
+        <p>Booked straight into a calendar from the same link. No waiting on a callback that never comes.</p>
+      </div>
+      <div class="step">
+        <h3>Onboard</h3>
+        <p>Paperwork, licensing where the division needs it, and your first territory. All in one place.</p>
+      </div>
+      <div class="step">
+        <h3>Sell</h3>
+        <p>Your numbers appear in the portal the day they land. So does what you are owed for them.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="divisions">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>What is actually open</h2>
+      <p class="kicker">Divisions</p>
+    </div>
+    <p class="lede" style="margin-bottom:40px">Three divisions, at three different stages. We would rather tell you which is which than have you find out in week two.</p>
+    <div class="divs">
+      <div class="div-cell">
+        <p class="status live">● Live and hiring</p>
+        <h3>Fiber</h3>
+        <p>Door-to-door fiber internet. Active territories, active installs, and the division every new rep can start in today.</p>
+        <a class="btn btn-ink" href="#join">Join the Team</a>
+      </div>
+      <div class="div-cell">
+        <p class="status hold">○ In training</p>
+        <h3>Life Insurance</h3>
+        <p>Licensing-backed and building its first cohort. Openings announced to current reps first.</p>
+      </div>
+      <div class="div-cell">
+        <p class="status hold">○ Queued</p>
+        <h3>Autoglass</h3>
+        <p>Scoped and waiting on its lane. When it opens, the ladder and portal work exactly the same way.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="portal">
+  <div class="wrap">
+    <div class="sec-head">
+      <h2>Your numbers, the day they land</h2>
+      <p class="kicker">The Portal</p>
+    </div>
+    <div class="portal" style="margin-top:8px">
+      <div class="ledger">
+        <div class="ledger-head"><span>Rep Ledger — This Week</span><span>Live</span></div>
+        <div class="ledger-row"><span>Mon — 3 installs</span><span class="amt pos">+ posted</span></div>
+        <div class="ledger-row"><span>Tue — 2 installs</span><span class="amt pos">+ posted</span></div>
+        <div class="ledger-row"><span>Wed — 4 installs</span><span class="amt pos">+ posted</span></div>
+        <div class="ledger-row"><span>Thu — 1 install</span><span class="amt pos">+ posted</span></div>
+        <div class="ledger-row"><span>Team override</span><span class="amt">accruing</span></div>
+        <div class="ledger-row" style="border-bottom:none"><span>Owed to date</span><span class="amt pos">visible daily</span></div>
+      </div>
+      <div>
+        <p class="lede" style="margin-bottom:20px">Every rep gets a login. Not a weekly screenshot in a group chat.</p>
+        <div class="p-item">
+          <h3>My money</h3>
+          <p>What you have earned, what has cleared, and what is queued. Down to the install.</p>
+        </div>
+        <div class="p-item">
+          <h3>My production</h3>
+          <p>Every sale you have made, the day it landed, and its status.</p>
+        </div>
+        <div class="p-item">
+          <h3>My team</h3>
+          <p>Once you are past EL: who is producing, who needs help, what your overrides look like.</p>
+        </div>
+        <div class="p-item" style="border-bottom:none">
+          <h3>Where I stand</h3>
+          <p>Your rung, your thresholds, and exactly how far you are from the next one.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="closing" id="join">
+  <div class="wrap">
+    <p class="kicker">Situations Vacant</p>
+    <h2 style="margin-top:18px">Everyone starts <em>at EL.</em></h2>
+    <p class="lede">Tell us what you have sold and where you are. We will tell you which division is open and what the first rung pays.</p>
+    <div class="closing-cta">
+      <a class="btn btn-ink" href="mailto:careers@elevatedmgmt.co">Join the Team</a>
+      <a class="btn btn-line" href="#ladder">Re-read the Ladder</a>
+    </div>
+    <p class="closing-mail">Or write to <a href="mailto:careers@elevatedmgmt.co">careers@elevatedmgmt.co</a>. Plain reply, one business day.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div class="foot-links">
+      <a href="#ladder">The Ladder</a>
+      <a href="#divisions">Divisions</a>
+      <a href="#portal">Portal</a>
+      <a href="mailto:careers@elevatedmgmt.co">Contact</a>
+    </div>
+    <p>Elevated Management Group</p>
+  </div>
+</footer>
+
+</body>
+</html>

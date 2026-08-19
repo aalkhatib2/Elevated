@@ -1,0 +1,455 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elevated Field Sales — Poster</title>
+<style>
+  /* ============================================================
+     MOCKUP 04 — POSTER
+     Brutalist street poster. Acid yellow + black, giant condensed
+     type, hard borders, marquee ticker, stamped labels.
+     ============================================================ */
+  @import url('https://fonts.googleapis.com/css2?family=Anton&family=Archivo+Narrow:wght@500;600;700&family=Space+Mono:wght@400;700&display=swap');
+
+  :root {
+    --acid:   #E8FF2B;
+    --black:  #111111;
+    --off:    #1B1B18;
+    --paper:  #F2F0E4;
+    --ink2:   #3E3E38;
+    --red:    #E33D22;
+
+    --display: "Anton", "Arial Narrow", sans-serif;
+    --body:    "Archivo Narrow", "Segoe UI", sans-serif;
+    --mono:    "Space Mono", ui-monospace, monospace;
+    --wrap: 1240px;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--acid);
+    color: var(--black);
+    font-family: var(--body);
+    font-size: 17px;
+    line-height: 1.55;
+    overflow-x: hidden;
+  }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 24px; }
+  a { color: inherit; text-decoration: none; }
+  h1,h2,h3 { margin: 0; font-family: var(--display); font-weight: 400; text-transform: uppercase; line-height: 0.92; letter-spacing: 0.005em; }
+  p { margin: 0; }
+
+  .stamp {
+    display: inline-block; padding: 6px 12px; border: 3px solid var(--black);
+    font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.12em; text-transform: uppercase;
+    transform: rotate(-2deg); background: var(--paper);
+  }
+  .lede { font-size: 19px; font-weight: 500; max-width: 56ch; }
+
+  /* ---- nav ---- */
+  header { position: sticky; top: 0; z-index: 50; background: var(--black); color: var(--acid); border-bottom: 4px solid var(--black); }
+  .nav { height: 64px; display: flex; align-items: center; justify-content: space-between; gap: 20px; }
+  .wordmark { font-family: var(--display); font-size: 24px; letter-spacing: 0.14em; text-transform: uppercase; }
+  .nav-links { display: flex; gap: 26px; }
+  .nav-links a { font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+  .nav-links a:hover { color: var(--paper); text-decoration: underline; text-underline-offset: 4px; }
+  .nav-cta { background: var(--acid); color: var(--black); padding: 10px 18px; font-family: var(--mono); font-weight: 700; font-size: 12px; letter-spacing: 0.08em; text-transform: uppercase; border: 3px solid var(--acid); }
+  .nav-cta:hover { background: var(--black); color: var(--acid); }
+
+  /* ---- hero ---- */
+  .hero { padding: 64px 0 0; }
+  .hero h1 {
+    font-size: clamp(88px, 17.5vw, 264px);
+    text-align: center;
+    -webkit-text-stroke: 0;
+  }
+  .hero h1 .outline {
+    color: transparent;
+    -webkit-text-stroke: 3px var(--black);
+  }
+  .hero-sub {
+    margin-top: 8px; display: flex; justify-content: center; gap: 18px; flex-wrap: wrap; padding-bottom: 40px;
+  }
+  .hero-cta-band { background: var(--black); color: var(--acid); padding: 34px 0 42px; border-top: 6px solid var(--black); }
+  .hero-cta-inner { display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap; }
+  .hero-cta-inner .lede { color: var(--paper); max-width: 52ch; font-size: 18px; }
+  .btn {
+    display: inline-block; padding: 18px 36px;
+    font-family: var(--display); font-size: 20px; letter-spacing: 0.06em; text-transform: uppercase;
+    border: 4px solid var(--black); cursor: pointer;
+    box-shadow: 6px 6px 0 var(--black);
+    transition: transform .12s, box-shadow .12s;
+    background: var(--acid); color: var(--black);
+  }
+  .btn:hover { transform: translate(3px,3px); box-shadow: 2px 2px 0 var(--black); }
+  .btn.on-dark { box-shadow: 6px 6px 0 var(--acid); border-color: var(--acid); }
+  .btn.on-dark:hover { box-shadow: 2px 2px 0 var(--acid); }
+  .btn-paper { background: var(--paper); }
+
+  /* ---- ticker ---- */
+  .ticker { background: var(--red); color: var(--paper); overflow: hidden; border-top: 4px solid var(--black); border-bottom: 4px solid var(--black); }
+  .ticker-track {
+    display: flex; gap: 48px; white-space: nowrap; padding: 12px 0;
+    font-family: var(--mono); font-weight: 700; font-size: 13px; letter-spacing: 0.14em; text-transform: uppercase;
+    animation: tick 22s linear infinite; width: max-content;
+  }
+  @keyframes tick { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+  /* ---- numbers ---- */
+  .nums { background: var(--paper); border-bottom: 4px solid var(--black); }
+  .nums-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .num { padding: 38px 26px; border-right: 4px solid var(--black); }
+  .num:last-child { border-right: none; }
+  .num .v { font-family: var(--display); font-size: 44px; text-transform: uppercase; }
+  .num .k { margin-top: 6px; font-family: var(--mono); font-size: 11px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--ink2); }
+
+  /* ---- sections ---- */
+  .sec { padding: 90px 0; }
+  .sec.dark { background: var(--black); color: var(--paper); }
+  .sec.paper { background: var(--paper); border-top: 4px solid var(--black); border-bottom: 4px solid var(--black); }
+  .sec-head h2 { font-size: clamp(48px, 7.5vw, 110px); }
+  .sec.dark .sec-head h2 { color: var(--acid); }
+  .sec-head .lede { margin-top: 20px; }
+
+  /* ---- ladder: giant stack ---- */
+  .stack { margin-top: 50px; }
+  .rung {
+    display: grid; grid-template-columns: 220px 1fr auto; gap: 30px; align-items: center;
+    border: 4px solid var(--paper); margin-top: -4px; padding: 26px 30px;
+  }
+  .rung:hover { background: var(--acid); color: var(--black); border-color: var(--acid); position: relative; z-index: 2; }
+  .rung .code { font-family: var(--display); font-size: 72px; line-height: 1; }
+  .rung:hover .code { color: var(--black); }
+  .rung .code { color: var(--acid); }
+  .rung .body h3 { font-size: 24px; letter-spacing: 0.02em; }
+  .rung .body p { margin-top: 8px; font-size: 16px; opacity: 0.85; }
+  .rung .lvl { font-family: var(--mono); font-weight: 700; font-size: 13px; letter-spacing: 0.1em; }
+  .ladder-note { margin-top: 34px; font-family: var(--mono); font-size: 13px; font-weight: 700; letter-spacing: 0.04em; text-transform: uppercase; max-width: 80ch; }
+
+  /* ---- traits: torn flyers ---- */
+  .flyers { margin-top: 54px; display: grid; grid-template-columns: 1fr 1fr; gap: 34px; }
+  .flyer { background: var(--paper); border: 4px solid var(--black); padding: 30px 30px 36px; box-shadow: 10px 10px 0 var(--black); }
+  .flyer:nth-child(1) { transform: rotate(-1.2deg); }
+  .flyer:nth-child(2) { transform: rotate(0.8deg); }
+  .flyer:nth-child(3) { transform: rotate(0.9deg); }
+  .flyer:nth-child(4) { transform: rotate(-0.7deg); }
+  .flyer h3 { font-size: 30px; }
+  .flyer p { margin-top: 12px; font-size: 16px; color: var(--ink2); }
+  .flyer .stamp { margin-bottom: 16px; }
+
+  /* ---- steps ---- */
+  .steps { margin-top: 54px; display: grid; grid-template-columns: repeat(4, 1fr); gap: 0; border: 4px solid var(--black); background: var(--black); grid-gap: 4px; }
+  .step { background: var(--acid); padding: 28px 24px 34px; }
+  .step .n { font-family: var(--display); font-size: 60px; line-height: 1; }
+  .step h3 { margin-top: 8px; font-size: 26px; }
+  .step p { margin-top: 10px; font-size: 15.5px; }
+
+  /* ---- divisions ---- */
+  .divs { margin-top: 54px; display: grid; grid-template-columns: 1.4fr 1fr 1fr; gap: 26px; }
+  .div-card { border: 4px solid var(--black); padding: 32px 30px 38px; display: flex; flex-direction: column; background: var(--paper); }
+  .div-card.live { background: var(--black); color: var(--paper); box-shadow: 10px 10px 0 var(--red); }
+  .div-card h3 { font-size: 46px; margin-top: 14px; }
+  .div-card.live h3 { color: var(--acid); }
+  .div-card p { margin-top: 12px; font-size: 16px; }
+  .div-card .btn { margin-top: 28px; align-self: flex-start; font-size: 17px; padding: 14px 26px; }
+
+  /* ---- portal ---- */
+  .portal-grid { margin-top: 54px; display: grid; grid-template-columns: 1fr 1fr; gap: 54px; align-items: start; }
+  .receipt {
+    background: var(--paper); border: 4px solid var(--black); box-shadow: 10px 10px 0 var(--black);
+    padding: 26px; font-family: var(--mono); transform: rotate(-0.8deg);
+  }
+  .receipt .rh { text-align: center; font-weight: 700; font-size: 14px; letter-spacing: 0.14em; text-transform: uppercase; border-bottom: 3px dashed var(--black); padding-bottom: 12px; }
+  .receipt .rr { display: flex; justify-content: space-between; padding: 10px 0; border-bottom: 1px dashed rgba(17,17,17,0.35); font-size: 13px; }
+  .receipt .rr:last-child { border-bottom: none; font-weight: 700; }
+  .p-item { border-top: 4px solid var(--black); padding: 20px 0; }
+  .p-item:last-child { border-bottom: 4px solid var(--black); }
+  .p-item h3 { font-size: 28px; }
+  .p-item p { margin-top: 8px; font-size: 16px; color: var(--ink2); max-width: 46ch; }
+
+  /* ---- closing ---- */
+  .closing { background: var(--black); color: var(--paper); padding: 110px 0 100px; text-align: center; }
+  .closing h2 { font-size: clamp(64px, 12vw, 180px); color: var(--acid); }
+  .closing .lede { margin: 26px auto 0; color: var(--paper); }
+  .closing-cta { margin-top: 44px; display: flex; justify-content: center; gap: 22px; flex-wrap: wrap; }
+  .closing-mail { margin-top: 34px; font-family: var(--mono); font-size: 13px; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase; }
+  .closing-mail a { color: var(--acid); text-decoration: underline; text-underline-offset: 5px; }
+
+  footer { background: var(--black); color: var(--paper); border-top: 4px solid var(--acid); padding: 30px 0 40px; }
+  .foot { display: flex; justify-content: space-between; gap: 22px; flex-wrap: wrap; font-family: var(--mono); font-size: 12px; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; }
+  .foot a:hover { color: var(--acid); }
+  .foot-links { display: flex; gap: 26px; flex-wrap: wrap; }
+
+  @media (max-width: 960px) {
+    .nav-links { display: none; }
+    .nums-grid { grid-template-columns: 1fr 1fr; }
+    .num:nth-child(2) { border-right: none; }
+    .num:nth-child(-n+2) { border-bottom: 4px solid var(--black); }
+    .rung { grid-template-columns: 1fr; gap: 12px; }
+    .steps { grid-template-columns: 1fr 1fr; }
+    .divs { grid-template-columns: 1fr; }
+    .portal-grid { grid-template-columns: 1fr; }
+    .flyers { grid-template-columns: 1fr; }
+  }
+  @media (max-width: 600px) {
+    .steps { grid-template-columns: 1fr; }
+    .hero-cta-inner { flex-direction: column; align-items: flex-start; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav class="nav">
+      <span class="wordmark">Elevated</span>
+      <div class="nav-links">
+        <a href="#ladder">Ladder</a>
+        <a href="#how">Process</a>
+        <a href="#divisions">Divisions</a>
+        <a href="#portal">Portal</a>
+      </div>
+      <a class="nav-cta" href="#join">Join the Team</a>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <h1>Knock<br><span class="outline">Louder.</span></h1>
+    <div class="hero-sub">
+      <span class="stamp">Field Sales</span>
+      <span class="stamp" style="transform:rotate(1.5deg)">Comp in writing</span>
+      <span class="stamp" style="transform:rotate(-1deg); background:var(--red); color:var(--paper); border-color:var(--black)">Now hiring</span>
+    </div>
+  </div>
+  <div class="hero-cta-band">
+    <div class="wrap hero-cta-inner">
+      <p class="lede">Door-to-door field sales with a published comp ladder, honestly-labeled divisions, and a portal that shows your money the day it lands.</p>
+      <a class="btn on-dark" href="#join">Join the Team</a>
+    </div>
+  </div>
+</section>
+
+<div class="ticker">
+  <div class="ticker-track">
+    <span>Everyone starts at EL ///</span><span>Comp published in writing ///</span><span>Fiber — live and hiring ///</span><span>Your numbers, the day they land ///</span><span>No mystery ///</span>
+    <span>Everyone starts at EL ///</span><span>Comp published in writing ///</span><span>Fiber — live and hiring ///</span><span>Your numbers, the day they land ///</span><span>No mystery ///</span>
+  </div>
+</div>
+
+<section class="nums">
+  <div class="wrap" style="padding:0">
+    <div class="nums-grid">
+      <div class="num"><div class="v">Add figure</div><div class="k">Installs 2026</div></div>
+      <div class="num"><div class="v">Add figure</div><div class="k">Paid to reps 2026</div></div>
+      <div class="num"><div class="v">Add figure</div><div class="k">Active territories</div></div>
+      <div class="num"><div class="v">Add figure</div><div class="k">Reps promoted past EL</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec dark" id="ladder">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="stamp">The Ladder</span>
+      <h2 style="margin-top:22px">Four rungs.<br>No mystery.</h2>
+      <p class="lede" style="opacity:.85">Most comp plans are explained once, in a room, by someone who benefits from you misremembering it. This one is written down and it does not move.</p>
+    </div>
+    <div class="stack">
+      <div class="rung">
+        <div class="code">EL</div>
+        <div class="body">
+          <h3>Entry Level</h3>
+          <p>You sell, you get paid on what you sell. Everyone starts here and nobody skips it, including the people running divisions today.</p>
+        </div>
+        <span class="lvl">LVL 01</span>
+      </div>
+      <div class="rung">
+        <div class="code">STL</div>
+        <div class="body">
+          <h3>Sales Team Leader</h3>
+          <p>Your own production plus the first reps you bring in. This is the first rung where your team pays you, not just your own knocks.</p>
+        </div>
+        <span class="lvl">LVL 02</span>
+      </div>
+      <div class="rung">
+        <div class="code">STC</div>
+        <div class="body">
+          <h3>Sales Team Captain</h3>
+          <p>A team deep enough to run without you in every conversation. You are coaching leaders now, not just closing your own doors.</p>
+        </div>
+        <span class="lvl">LVL 03</span>
+      </div>
+      <div class="rung">
+        <div class="code">JP</div>
+        <div class="body">
+          <h3>Junior Partner</h3>
+          <p>You are building the organization instead of working inside it. The top of the published ladder, and the start of a different conversation.</p>
+        </div>
+        <span class="lvl">LVL 04</span>
+      </div>
+    </div>
+    <p class="ladder-note">Advancement = your production + the team you have built. Exact thresholds published per division, in writing, day one.</p>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="stamp">Warning label</span>
+      <h2 style="margin-top:22px">Not for everyone</h2>
+      <p class="lede">Plenty of people do well in this work. Not all of them do well here. The reps who last tend to look like this.</p>
+    </div>
+    <div class="flyers">
+      <div class="flyer">
+        <span class="stamp">Trait 01</span>
+        <h3>You want the numbers in writing</h3>
+        <p>Handshakes are fine. Published thresholds are better. You read the comp plan before you sign it.</p>
+      </div>
+      <div class="flyer">
+        <span class="stamp">Trait 02</span>
+        <h3>You'd rather be measured than managed</h3>
+        <p>Your production speaks for itself, and you prefer it that way. Nobody has to hover.</p>
+      </div>
+      <div class="flyer">
+        <span class="stamp">Trait 03</span>
+        <h3>You're building a team, not just a check</h3>
+        <p>The ladder pays you for the people you develop, not only the doors you knock yourself.</p>
+      </div>
+      <div class="flyer">
+        <span class="stamp">Trait 04</span>
+        <h3>You knock when the weather is bad</h3>
+        <p>Consistency beats intensity. The reps who last show up on the days nobody else does.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec paper" id="how">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="stamp">The Process</span>
+      <h2 style="margin-top:22px">How it runs</h2>
+      <p class="lede">From the first form to your first paid week, without a two week silence in the middle.</p>
+    </div>
+    <div class="steps">
+      <div class="step">
+        <div class="n">1</div>
+        <h3>Apply</h3>
+        <p>One short form. We are asking what you have sold and where you are, not for a resume.</p>
+      </div>
+      <div class="step">
+        <div class="n">2</div>
+        <h3>Interview</h3>
+        <p>Booked straight into a calendar from the same link. No waiting on a callback that never comes.</p>
+      </div>
+      <div class="step">
+        <div class="n">3</div>
+        <h3>Onboard</h3>
+        <p>Paperwork, licensing where the division needs it, and your first territory. All in one place.</p>
+      </div>
+      <div class="step">
+        <div class="n">4</div>
+        <h3>Sell</h3>
+        <p>Your numbers appear in the portal the day they land. So does what you are owed for them.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="divisions">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="stamp">Divisions</span>
+      <h2 style="margin-top:22px">What's actually open</h2>
+      <p class="lede">Three divisions, at three different stages. We would rather tell you which is which than have you find out in week two.</p>
+    </div>
+    <div class="divs">
+      <div class="div-card live">
+        <span class="stamp" style="background:var(--acid); align-self:flex-start">Live + hiring</span>
+        <h3>Fiber</h3>
+        <p>Door-to-door fiber internet. Active territories, active installs, and the division every new rep can start in today.</p>
+        <a class="btn on-dark" href="#join">Join the Team</a>
+      </div>
+      <div class="div-card">
+        <span class="stamp" style="align-self:flex-start">In training</span>
+        <h3>Life Insurance</h3>
+        <p>Licensing-backed and building its first cohort. Openings announced to current reps first.</p>
+      </div>
+      <div class="div-card">
+        <span class="stamp" style="align-self:flex-start">Queued</span>
+        <h3>Autoglass</h3>
+        <p>Scoped and waiting on its lane. When it opens, the ladder and portal work exactly the same way.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec paper" id="portal" style="border-bottom:none">
+  <div class="wrap">
+    <div class="sec-head">
+      <span class="stamp">The Portal</span>
+      <h2 style="margin-top:22px">Your numbers,<br>the day they land</h2>
+      <p class="lede">Every rep gets a login. Not a weekly screenshot in a group chat.</p>
+    </div>
+    <div class="portal-grid">
+      <div class="receipt">
+        <div class="rh">** Rep Receipt — This Week **</div>
+        <div class="rr"><span>MON — 3 INSTALLS</span><span>POSTED</span></div>
+        <div class="rr"><span>TUE — 2 INSTALLS</span><span>POSTED</span></div>
+        <div class="rr"><span>WED — 4 INSTALLS</span><span>POSTED</span></div>
+        <div class="rr"><span>THU — 1 INSTALL</span><span>POSTED</span></div>
+        <div class="rr"><span>TEAM OVERRIDE</span><span>ACCRUING</span></div>
+        <div class="rr"><span>OWED TO DATE</span><span>VISIBLE DAILY</span></div>
+      </div>
+      <div>
+        <div class="p-item">
+          <h3>My money</h3>
+          <p>What you have earned, what has cleared, and what is queued. Down to the install.</p>
+        </div>
+        <div class="p-item">
+          <h3>My production</h3>
+          <p>Every sale you have made, the day it landed, and its status.</p>
+        </div>
+        <div class="p-item">
+          <h3>My team</h3>
+          <p>Once you are past EL: who is producing, who needs help, what your overrides look like.</p>
+        </div>
+        <div class="p-item">
+          <h3>Where I stand</h3>
+          <p>Your rung, your thresholds, and exactly how far you are from the next one.</p>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="closing" id="join">
+  <div class="wrap">
+    <h2>Start at EL</h2>
+    <p class="lede">Tell us what you have sold and where you are. We will tell you which division is open and what the first rung pays.</p>
+    <div class="closing-cta">
+      <a class="btn on-dark" href="mailto:careers@elevatedmgmt.co">Join the Team</a>
+      <a class="btn on-dark btn-paper" href="#ladder">Re-read the Ladder</a>
+    </div>
+    <p class="closing-mail">Or write to <a href="mailto:careers@elevatedmgmt.co">careers@elevatedmgmt.co</a> — plain reply, one business day.</p>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div class="foot-links">
+      <a href="#ladder">Ladder</a>
+      <a href="#divisions">Divisions</a>
+      <a href="#portal">Portal</a>
+      <a href="mailto:careers@elevatedmgmt.co">Contact</a>
+    </div>
+    <p>Elevated Management Group</p>
+  </div>
+</footer>
+
+</body>
+</html>

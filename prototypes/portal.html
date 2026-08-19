@@ -1,0 +1,369 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Portal — Elevated Field Sales</title>
+<link rel="stylesheet" href="elevated.css">
+<style>
+  .shell { padding: 44px 0 90px; }
+
+  /* ---- rep header ---- */
+  .rep-head { display: flex; justify-content: space-between; align-items: flex-end; gap: 32px; flex-wrap: wrap; padding-bottom: 30px; border-bottom: 1px solid var(--line-soft); }
+  .rep-id h1 { font-size: clamp(28px, 3.6vw, 46px); margin-top: 12px; }
+  .rep-meta { display: flex; gap: 10px; margin-top: 16px; flex-wrap: wrap; }
+  .rep-stamp { text-align: right; }
+  .rep-stamp .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .rep-stamp .v { font-family: var(--display); font-weight: 900; font-size: 30px; text-transform: uppercase; letter-spacing: -0.02em; margin-top: 4px; }
+
+  /* ---- tabs ---- */
+  .tabs { display: flex; gap: 0; margin-top: 0; border-bottom: 1px solid var(--line-soft); overflow-x: auto; }
+  .tab {
+    background: none; border: none; cursor: pointer; white-space: nowrap;
+    padding: 20px 26px 18px; margin-bottom: -1px;
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); border-bottom: 2px solid transparent; transition: color .2s, border-color .2s;
+  }
+  .tab:first-child { padding-left: 0; }
+  .tab:hover { color: var(--text-2); }
+  .tab[aria-selected="true"] { color: var(--white); border-bottom-color: var(--steel); }
+
+  .pane { display: none; padding-top: 44px; animation: fade .35s cubic-bezier(.16,1,.3,1); }
+  .pane.on { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+
+  /* ---- stat row ---- */
+  .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); }
+  .stat { background: var(--bg-2); padding: 26px 24px; }
+  .stat .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .stat .v { margin-top: 12px; font-family: var(--display); font-weight: 900; font-size: 32px; letter-spacing: -0.03em; }
+  .stat .v.steel { color: var(--steel); }
+  .stat .v.pos { color: var(--pos); }
+  .stat .s { margin-top: 6px; font-size: 13px; color: var(--muted); }
+
+  /* ---- section blocks ---- */
+  .block { margin-top: 46px; }
+  .block-head { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; flex-wrap: wrap; padding-bottom: 16px; border-bottom: 1px solid var(--line-soft); }
+  .block-head h2 { font-size: 22px; }
+
+  /* ---- ledger / tables ---- */
+  .row {
+    display: grid; align-items: center; gap: 20px;
+    padding: 18px 0; border-bottom: 1px solid var(--line-soft);
+  }
+  .row-money { grid-template-columns: 110px 1fr 130px 120px; }
+  .row-prod  { grid-template-columns: 110px 1fr 150px 120px; }
+  .row-team  { grid-template-columns: 1fr 90px 130px 120px; }
+  .row.head { padding: 14px 0; border-bottom: 1px solid var(--line); }
+  .row.head span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .row .date { font-family: var(--mono); font-size: 12px; color: var(--muted); }
+  .row .what { font-size: 15.5px; }
+  .row .what small { display: block; color: var(--muted); font-size: 13px; margin-top: 3px; }
+  .row .amt { font-family: var(--mono); font-size: 14px; text-align: right; }
+  .row .amt.pos { color: var(--pos); }
+  .row .amt.pend { color: var(--muted); }
+  .row .st { text-align: right; }
+  .st-pill {
+    font-family: var(--mono); font-size: 9.5px; letter-spacing: 0.14em; text-transform: uppercase;
+    border: 1px solid var(--line); padding: 4px 9px; color: var(--text-2);
+  }
+  .st-pill.paid { border-color: rgba(127,184,148,0.45); color: var(--pos); }
+  .st-pill.wait { border-color: var(--line-soft); color: var(--muted); }
+  .st-pill.set  { border-color: rgba(157,182,206,0.45); color: var(--steel); }
+
+  /* ---- pipeline ---- */
+  .pipeline { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); }
+  .pipe { background: var(--bg-2); padding: 22px 20px; }
+  .pipe .n { font-family: var(--display); font-weight: 900; font-size: 34px; letter-spacing: -0.03em; }
+  .pipe .l { margin-top: 6px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  .pipe .bar { margin-top: 14px; height: 3px; background: var(--line-soft); }
+  .pipe .bar i { display: block; height: 100%; background: var(--steel); }
+
+  /* ---- where I stand ---- */
+  .stand-grid { display: grid; grid-template-columns: 1fr 380px; gap: 56px; align-items: start; }
+  .meter-block { border: 1px solid var(--line); padding: 34px; background: var(--bg-2); }
+  .meter-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
+  .meter-top .now { font-family: var(--display); font-weight: 900; font-size: 46px; letter-spacing: -0.03em; }
+  .meter-top .next { text-align: right; }
+  .meter-top .next .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .meter-top .next .v { font-family: var(--display); font-weight: 900; font-size: 30px; color: var(--steel); letter-spacing: -0.02em; margin-top: 4px; }
+
+  .gate { margin-top: 30px; }
+  .gate + .gate { margin-top: 24px; }
+  .gate-label { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+  .gate-label .g { font-size: 15px; }
+  .gate-label .c { font-family: var(--mono); font-size: 12px; color: var(--text-2); }
+  .gate-label .c b { color: var(--white); font-weight: 400; }
+  .track { margin-top: 10px; height: 8px; background: var(--bg-3); border: 1px solid var(--line-soft); position: relative; }
+  .track i { position: absolute; inset: 0 auto 0 0; background: var(--steel); }
+  .track.met i { background: var(--pos); }
+
+  .verdict { margin-top: 32px; padding: 22px 24px; background: var(--bg-3); border-left: 2px solid var(--steel); }
+  .verdict .h { font-family: var(--display); font-weight: 900; font-size: 20px; text-transform: uppercase; letter-spacing: -0.02em; }
+  .verdict p { margin-top: 8px; color: var(--text-2); font-size: 15px; line-height: 1.6; }
+
+  /* ---- rung list ---- */
+  .rungs { display: flex; flex-direction: column; }
+  .rung-item { padding: 18px 0; border-bottom: 1px solid var(--line-soft); display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
+  .rung-item .c { font-family: var(--display); font-weight: 900; font-size: 20px; }
+  .rung-item .n { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  .rung-item.is-now { box-shadow: inset 3px 0 0 var(--steel); padding-left: 16px; }
+  .rung-item.is-now .c { color: var(--steel); }
+  .rung-item.is-past { opacity: .45; }
+
+  @media (max-width: 1000px) {
+    .stand-grid { grid-template-columns: 1fr; gap: 40px; }
+  }
+  @media (max-width: 767px) {
+    .stats, .pipeline { grid-template-columns: 1fr 1fr; }
+    .row-money, .row-prod, .row-team { grid-template-columns: 1fr auto; gap: 8px 16px; }
+    .row .date { grid-column: 1 / -1; }
+    .row.head { display: none; }
+    .row .amt, .row .st { text-align: left; }
+  }
+</style>
+</head>
+<body>
+
+<div class="proto-flag">
+  <div class="wrap">
+    <span><b>Prototype</b> — /portal</span>
+    <span>Sample rep, placeholder figures</span>
+  </div>
+</div>
+
+<header>
+  <div class="wrap">
+    <nav class="nav">
+      <a class="wordmark" href="../index.html">Elevated</a>
+      <div class="nav-links">
+        <a href="../index.html#ladder">Your Growth</a>
+        <a href="apply.html">Apply</a>
+        <a href="calculator.html">Calculator</a>
+      </div>
+      <a class="btn btn-ghost btn-sm" href="../index.html">Back to Site</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell">
+  <div class="wrap">
+
+    <div class="rep-head">
+      <div class="rep-id">
+        <p class="eyebrow">Signed in</p>
+        <h1>Marcus Deland</h1>
+        <div class="rep-meta">
+          <span class="tag live"><span class="dot"></span>Fiber</span>
+          <span class="tag"><span class="dot"></span>Salt Lake City, UT</span>
+          <span class="tag"><span class="dot"></span>Rep since Mar 2026</span>
+        </div>
+      </div>
+      <div class="rep-stamp">
+        <div class="k">Current rung</div>
+        <div class="v">EL</div>
+      </div>
+    </div>
+
+    <div class="tabs" role="tablist">
+      <button class="tab" role="tab" aria-selected="true"  data-pane="money">My money</button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="prod">My production</button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="team">My team</button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="stand">Where I stand</button>
+    </div>
+
+    <!-- ============ MY MONEY ============ -->
+    <section class="pane on" data-pane="money">
+      <div class="stats">
+        <div class="stat">
+          <div class="k">Cleared this period</div>
+          <div class="v pos">Add figure</div>
+          <div class="s">Deposited Aug 15</div>
+        </div>
+        <div class="stat">
+          <div class="k">Pending clearance</div>
+          <div class="v">Add figure</div>
+          <div class="s">6 installs awaiting</div>
+        </div>
+        <div class="stat">
+          <div class="k">Owed to date</div>
+          <div class="v steel">Add figure</div>
+          <div class="s">Updated 4 min ago</div>
+        </div>
+        <div class="stat">
+          <div class="k">Paid in 2026</div>
+          <div class="v">Add figure</div>
+          <div class="s">Since March</div>
+        </div>
+      </div>
+
+      <div class="block">
+        <div class="block-head">
+          <h2>Ledger</h2>
+          <span class="mono-label">Every line, down to the install</span>
+        </div>
+        <div class="row head row-money"><span>Date</span><span>Detail</span><span>Amount</span><span>Status</span></div>
+        <div class="row row-money"><span class="date">AUG 18</span><span class="what">Install — 1482 Ridgeline Dr<small>Verizon fiber, 1 gig</small></span><span class="amt pos">Add figure</span><span class="st"><span class="st-pill paid">Cleared</span></span></div>
+        <div class="row row-money"><span class="date">AUG 18</span><span class="what">Install — 907 Cordell Ave<small>Verizon fiber, 500 meg</small></span><span class="amt pos">Add figure</span><span class="st"><span class="st-pill paid">Cleared</span></span></div>
+        <div class="row row-money"><span class="date">AUG 17</span><span class="what">Install — 55 Bellhaven Ct<small>Verizon fiber, 1 gig</small></span><span class="amt pend">Add figure</span><span class="st"><span class="st-pill wait">Pending</span></span></div>
+        <div class="row row-money"><span class="date">AUG 16</span><span class="what">Install — 2210 Fairmount St<small>Verizon fiber, 2 gig</small></span><span class="amt pend">Add figure</span><span class="st"><span class="st-pill wait">Pending</span></span></div>
+        <div class="row row-money"><span class="date">AUG 15</span><span class="what">Period deposit<small>Aug 1 to Aug 14, 19 installs</small></span><span class="amt pos">Add figure</span><span class="st"><span class="st-pill paid">Deposited</span></span></div>
+        <div class="row row-money"><span class="date">AUG 14</span><span class="what">Chargeback — 88 Wexler Ln<small>Cancelled inside 30 days</small></span><span class="amt">Add figure</span><span class="st"><span class="st-pill wait">Reversed</span></span></div>
+      </div>
+    </section>
+
+    <!-- ============ MY PRODUCTION ============ -->
+    <section class="pane" data-pane="prod">
+      <div class="pipeline">
+        <div class="pipe"><div class="n">7</div><div class="l">Sold</div><div class="bar"><i style="width:100%"></i></div></div>
+        <div class="pipe"><div class="n">5</div><div class="l">Scheduled</div><div class="bar"><i style="width:71%"></i></div></div>
+        <div class="pipe"><div class="n">4</div><div class="l">Installed</div><div class="bar"><i style="width:57%"></i></div></div>
+        <div class="pipe"><div class="n">2</div><div class="l">Paid</div><div class="bar"><i style="width:29%"></i></div></div>
+      </div>
+
+      <div class="block">
+        <div class="block-head">
+          <h2>This week</h2>
+          <span class="mono-label">Aug 17 to Aug 23</span>
+        </div>
+        <div class="row head row-prod"><span>Date</span><span>Address</span><span>Product</span><span>Stage</span></div>
+        <div class="row row-prod"><span class="date">AUG 18</span><span class="what">1482 Ridgeline Dr<small>Salt Lake City, UT</small></span><span class="amt">1 gig</span><span class="st"><span class="st-pill paid">Paid</span></span></div>
+        <div class="row row-prod"><span class="date">AUG 18</span><span class="what">907 Cordell Ave<small>Salt Lake City, UT</small></span><span class="amt">500 meg</span><span class="st"><span class="st-pill paid">Paid</span></span></div>
+        <div class="row row-prod"><span class="date">AUG 17</span><span class="what">55 Bellhaven Ct<small>Millcreek, UT</small></span><span class="amt">1 gig</span><span class="st"><span class="st-pill set">Installed</span></span></div>
+        <div class="row row-prod"><span class="date">AUG 17</span><span class="what">2210 Fairmount St<small>Millcreek, UT</small></span><span class="amt">2 gig</span><span class="st"><span class="st-pill set">Installed</span></span></div>
+        <div class="row row-prod"><span class="date">AUG 17</span><span class="what">640 Juniper Way<small>Murray, UT</small></span><span class="amt">1 gig</span><span class="st"><span class="st-pill wait">Scheduled</span></span></div>
+        <div class="row row-prod"><span class="date">AUG 16</span><span class="what">3117 Ashcroft Ln<small>Murray, UT</small></span><span class="amt">500 meg</span><span class="st"><span class="st-pill wait">Scheduled</span></span></div>
+        <div class="row row-prod"><span class="date">AUG 16</span><span class="what">78 Halloway Cir<small>Murray, UT</small></span><span class="amt">1 gig</span><span class="st"><span class="st-pill wait">Sold</span></span></div>
+      </div>
+    </section>
+
+    <!-- ============ MY TEAM ============ -->
+    <section class="pane" data-pane="team">
+      <div class="stats">
+        <div class="stat"><div class="k">Reps under you</div><div class="v">2</div><div class="s">1 producing this week</div></div>
+        <div class="stat"><div class="k">Team installs</div><div class="v">6</div><div class="s">This period</div></div>
+        <div class="stat"><div class="k">Override earned</div><div class="v steel">Add figure</div><div class="s">Paid at STL and above</div></div>
+        <div class="stat"><div class="k">Needed for STL</div><div class="v">1 more</div><div class="s">Producing rep</div></div>
+      </div>
+
+      <div class="block">
+        <div class="block-head">
+          <h2>Your downline</h2>
+          <span class="mono-label">Override unlocks at STL</span>
+        </div>
+        <div class="row head row-team"><span>Rep</span><span>Rung</span><span>Installs, period</span><span>Status</span></div>
+        <div class="row row-team"><span class="what">Devon Marsh<small>Recruited Jul 2026 — Salt Lake City</small></span><span class="amt" style="text-align:left">EL</span><span class="amt">4</span><span class="st"><span class="st-pill paid">Producing</span></span></div>
+        <div class="row row-team"><span class="what">Priya Raman<small>Recruited Aug 2026 — Murray</small></span><span class="amt" style="text-align:left">EL</span><span class="amt">2</span><span class="st"><span class="st-pill set">Onboarding</span></span></div>
+        <div class="row row-team"><span class="what" style="color:var(--muted)">Open seat<small>Bring one more producing rep to hit STL</small></span><span class="amt" style="text-align:left">—</span><span class="amt">—</span><span class="st"><span class="st-pill wait">Invite</span></span></div>
+      </div>
+
+      <div class="block">
+        <a class="btn btn-primary" href="apply.html">Send Your Recruiting Link</a>
+      </div>
+    </section>
+
+    <!-- ============ WHERE I STAND ============ -->
+    <section class="pane" data-pane="stand">
+      <div class="stand-grid">
+        <div>
+          <div class="meter-block">
+            <div class="meter-top">
+              <div>
+                <div class="mono-label">You are here</div>
+                <div class="now">EL</div>
+              </div>
+              <div class="next">
+                <div class="k">Next rung</div>
+                <div class="v">STL</div>
+              </div>
+            </div>
+
+            <div class="gate">
+              <div class="gate-label">
+                <span class="g">Personal installs, trailing 30 days</span>
+                <span class="c"><b>24</b> of 30</span>
+              </div>
+              <div class="track"><i style="width:80%"></i></div>
+            </div>
+
+            <div class="gate">
+              <div class="gate-label">
+                <span class="g">Producing reps recruited</span>
+                <span class="c"><b>1</b> of 2</span>
+              </div>
+              <div class="track"><i style="width:50%"></i></div>
+            </div>
+
+            <div class="gate">
+              <div class="gate-label">
+                <span class="g">Weeks active without a gap</span>
+                <span class="c"><b>12</b> of 8</span>
+              </div>
+              <div class="track met"><i style="width:100%"></i></div>
+            </div>
+
+            <div class="verdict">
+              <div class="h">6 installs and 1 rep from STL</div>
+              <p>Your tenure gate is already met. At your current pace you clear the install threshold in about nine days. The rep is the long pole — bring one more producer and STL is yours the moment both land.</p>
+            </div>
+          </div>
+        </div>
+
+        <aside>
+          <div class="block-head" style="margin-bottom:8px"><h2>The published ladder</h2></div>
+          <div class="rungs">
+            <div class="rung-item is-now">
+              <div><div class="c">EL</div><div class="n">Entry Level</div></div>
+              <span class="st-pill set">You are here</span>
+            </div>
+            <div class="rung-item">
+              <div><div class="c">STL</div><div class="n">Sales Team Leader</div></div>
+              <span class="st-pill wait">2 gates left</span>
+            </div>
+            <div class="rung-item">
+              <div><div class="c">STC</div><div class="n">Sales Team Captain</div></div>
+              <span class="st-pill wait">Locked</span>
+            </div>
+            <div class="rung-item">
+              <div><div class="c">JP</div><div class="n">Junior Partner</div></div>
+              <span class="st-pill wait">Locked</span>
+            </div>
+          </div>
+          <p class="lede" style="margin-top:26px; font-size:15px">
+            Thresholds are published per campaign and handed to you in writing on day one. They do not move while you are climbing toward them.
+          </p>
+          <a class="btn btn-ghost btn-sm" href="calculator.html" style="margin-top:22px">Model the Next Rung</a>
+        </aside>
+      </div>
+    </section>
+
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="foot-links">
+      <a href="../index.html">Home</a>
+      <a href="apply.html">Apply</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="mailto:careers@elevatedmgmt.co">Contact</a>
+    </div>
+    <p>Elevated Management Group</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var tabs = document.querySelectorAll('.tab');
+  var panes = document.querySelectorAll('.pane');
+  tabs.forEach(function (t) {
+    t.addEventListener('click', function () {
+      tabs.forEach(function (x) { x.setAttribute('aria-selected', String(x === t)); });
+      panes.forEach(function (p) { p.classList.toggle('on', p.dataset.pane === t.dataset.pane); });
+    });
+  });
+})();
+</script>
+
+</body>
+</html>

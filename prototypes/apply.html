@@ -1,0 +1,431 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Apply — Elevated Field Sales</title>
+<link rel="stylesheet" href="elevated.css">
+<style>
+  .shell { padding: 56px 0 100px; }
+  .apply-grid { display: grid; grid-template-columns: 1fr 400px; gap: 64px; align-items: start; }
+
+  /* ---- progress rail ---- */
+  .rail { display: flex; gap: 0; margin-bottom: 48px; border-top: 1px solid var(--line-soft); }
+  .rail-step { flex: 1; padding-top: 14px; border-top: 2px solid transparent; margin-top: -1px; transition: border-color .3s, color .3s; }
+  .rail-step .n { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; color: var(--muted); }
+  .rail-step .t { margin-top: 4px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+  .rail-step.done { border-top-color: var(--line); }
+  .rail-step.done .t, .rail-step.done .n { color: var(--text-2); }
+  .rail-step.active { border-top-color: var(--steel); }
+  .rail-step.active .t { color: var(--white); }
+  .rail-step.active .n { color: var(--steel); }
+
+  /* ---- steps ---- */
+  .step { display: none; animation: fade .4s cubic-bezier(.16,1,.3,1); }
+  .step.on { display: block; }
+  @keyframes fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+  .step h2 { font-size: clamp(30px, 4.2vw, 52px); max-width: 18ch; }
+  .step .lede { margin-top: 18px; }
+
+  /* ---- choice chips ---- */
+  .choices { margin-top: 38px; display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); }
+  .choice {
+    background: var(--bg-2); padding: 22px 24px; cursor: pointer; text-align: left;
+    border: none; color: var(--text); font-family: var(--body); font-size: 16px;
+    transition: background .2s, color .2s; position: relative;
+  }
+  .choice:hover { background: var(--bg-3); }
+  .choice .ct { font-weight: 600; display: block; }
+  .choice .cs { display: block; margin-top: 5px; font-size: 14px; color: var(--muted); line-height: 1.5; }
+  .choice[aria-pressed="true"] { background: var(--bg-3); box-shadow: inset 3px 0 0 var(--steel); }
+  .choice[aria-pressed="true"] .ct { color: var(--steel); }
+
+  /* ---- inputs ---- */
+  .field { margin-top: 34px; max-width: 460px; }
+  .field label { display: block; }
+  .field input {
+    width: 100%; margin-top: 12px; background: var(--bg-2); border: 1px solid var(--line);
+    color: var(--text); padding: 16px 18px; font-family: var(--body); font-size: 17px; border-radius: 0;
+    transition: border-color .2s;
+  }
+  .field input:focus { outline: none; border-color: var(--steel); }
+  .field input::placeholder { color: var(--muted); }
+
+  /* ---- slots ---- */
+  .slots { margin-top: 34px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 620px; }
+  .slot {
+    background: var(--bg-2); border: 1px solid var(--line-soft); padding: 16px 12px; cursor: pointer;
+    color: var(--text); font-family: var(--mono); font-size: 12px; letter-spacing: 0.08em; text-align: center;
+    transition: all .2s;
+  }
+  .slot:hover { border-color: var(--line); background: var(--bg-3); }
+  .slot .d { display: block; font-size: 10px; color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
+  .slot[aria-pressed="true"] { border-color: var(--steel); color: var(--steel); background: var(--bg-3); }
+
+  .actions { margin-top: 46px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
+  .back { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); cursor: pointer; background: none; border: none; }
+  .back:hover { color: var(--text); }
+
+  /* ---- live match panel ---- */
+  .match { position: sticky; top: 96px; }
+  .match-inner { background: var(--bg-2); border: 1px solid var(--line-soft); padding: 28px; }
+  .match-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line-soft); padding-bottom: 16px; }
+  .match-row { padding: 16px 0; border-bottom: 1px solid var(--line-soft); }
+  .match-row:last-of-type { border-bottom: none; }
+  .match-row .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .match-row .v { margin-top: 6px; font-size: 16px; color: var(--text); font-weight: 600; }
+  .match-row .v.pending { color: var(--muted); font-weight: 400; font-style: italic; }
+  .match-verdict { margin-top: 20px; padding: 20px; background: var(--bg-3); border-left: 2px solid var(--steel); }
+  .match-verdict .h { font-family: var(--display); font-weight: 900; text-transform: uppercase; font-size: 22px; letter-spacing: -0.02em; }
+  .match-verdict p { margin-top: 8px; font-size: 14px; color: var(--text-2); line-height: 1.55; }
+
+  /* ---- confirmation ---- */
+  .confirm { max-width: 700px; }
+  .confirm h2 { font-size: clamp(34px, 5vw, 64px); }
+  .receipt { margin-top: 40px; border: 1px solid var(--line); }
+  .receipt-head { background: var(--bg-3); padding: 16px 24px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line); gap: 16px; flex-wrap: wrap; }
+  .receipt-row { display: flex; justify-content: space-between; gap: 20px; padding: 18px 24px; border-bottom: 1px solid var(--line-soft); font-size: 15px; }
+  .receipt-row:last-child { border-bottom: none; }
+  .receipt-row .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  .receipt-row .v { color: var(--text); font-weight: 600; text-align: right; }
+  .receipt-row .v.steel { color: var(--steel); }
+
+  @media (max-width: 1000px) {
+    .apply-grid { grid-template-columns: 1fr; gap: 44px; }
+    .match { position: static; }
+  }
+  @media (max-width: 640px) {
+    .choices { grid-template-columns: 1fr; }
+    .slots { grid-template-columns: 1fr 1fr; }
+    .rail-step .t { display: none; }
+  }
+</style>
+</head>
+<body>
+
+<div class="proto-flag">
+  <div class="wrap">
+    <span><b>Prototype</b> — /apply</span>
+    <span>Territory matching and calendar slots are simulated</span>
+  </div>
+</div>
+
+<header>
+  <div class="wrap">
+    <nav class="nav">
+      <a class="wordmark" href="../index.html">Elevated</a>
+      <div class="nav-links">
+        <a href="../index.html#ladder">Your Growth</a>
+        <a href="../index.html#how">How It Runs</a>
+        <a href="../index.html#divisions">Campaigns</a>
+        <a href="portal.html">Portal</a>
+      </div>
+      <a class="btn btn-ghost btn-sm" href="../index.html">Back to Site</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell">
+  <div class="wrap">
+    <div class="apply-grid">
+      <div>
+        <div class="rail" id="rail">
+          <div class="rail-step active" data-s="1"><div class="n">01</div><div class="t">Experience</div></div>
+          <div class="rail-step" data-s="2"><div class="n">02</div><div class="t">Location</div></div>
+          <div class="rail-step" data-s="3"><div class="n">03</div><div class="t">Campaign</div></div>
+          <div class="rail-step" data-s="4"><div class="n">04</div><div class="t">Interview</div></div>
+        </div>
+
+        <!-- STEP 1 -->
+        <section class="step on" data-step="1">
+          <p class="eyebrow">Question one of four</p>
+          <h2 style="margin-top:18px">What have you sold?</h2>
+          <p class="lede">We are not asking for a resume. We are asking what you have actually closed, so we point you at the right campaign.</p>
+          <div class="choices" role="group">
+            <button class="choice" data-q="exp" data-val="Door to door" aria-pressed="false">
+              <span class="ct">Door to door</span>
+              <span class="cs">Fiber, solar, alarms, pest, roofing — anything on a doorstep.</span>
+            </button>
+            <button class="choice" data-q="exp" data-val="Phone or virtual" aria-pressed="false">
+              <span class="ct">Phone or virtual closing</span>
+              <span class="cs">Setter, closer, or full cycle over the phone or Zoom.</span>
+            </button>
+            <button class="choice" data-q="exp" data-val="Retail or B2B" aria-pressed="false">
+              <span class="ct">Retail or B2B</span>
+              <span class="cs">Floor sales, account work, or business-to-business.</span>
+            </button>
+            <button class="choice" data-q="exp" data-val="Nothing yet" aria-pressed="false">
+              <span class="ct">Nothing yet</span>
+              <span class="cs">No sales history. Everyone starts at EL regardless.</span>
+            </button>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" data-next disabled>Continue</button>
+          </div>
+        </section>
+
+        <!-- STEP 2 -->
+        <section class="step" data-step="2">
+          <p class="eyebrow">Question two of four</p>
+          <h2 style="margin-top:18px">Where are you?</h2>
+          <p class="lede">Fiber runs on live territories, so your zip decides whether you can start this month or whether remote is the better door.</p>
+          <div class="field">
+            <label class="mono-label" for="zip">Zip code</label>
+            <input id="zip" inputmode="numeric" maxlength="5" placeholder="e.g. 84101" autocomplete="postal-code">
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" data-next disabled>Continue</button>
+            <button class="back" data-back>Back</button>
+          </div>
+        </section>
+
+        <!-- STEP 3 -->
+        <section class="step" data-step="3">
+          <p class="eyebrow">Question three of four</p>
+          <h2 style="margin-top:18px">Which campaign?</h2>
+          <p class="lede">Based on your answers we have marked the one we would put you in. You can override it — we will tell you honestly if it is not open.</p>
+          <div class="choices" id="campaignChoices" style="grid-template-columns:1fr">
+            <button class="choice" data-q="camp" data-val="Fiber" aria-pressed="false">
+              <span class="ct">Fiber <span class="tag live" style="margin-left:10px"><span class="dot"></span>Live and hiring</span></span>
+              <span class="cs">Verizon fiber contracts, door to door. Active territories, reps on the ground, commissions paying today.</span>
+            </button>
+            <button class="choice" data-q="camp" data-val="Virtual High Ticket" aria-pressed="false">
+              <span class="ct">Virtual High Ticket <span class="tag" style="margin-left:10px"><span class="dot"></span>In training</span></span>
+              <span class="cs">Closing high-ticket wellness solutions, fully remote. Onboarding and training are running now.</span>
+            </button>
+            <button class="choice" data-q="camp" data-val="Life Insurance" aria-pressed="false">
+              <span class="ct">Life Insurance <span class="tag" style="margin-left:10px"><span class="dot"></span>Queued</span></span>
+              <span class="cs">Remote sales for licensed producers. Next campaign in line, not open yet — we will hold your application.</span>
+            </button>
+          </div>
+          <div class="actions">
+            <button class="btn btn-primary" data-next disabled>Continue</button>
+            <button class="back" data-back>Back</button>
+          </div>
+        </section>
+
+        <!-- STEP 4 -->
+        <section class="step" data-step="4">
+          <p class="eyebrow">Question four of four</p>
+          <h2 style="margin-top:18px">Book the interview</h2>
+          <p class="lede">Straight into a real calendar from this same page. Twenty minutes, on video, with the person who runs the campaign.</p>
+          <div class="slots" id="slots"></div>
+          <div class="actions">
+            <button class="btn btn-primary" data-next disabled>Confirm Interview</button>
+            <button class="back" data-back>Back</button>
+          </div>
+        </section>
+
+        <!-- DONE -->
+        <section class="step confirm" data-step="5">
+          <p class="eyebrow">Confirmed</p>
+          <h2 style="margin-top:18px">You are booked.</h2>
+          <p class="lede">A calendar invite is on its way. If anything changes, reply to it — a person reads that inbox.</p>
+          <div class="receipt">
+            <div class="receipt-head">
+              <span class="mono-label" style="color:var(--text-2)">Application EL-2026-0871</span>
+              <span class="tag live"><span class="dot"></span>Interview set</span>
+            </div>
+            <div class="receipt-row"><span class="k">Experience</span><span class="v" data-fill="exp">—</span></div>
+            <div class="receipt-row"><span class="k">Location</span><span class="v" data-fill="zip">—</span></div>
+            <div class="receipt-row"><span class="k">Campaign</span><span class="v steel" data-fill="camp">—</span></div>
+            <div class="receipt-row"><span class="k">Interview</span><span class="v" data-fill="slot">—</span></div>
+            <div class="receipt-row"><span class="k">Starting rung</span><span class="v">EL — Entry Level</span></div>
+          </div>
+          <div class="actions">
+            <a class="btn btn-primary" href="portal.html">Preview the Portal</a>
+            <a class="btn btn-ghost" href="calculator.html">Run the Numbers</a>
+          </div>
+        </section>
+      </div>
+
+      <!-- MATCH PANEL -->
+      <aside class="match">
+        <div class="match-inner">
+          <div class="match-head">
+            <span class="mono-label">Your match</span>
+            <span class="mono-label" id="pct" style="color:var(--steel)">0%</span>
+          </div>
+          <div class="match-row"><div class="k">Experience</div><div class="v pending" data-panel="exp">Not answered</div></div>
+          <div class="match-row"><div class="k">Territory</div><div class="v pending" data-panel="zip">Not answered</div></div>
+          <div class="match-row"><div class="k">Campaign</div><div class="v pending" data-panel="camp">Not answered</div></div>
+          <div class="match-verdict">
+            <div class="h" id="verdictH">Start here</div>
+            <p id="verdictP">Answer the first question and we will tell you which campaign you fit and whether it is open right now.</p>
+          </div>
+        </div>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="foot-links">
+      <a href="../index.html">Home</a>
+      <a href="portal.html">Portal</a>
+      <a href="calculator.html">Calculator</a>
+      <a href="mailto:careers@elevatedmgmt.co">Contact</a>
+    </div>
+    <p>Elevated Management Group</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  var answers = { exp: null, zip: null, camp: null, slot: null };
+  var current = 1;
+
+  var steps = document.querySelectorAll('.step');
+  var railSteps = document.querySelectorAll('.rail-step');
+
+  /* Simulated territory lookup. The real build swaps this one function
+     for the territory service and everything else stays as is. */
+  function territoryFor(zip) {
+    var n = parseInt(zip, 10) || 0;
+    var pool = [
+      { city: 'Salt Lake City, UT', live: true,  drive: '12 min' },
+      { city: 'Boise, ID',          live: true,  drive: '20 min' },
+      { city: 'Phoenix, AZ',        live: true,  drive: '25 min' },
+      { city: 'Reno, NV',           live: false, drive: null }
+    ];
+    return pool[n % pool.length];
+  }
+
+  function recommend() {
+    if (answers.exp === 'Phone or virtual') return 'Virtual High Ticket';
+    return 'Fiber';
+  }
+
+  function buildSlots() {
+    var host = document.getElementById('slots');
+    if (host.children.length) return;
+    var days  = ['Tue 21', 'Tue 21', 'Wed 22', 'Wed 22', 'Thu 23', 'Thu 23'];
+    var times = ['9:00 AM', '2:30 PM', '10:00 AM', '4:00 PM', '11:30 AM', '1:00 PM'];
+    days.forEach(function (d, i) {
+      var b = document.createElement('button');
+      b.className = 'slot';
+      b.setAttribute('aria-pressed', 'false');
+      b.dataset.q = 'slot';
+      b.dataset.val = d + ' at ' + times[i];
+      b.innerHTML = '<span class="d">' + d + '</span>' + times[i];
+      host.appendChild(b);
+    });
+  }
+
+  function updatePanel() {
+    var t = answers.zip ? territoryFor(answers.zip) : null;
+    var map = { exp: answers.exp, zip: t ? t.city : null, camp: answers.camp };
+
+    Object.keys(map).forEach(function (k) {
+      var el = document.querySelector('[data-panel="' + k + '"]');
+      if (map[k]) { el.textContent = map[k]; el.classList.remove('pending'); }
+      else { el.textContent = 'Not answered'; el.classList.add('pending'); }
+    });
+
+    var filled = Object.keys(answers).filter(function (k) { return answers[k]; }).length;
+    document.getElementById('pct').textContent = Math.round(filled / 4 * 100) + '%';
+
+    var h = document.getElementById('verdictH');
+    var p = document.getElementById('verdictP');
+
+    if (answers.camp === 'Life Insurance') {
+      h.textContent = 'Queued, not open';
+      p.textContent = 'Life Insurance has not opened yet. We will hold your application and contact you first when it does, or you can start in Fiber now and move over later.';
+    } else if (answers.camp === 'Virtual High Ticket') {
+      h.textContent = 'Remote, in training';
+      p.textContent = 'Virtual High Ticket is onboarding its first cohort now. Fully remote, so your zip does not gate you.';
+    } else if (answers.camp === 'Fiber' && t) {
+      h.textContent = t.live ? 'Fiber, you can start now' : 'Fiber, nearest is a drive';
+      p.textContent = t.live
+        ? 'There is an active Fiber territory in ' + t.city + ', about ' + t.drive + ' out. Reps are on the ground and commissions are paying today.'
+        : 'No live Fiber territory in ' + t.city + ' yet. Virtual High Ticket is remote and open, which may be the faster door for you.';
+    } else if (t) {
+      h.textContent = t.live ? 'Live territory near you' : 'Remote is your best door';
+      p.textContent = t.live
+        ? 'We show an active territory in ' + t.city + '. Pick a campaign to keep going.'
+        : 'No live territory in ' + t.city + ' yet, but the remote campaigns do not care where you are.';
+    } else if (answers.exp) {
+      h.textContent = 'Reads like ' + recommend();
+      p.textContent = answers.exp === 'Phone or virtual'
+        ? 'Phone and virtual closers tend to land in Virtual High Ticket. Tell us your zip so we can check the live territories too.'
+        : 'That background points at Fiber, the one campaign hiring today. Tell us where you are.';
+    }
+  }
+
+  function markRecommended() {
+    var rec = recommend();
+    document.querySelectorAll('#campaignChoices .choice').forEach(function (c) {
+      var old = c.querySelector('.rec');
+      if (old) old.remove();
+      if (c.dataset.val === rec) {
+        var s = document.createElement('span');
+        s.className = 'rec mono-label';
+        s.style.cssText = 'display:block;margin-top:10px;color:var(--steel)';
+        s.textContent = 'Recommended from your answers';
+        c.appendChild(s);
+      }
+    });
+  }
+
+  function validate() {
+    var btn = document.querySelector('.step[data-step="' + current + '"] [data-next]');
+    if (!btn) return;
+    var rules = { 1: !!answers.exp, 2: !!answers.zip, 3: !!answers.camp, 4: !!answers.slot };
+    btn.disabled = !rules[current];
+  }
+
+  function show(n) {
+    current = n;
+    steps.forEach(function (s) { s.classList.toggle('on', +s.dataset.step === n); });
+    railSteps.forEach(function (r) {
+      var i = +r.dataset.s;
+      r.classList.toggle('active', i === n);
+      r.classList.toggle('done', i < n);
+    });
+    if (n === 3) markRecommended();
+    if (n === 4) buildSlots();
+    if (n === 5) {
+      var t = territoryFor(answers.zip);
+      var fills = {
+        exp: answers.exp,
+        zip: t.city + ' — ' + answers.zip,
+        camp: answers.camp,
+        slot: answers.slot
+      };
+      Object.keys(fills).forEach(function (k) {
+        document.querySelector('[data-fill="' + k + '"]').textContent = fills[k];
+      });
+    }
+    validate();
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  document.addEventListener('click', function (e) {
+    var choice = e.target.closest('[data-q]');
+    if (choice) {
+      var q = choice.dataset.q;
+      choice.parentElement.querySelectorAll('[data-q="' + q + '"]').forEach(function (g) {
+        g.setAttribute('aria-pressed', 'false');
+      });
+      choice.setAttribute('aria-pressed', 'true');
+      answers[q] = choice.dataset.val;
+      updatePanel();
+      validate();
+      return;
+    }
+    if (e.target.closest('[data-next]')) { show(Math.min(current + 1, 5)); return; }
+    if (e.target.closest('[data-back]')) { show(Math.max(current - 1, 1)); return; }
+  });
+
+  document.getElementById('zip').addEventListener('input', function (e) {
+    e.target.value = e.target.value.replace(/[^0-9]/g, '');
+    answers.zip = e.target.value.length >= 5 ? e.target.value : null;
+    updatePanel();
+    validate();
+  });
+})();
+</script>
+
+</body>
+</html>

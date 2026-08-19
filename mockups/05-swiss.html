@@ -1,0 +1,474 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Elevated Field Sales — Swiss</title>
+<style>
+  /* ============================================================
+     MOCKUP 05 — SWISS
+     International-style light grid. Warm white, near-black ink,
+     one signal red, numbered sections, exposed grid columns.
+     ============================================================ */
+  @import url('https://fonts.googleapis.com/css2?family=Archivo:ital,wght@0,400;0,500;0,640;0,700&family=Archivo+Expanded:wght@500;600;700&family=Fragment+Mono&display=swap');
+
+  :root {
+    --white:  #FAF9F5;
+    --white2: #F1EFE9;
+    --ink:    #16150F;
+    --ink2:   #55534A;
+    --faint:  #97948A;
+    --hair:   rgba(22,21,15,0.14);
+    --hair2:  rgba(22,21,15,0.32);
+    --signal: #E8442E;
+
+    --head: "Archivo Expanded", "Archivo", "Segoe UI", sans-serif;
+    --body: "Archivo", "Segoe UI", sans-serif;
+    --mono: "Fragment Mono", ui-monospace, monospace;
+    --wrap: 1260px;
+  }
+
+  * { box-sizing: border-box; }
+  body {
+    margin: 0;
+    background: var(--white);
+    color: var(--ink);
+    font-family: var(--body);
+    font-size: 16px;
+    line-height: 1.6;
+  }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 28px; }
+  a { color: inherit; text-decoration: none; }
+  h1,h2,h3 { margin: 0; font-family: var(--head); font-weight: 700; line-height: 1.0; letter-spacing: -0.03em; }
+  p { margin: 0; }
+
+  .idx { font-family: var(--mono); font-size: 11px; letter-spacing: 0.08em; color: var(--signal); }
+  .lede { color: var(--ink2); max-width: 58ch; font-size: 17px; }
+
+  /* ---- nav ---- */
+  header { position: sticky; top: 0; z-index: 50; background: rgba(250,249,245,0.92); backdrop-filter: blur(10px); border-bottom: 1px solid var(--hair2); }
+  .nav { height: 64px; display: grid; grid-template-columns: 1fr 2fr 1fr; align-items: center; }
+  .wordmark { font-family: var(--head); font-weight: 700; font-size: 17px; letter-spacing: 0.02em; }
+  .wordmark::after { content: "®"; font-size: 9px; vertical-align: super; color: var(--signal); }
+  .nav-links { display: flex; gap: 28px; justify-content: center; }
+  .nav-links a { font-size: 13px; font-weight: 500; color: var(--ink2); }
+  .nav-links a:hover { color: var(--signal); }
+  .nav-end { display: flex; justify-content: flex-end; }
+  .btn {
+    display: inline-block; padding: 13px 26px;
+    font-family: var(--body); font-size: 13.5px; font-weight: 640; letter-spacing: 0.01em;
+    border-radius: 999px; border: 1px solid var(--ink); cursor: pointer; transition: all .2s;
+  }
+  .btn-ink { background: var(--ink); color: var(--white); }
+  .btn-ink:hover { background: var(--signal); border-color: var(--signal); }
+  .btn-line { color: var(--ink); }
+  .btn-line:hover { border-color: var(--signal); color: var(--signal); }
+  .btn-sm { padding: 9px 18px; font-size: 12.5px; }
+
+  /* ---- hero ---- */
+  .hero { border-bottom: 1px solid var(--hair2); }
+  .hero-grid { display: grid; grid-template-columns: repeat(12, 1fr); }
+  .hero-main { grid-column: 1 / 10; padding: 96px 40px 84px 0; border-right: 1px solid var(--hair); }
+  .hero-main h1 { font-size: clamp(46px, 6.6vw, 96px); letter-spacing: -0.04em; max-width: 14ch; }
+  .hero-main h1 .sig { color: var(--signal); }
+  .hero-main .lede { margin-top: 28px; }
+  .hero-cta { margin-top: 38px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .hero-side { grid-column: 10 / 13; padding: 96px 0 84px 36px; display: flex; flex-direction: column; justify-content: flex-end; gap: 26px; }
+  .fact { border-top: 1px solid var(--hair2); padding-top: 12px; }
+  .fact .k { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; color: var(--faint); text-transform: uppercase; }
+  .fact .v { margin-top: 4px; font-family: var(--head); font-weight: 600; font-size: 15px; }
+
+  /* ---- numbers ---- */
+  .band { border-bottom: 1px solid var(--hair2); background: var(--white2); }
+  .band-grid { display: grid; grid-template-columns: repeat(4, 1fr); }
+  .band-cell { padding: 34px 26px; border-left: 1px solid var(--hair); }
+  .band-cell:first-child { border-left: none; padding-left: 0; }
+  .band-cell .v { font-family: var(--head); font-weight: 700; font-size: 30px; letter-spacing: -0.02em; }
+  .band-cell .v::after { content: " ↗"; color: var(--signal); font-size: 18px; }
+  .band-cell .k { margin-top: 6px; font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); }
+
+  /* ---- sections ---- */
+  .sec { padding: 100px 0; border-bottom: 1px solid var(--hair2); }
+  .sec-grid { display: grid; grid-template-columns: repeat(12, 1fr); gap: 0; }
+  .sec-label { grid-column: 1 / 4; padding-right: 36px; }
+  .sec-label h2 { margin-top: 12px; font-size: clamp(26px, 2.8vw, 38px); }
+  .sec-label .lede { margin-top: 16px; font-size: 15.5px; }
+  .sec-content { grid-column: 4 / 13; border-left: 1px solid var(--hair); padding-left: 48px; }
+
+  /* ---- ladder table ---- */
+  .l-row {
+    display: grid; grid-template-columns: 64px 110px 220px 1fr; gap: 24px; align-items: baseline;
+    padding: 26px 0; border-bottom: 1px solid var(--hair);
+  }
+  .l-row:first-child { padding-top: 4px; }
+  .l-row .n { font-family: var(--mono); font-size: 11px; color: var(--faint); }
+  .l-row .code { font-family: var(--head); font-weight: 700; font-size: 32px; letter-spacing: -0.02em; }
+  .l-row:hover .code { color: var(--signal); }
+  .l-row .name { font-weight: 640; font-size: 15px; }
+  .l-row p { color: var(--ink2); font-size: 15px; }
+  .l-note { margin-top: 26px; font-family: var(--mono); font-size: 12px; color: var(--faint); max-width: 76ch; line-height: 1.7; }
+
+  /* ---- traits ---- */
+  .t-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 44px 48px; }
+  .t-item .idx { display: block; }
+  .t-item h3 { margin-top: 10px; font-size: 20px; letter-spacing: -0.02em; }
+  .t-item p { margin-top: 10px; color: var(--ink2); font-size: 15px; }
+
+  /* ---- steps ---- */
+  .s-row { display: grid; grid-template-columns: repeat(4, 1fr); gap: 40px; }
+  .s-item { border-top: 2px solid var(--ink); padding-top: 16px; }
+  .s-item:hover { border-top-color: var(--signal); }
+  .s-item .idx { display: block; }
+  .s-item h3 { margin-top: 8px; font-size: 20px; }
+  .s-item p { margin-top: 10px; color: var(--ink2); font-size: 14.5px; }
+
+  /* ---- divisions ---- */
+  .d-list { display: flex; flex-direction: column; }
+  .d-row {
+    display: grid; grid-template-columns: 170px 200px 1fr auto; gap: 28px; align-items: center;
+    padding: 30px 0; border-bottom: 1px solid var(--hair);
+  }
+  .d-row:first-child { padding-top: 4px; }
+  .d-row h3 { font-size: 30px; letter-spacing: -0.03em; }
+  .pill {
+    display: inline-flex; align-items: center; gap: 8px;
+    font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.06em; text-transform: uppercase;
+    border: 1px solid var(--hair2); border-radius: 999px; padding: 6px 14px; color: var(--ink2); justify-self: start;
+  }
+  .pill .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--faint); }
+  .pill.live { border-color: var(--signal); color: var(--signal); }
+  .pill.live .dot { background: var(--signal); }
+  .d-row p { color: var(--ink2); font-size: 15px; max-width: 52ch; }
+
+  /* ---- portal ---- */
+  .p-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 56px; align-items: start; }
+  .shot {
+    border: 1px solid var(--hair2); border-radius: 14px; overflow: hidden; background: var(--white);
+    box-shadow: 0 24px 60px rgba(22,21,15,0.09);
+  }
+  .shot-bar { display: flex; gap: 6px; padding: 12px 16px; border-bottom: 1px solid var(--hair); }
+  .shot-bar i { width: 9px; height: 9px; border-radius: 50%; background: var(--hair2); }
+  .shot-bar i:first-child { background: var(--signal); }
+  .shot-body { padding: 22px; }
+  .shot-title { font-family: var(--mono); font-size: 11px; letter-spacing: 0.06em; text-transform: uppercase; color: var(--faint); display: flex; justify-content: space-between; }
+  .shot-row { display: flex; justify-content: space-between; align-items: center; padding: 13px 0; border-bottom: 1px solid var(--hair); font-size: 14px; }
+  .shot-row:last-child { border-bottom: none; }
+  .shot-row .v { font-weight: 640; }
+  .shot-row .v.sig { color: var(--signal); }
+  .p-items .t-item { padding: 18px 0; border-bottom: 1px solid var(--hair); }
+  .p-items .t-item:first-child { padding-top: 0; }
+  .p-items .t-item:last-child { border-bottom: none; }
+
+  /* ---- closing ---- */
+  .closing { padding: 130px 0; text-align: left; }
+  .closing-grid { display: grid; grid-template-columns: repeat(12, 1fr); }
+  .closing-main { grid-column: 1 / 10; }
+  .closing h2 { font-size: clamp(44px, 7vw, 100px); letter-spacing: -0.04em; }
+  .closing h2 .sig { color: var(--signal); }
+  .closing .lede { margin-top: 26px; }
+  .closing-cta { margin-top: 40px; display: flex; gap: 12px; flex-wrap: wrap; }
+  .closing-mail { margin-top: 28px; font-family: var(--mono); font-size: 12px; color: var(--faint); }
+  .closing-mail a { color: var(--signal); border-bottom: 1px solid rgba(232,68,46,0.4); }
+
+  footer { border-top: 1px solid var(--hair2); padding: 40px 0 48px; }
+  .foot { display: flex; justify-content: space-between; gap: 24px; flex-wrap: wrap; font-family: var(--mono); font-size: 11.5px; color: var(--faint); }
+  .foot a:hover { color: var(--signal); }
+  .foot-links { display: flex; gap: 26px; flex-wrap: wrap; }
+
+  @media (max-width: 1000px) {
+    .nav { grid-template-columns: 1fr auto; }
+    .nav-links { display: none; }
+    .hero-grid { grid-template-columns: 1fr; }
+    .hero-main { grid-column: 1; border-right: none; padding-right: 0; }
+    .hero-side { grid-column: 1; flex-direction: row; padding: 0 0 60px; }
+    .fact { flex: 1; }
+    .sec-grid { grid-template-columns: 1fr; }
+    .sec-label { grid-column: 1; padding-right: 0; margin-bottom: 40px; }
+    .sec-content { grid-column: 1; border-left: none; padding-left: 0; }
+    .band-grid { grid-template-columns: 1fr 1fr; }
+    .band-cell:nth-child(3) { border-left: none; padding-left: 0; }
+    .band-cell:nth-child(-n+2) { border-bottom: 1px solid var(--hair); }
+    .s-row, .t-grid { grid-template-columns: 1fr 1fr; }
+    .p-grid { grid-template-columns: 1fr; }
+    .d-row { grid-template-columns: 1fr; gap: 10px; }
+    .closing-main { grid-column: 1 / 13; }
+  }
+  @media (max-width: 620px) {
+    .s-row, .t-grid { grid-template-columns: 1fr; }
+    .l-row { grid-template-columns: 1fr; gap: 6px; }
+    .hero-side { flex-direction: column; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="wrap">
+    <nav class="nav">
+      <span class="wordmark">Elevated</span>
+      <div class="nav-links">
+        <a href="#ladder">Ladder</a>
+        <a href="#how">Process</a>
+        <a href="#divisions">Divisions</a>
+        <a href="#portal">Portal</a>
+      </div>
+      <div class="nav-end"><a class="btn btn-ink btn-sm" href="#join">Join the team</a></div>
+    </nav>
+  </div>
+</header>
+
+<section class="hero">
+  <div class="wrap">
+    <div class="hero-grid">
+      <div class="hero-main">
+        <span class="idx">01 — Field Sales Careers</span>
+        <h1 style="margin-top:22px">Sales, run like a system<span class="sig">.</span></h1>
+        <p class="lede">A field sales organization with a published comp ladder, divisions labeled by their real status, and a portal that shows your money the day it lands.</p>
+        <div class="hero-cta">
+          <a class="btn btn-ink" href="#join">Join the team</a>
+          <a class="btn btn-line" href="#ladder">Read the ladder</a>
+        </div>
+      </div>
+      <aside class="hero-side">
+        <div class="fact"><div class="k">Structure</div><div class="v">4 published rungs</div></div>
+        <div class="fact"><div class="k">Open now</div><div class="v">Fiber division</div></div>
+        <div class="fact"><div class="k">Pay visibility</div><div class="v">Daily, in the portal</div></div>
+      </aside>
+    </div>
+  </div>
+</section>
+
+<section class="band">
+  <div class="wrap">
+    <div class="band-grid">
+      <div class="band-cell"><div class="v">Add figure</div><div class="k">Installs 2026</div></div>
+      <div class="band-cell"><div class="v">Add figure</div><div class="k">Paid to reps 2026</div></div>
+      <div class="band-cell"><div class="v">Add figure</div><div class="k">Active territories</div></div>
+      <div class="band-cell"><div class="v">Add figure</div><div class="k">Reps promoted past EL</div></div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="ladder">
+  <div class="wrap">
+    <div class="sec-grid">
+      <div class="sec-label">
+        <span class="idx">02 — The Ladder</span>
+        <h2>Four rungs. No mystery.</h2>
+        <p class="lede">Most comp plans are explained once, in a room, by someone who benefits from you misremembering it. This one is written down and it does not move.</p>
+      </div>
+      <div class="sec-content">
+        <div class="l-row">
+          <span class="n">/01</span>
+          <span class="code">EL</span>
+          <span class="name">Entry Level</span>
+          <p>You sell, you get paid on what you sell. Everyone starts here and nobody skips it, including the people running divisions today.</p>
+        </div>
+        <div class="l-row">
+          <span class="n">/02</span>
+          <span class="code">STL</span>
+          <span class="name">Sales Team Leader</span>
+          <p>Your own production plus the first reps you bring in. This is the first rung where your team pays you, not just your own knocks.</p>
+        </div>
+        <div class="l-row">
+          <span class="n">/03</span>
+          <span class="code">STC</span>
+          <span class="name">Sales Team Captain</span>
+          <p>A team deep enough to run without you in every conversation. You are coaching leaders now, not just closing your own doors.</p>
+        </div>
+        <div class="l-row">
+          <span class="n">/04</span>
+          <span class="code">JP</span>
+          <span class="name">Junior Partner</span>
+          <p>You are building the organization instead of working inside it. The top of the published ladder, and the start of a different conversation.</p>
+        </div>
+        <p class="l-note">Advancement is your production plus the team you have built. Exact thresholds are published per division and given to you in writing on day one.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec">
+  <div class="wrap">
+    <div class="sec-grid">
+      <div class="sec-label">
+        <span class="idx">03 — Fit</span>
+        <h2>This is not for everyone</h2>
+        <p class="lede">Plenty of people do well in this work. Not all of them do well here. The reps who last tend to look like this.</p>
+      </div>
+      <div class="sec-content">
+        <div class="t-grid">
+          <div class="t-item">
+            <span class="idx">a.</span>
+            <h3>You want the numbers in writing</h3>
+            <p>Handshakes are fine. Published thresholds are better. You read the comp plan before you sign it.</p>
+          </div>
+          <div class="t-item">
+            <span class="idx">b.</span>
+            <h3>You would rather be measured than managed</h3>
+            <p>Your production speaks for itself, and you prefer it that way. Nobody has to hover.</p>
+          </div>
+          <div class="t-item">
+            <span class="idx">c.</span>
+            <h3>You are building a team, not just a check</h3>
+            <p>The ladder pays you for the people you develop, not only the doors you knock yourself.</p>
+          </div>
+          <div class="t-item">
+            <span class="idx">d.</span>
+            <h3>You knock when the weather is bad</h3>
+            <p>Consistency beats intensity. The reps who last show up on the days nobody else does.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="how">
+  <div class="wrap">
+    <div class="sec-grid">
+      <div class="sec-label">
+        <span class="idx">04 — Process</span>
+        <h2>How it runs</h2>
+        <p class="lede">From the first form to your first paid week, without a two week silence in the middle.</p>
+      </div>
+      <div class="sec-content">
+        <div class="s-row">
+          <div class="s-item">
+            <span class="idx">Step 1</span>
+            <h3>Apply</h3>
+            <p>One short form. We are asking what you have sold and where you are, not for a resume.</p>
+          </div>
+          <div class="s-item">
+            <span class="idx">Step 2</span>
+            <h3>Interview</h3>
+            <p>Booked straight into a calendar from the same link. No waiting on a callback that never comes.</p>
+          </div>
+          <div class="s-item">
+            <span class="idx">Step 3</span>
+            <h3>Onboard</h3>
+            <p>Paperwork, licensing where the division needs it, and your first territory. All in one place.</p>
+          </div>
+          <div class="s-item">
+            <span class="idx">Step 4</span>
+            <h3>Sell</h3>
+            <p>Your numbers appear in the portal the day they land. So does what you are owed for them.</p>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="divisions">
+  <div class="wrap">
+    <div class="sec-grid">
+      <div class="sec-label">
+        <span class="idx">05 — Divisions</span>
+        <h2>What is actually open</h2>
+        <p class="lede">Three divisions, at three different stages. We would rather tell you which is which than have you find out in week two.</p>
+      </div>
+      <div class="sec-content">
+        <div class="d-list">
+          <div class="d-row">
+            <h3>Fiber</h3>
+            <span class="pill live"><span class="dot"></span>Live · hiring</span>
+            <p>Door-to-door fiber internet. Active territories, active installs, and the division every new rep can start in today.</p>
+            <a class="btn btn-ink btn-sm" href="#join">Join</a>
+          </div>
+          <div class="d-row">
+            <h3>Life Insurance</h3>
+            <span class="pill"><span class="dot"></span>In training</span>
+            <p>Licensing-backed and building its first cohort. Openings announced to current reps first.</p>
+            <span></span>
+          </div>
+          <div class="d-row" style="border-bottom:none">
+            <h3>Autoglass</h3>
+            <span class="pill"><span class="dot"></span>Queued</span>
+            <p>Scoped and waiting on its lane. When it opens, the ladder and portal work exactly the same way.</p>
+            <span></span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="sec" id="portal">
+  <div class="wrap">
+    <div class="sec-grid">
+      <div class="sec-label">
+        <span class="idx">06 — The Portal</span>
+        <h2>Your numbers, the day they land</h2>
+        <p class="lede">Every rep gets a login. Not a weekly screenshot in a group chat.</p>
+      </div>
+      <div class="sec-content">
+        <div class="p-grid">
+          <div class="shot">
+            <div class="shot-bar"><i></i><i></i><i></i></div>
+            <div class="shot-body">
+              <div class="shot-title"><span>portal.elevatedmgmt.co / me</span><span style="color:var(--signal)">● live</span></div>
+              <div style="margin-top:14px">
+                <div class="shot-row"><span>Mon — 3 installs</span><span class="v">Posted</span></div>
+                <div class="shot-row"><span>Tue — 2 installs</span><span class="v">Posted</span></div>
+                <div class="shot-row"><span>Wed — 4 installs</span><span class="v">Posted</span></div>
+                <div class="shot-row"><span>Team override</span><span class="v">Accruing</span></div>
+                <div class="shot-row"><span>Owed to date</span><span class="v sig">Visible daily</span></div>
+              </div>
+            </div>
+          </div>
+          <div class="p-items">
+            <div class="t-item">
+              <h3>My money</h3>
+              <p>What you have earned, what has cleared, and what is queued. Down to the install.</p>
+            </div>
+            <div class="t-item">
+              <h3>My production</h3>
+              <p>Every sale you have made, the day it landed, and its status.</p>
+            </div>
+            <div class="t-item">
+              <h3>My team</h3>
+              <p>Once you are past EL: who is producing, who needs help, what your overrides look like.</p>
+            </div>
+            <div class="t-item">
+              <h3>Where I stand</h3>
+              <p>Your rung, your thresholds, and exactly how far you are from the next one.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="closing" id="join">
+  <div class="wrap">
+    <div class="closing-grid">
+      <div class="closing-main">
+        <span class="idx">07 — Join</span>
+        <h2 style="margin-top:20px">Everyone starts at EL<span class="sig">.</span></h2>
+        <p class="lede">Tell us what you have sold and where you are. We will tell you which division is open and what the first rung pays.</p>
+        <div class="closing-cta">
+          <a class="btn btn-ink" href="mailto:careers@elevatedmgmt.co">Join the team</a>
+          <a class="btn btn-line" href="#ladder">Re-read the ladder</a>
+        </div>
+        <p class="closing-mail">Or write to <a href="mailto:careers@elevatedmgmt.co">careers@elevatedmgmt.co</a> — plain reply, one business day.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<footer>
+  <div class="wrap foot">
+    <div class="foot-links">
+      <a href="#ladder">Ladder</a>
+      <a href="#divisions">Divisions</a>
+      <a href="#portal">Portal</a>
+      <a href="mailto:careers@elevatedmgmt.co">Contact</a>
+    </div>
+    <p>Elevated Management Group</p>
+  </div>
+</footer>
+
+</body>
+</html>

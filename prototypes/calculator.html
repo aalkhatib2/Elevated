@@ -1,0 +1,353 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Comp Calculator — Elevated Field Sales</title>
+<link rel="stylesheet" href="elevated.css">
+<style>
+  .shell { padding: 56px 0 90px; }
+  .head-block { max-width: 780px; }
+  .head-block h1 { font-size: clamp(34px, 5vw, 68px); margin-top: 18px; }
+  .head-block .lede { margin-top: 22px; }
+
+  .calc { margin-top: 56px; display: grid; grid-template-columns: 1fr 440px; gap: 56px; align-items: start; }
+
+  /* ---- controls ---- */
+  .control { padding: 30px 0; border-top: 1px solid var(--line-soft); }
+  .control:first-child { border-top: none; padding-top: 0; }
+  .control-top { display: flex; justify-content: space-between; align-items: baseline; gap: 20px; }
+  .control-top .g { font-size: 17px; font-weight: 600; }
+  .control-top .g small { display: block; font-weight: 400; color: var(--muted); font-size: 14px; margin-top: 4px; max-width: 46ch; line-height: 1.5; }
+  .control-top .val { font-family: var(--display); font-weight: 900; font-size: 34px; letter-spacing: -0.03em; color: var(--steel); white-space: nowrap; }
+
+  input[type=range] {
+    -webkit-appearance: none; appearance: none;
+    width: 100%; margin-top: 22px; height: 8px; background: var(--bg-3);
+    border: 1px solid var(--line-soft); cursor: pointer;
+  }
+  input[type=range]::-webkit-slider-thumb {
+    -webkit-appearance: none; appearance: none;
+    width: 18px; height: 26px; background: var(--white); border: none; cursor: grab;
+  }
+  input[type=range]::-webkit-slider-thumb:active { cursor: grabbing; background: var(--steel); }
+  input[type=range]::-moz-range-thumb {
+    width: 18px; height: 26px; background: var(--white); border: none; border-radius: 0; cursor: grab;
+  }
+  .scale { display: flex; justify-content: space-between; margin-top: 8px; font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; color: var(--muted); }
+
+  /* ---- rate card ---- */
+  .rates { margin-top: 44px; border: 1px solid var(--line); }
+  .rates-head { background: var(--bg-3); padding: 16px 22px; border-bottom: 1px solid var(--line); display: flex; justify-content: space-between; align-items: center; gap: 16px; flex-wrap: wrap; }
+  .rates-body { padding: 22px; display: grid; grid-template-columns: 1fr 1fr; gap: 20px; }
+  .rate-field label { display: block; font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  .rate-field .wrapin { display: flex; align-items: center; margin-top: 10px; border: 1px solid var(--line); background: var(--bg); }
+  .rate-field .wrapin span { padding: 0 12px; font-family: var(--mono); font-size: 14px; color: var(--muted); }
+  .rate-field input {
+    flex: 1; min-width: 0; background: none; border: none; color: var(--text);
+    padding: 13px 12px 13px 0; font-family: var(--body); font-size: 17px; font-weight: 600;
+  }
+  .rate-field input:focus { outline: none; }
+  .rate-field .wrapin:focus-within { border-color: var(--steel); }
+  .warn {
+    font-family: var(--mono); font-size: 10px; letter-spacing: 0.14em; text-transform: uppercase;
+    color: #0A0B0D; background: var(--steel); padding: 5px 10px;
+  }
+
+  /* ---- result ---- */
+  .result { position: sticky; top: 96px; }
+  .result-inner { border: 1px solid var(--line); background: var(--bg-2); }
+  .result-head { padding: 22px 26px; border-bottom: 1px solid var(--line-soft); display: flex; justify-content: space-between; align-items: center; }
+  .payout { padding: 32px 26px; border-bottom: 1px solid var(--line-soft); }
+  .payout .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .payout .v { margin-top: 10px; font-family: var(--display); font-weight: 900; font-size: clamp(40px, 5vw, 60px); letter-spacing: -0.04em; line-height: 1; }
+  .payout .s { margin-top: 12px; font-size: 14px; color: var(--muted); line-height: 1.55; }
+  .split { display: grid; grid-template-columns: 1fr 1fr; gap: 1px; background: var(--line-soft); }
+  .split div { background: var(--bg-2); padding: 20px 26px; }
+  .split .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.18em; text-transform: uppercase; color: var(--muted); }
+  .split .v { margin-top: 8px; font-family: var(--mono); font-size: 19px; color: var(--text); }
+  .split .v.steel { color: var(--steel); }
+
+  .rung-out { padding: 26px; border-top: 1px solid var(--line-soft); }
+  .rung-out .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
+  .rung-out .v { margin-top: 10px; display: flex; align-items: baseline; gap: 14px; }
+  .rung-out .v .code { font-family: var(--display); font-weight: 900; font-size: 44px; letter-spacing: -0.03em; color: var(--steel); }
+  .rung-out .v .name { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-2); }
+  .rung-out p { margin-top: 14px; font-size: 14.5px; color: var(--text-2); line-height: 1.6; }
+
+  .gates { margin-top: 20px; display: flex; flex-direction: column; gap: 12px; }
+  .gate-mini { display: flex; justify-content: space-between; align-items: center; gap: 14px; font-size: 13.5px; }
+  .gate-mini .c { font-family: var(--mono); font-size: 11px; }
+  .gate-mini .c.met { color: var(--pos); }
+  .gate-mini .c.miss { color: var(--muted); }
+
+  .disclaimer { margin-top: 26px; padding: 18px 20px; border-left: 2px solid var(--steel); background: var(--bg-2); font-size: 14px; color: var(--text-2); line-height: 1.6; }
+
+  @media (max-width: 1000px) {
+    .calc { grid-template-columns: 1fr; gap: 44px; }
+    .result { position: static; }
+  }
+  @media (max-width: 560px) {
+    .rates-body { grid-template-columns: 1fr; }
+    .control-top { flex-direction: column; gap: 10px; }
+  }
+</style>
+</head>
+<body>
+
+<div class="proto-flag">
+  <div class="wrap">
+    <span><b>Prototype</b> — comp calculator</span>
+    <span>Rates below are examples, not Elevated's published comp</span>
+  </div>
+</div>
+
+<header>
+  <div class="wrap">
+    <nav class="nav">
+      <a class="wordmark" href="../index.html">Elevated</a>
+      <div class="nav-links">
+        <a href="../index.html#ladder">Your Growth</a>
+        <a href="apply.html">Apply</a>
+        <a href="portal.html">Portal</a>
+      </div>
+      <a class="btn btn-ghost btn-sm" href="../index.html">Back to Site</a>
+    </nav>
+  </div>
+</header>
+
+<main class="shell">
+  <div class="wrap">
+    <div class="head-block">
+      <p class="eyebrow">Run the numbers</p>
+      <h1>What the ladder actually pays</h1>
+      <p class="lede">Move the sliders to your own pace. The math is the published comp structure, not a pitch — and you can see the rung you would be standing on while you earn it.</p>
+    </div>
+
+    <div class="calc">
+      <!-- CONTROLS -->
+      <div>
+        <div class="control">
+          <div class="control-top">
+            <div class="g">Your installs per week
+              <small>What you personally close and get installed. A steady Fiber rep works a full week of doors.</small>
+            </div>
+            <div class="val" id="vInstalls">6</div>
+          </div>
+          <input type="range" id="sInstalls" min="0" max="25" value="6">
+          <div class="scale"><span>0</span><span>25</span></div>
+        </div>
+
+        <div class="control">
+          <div class="control-top">
+            <div class="g">Producing reps on your team
+              <small>Reps you recruited who are actually knocking. Overrides only pay once you reach STL.</small>
+            </div>
+            <div class="val" id="vReps">0</div>
+          </div>
+          <input type="range" id="sReps" min="0" max="20" value="0">
+          <div class="scale"><span>0</span><span>20</span></div>
+        </div>
+
+        <div class="control">
+          <div class="control-top">
+            <div class="g">Average installs per team rep, per week
+              <small>What a typical rep under you produces. New reps ramp; set this honestly.</small>
+            </div>
+            <div class="val" id="vTeamRate">4</div>
+          </div>
+          <input type="range" id="sTeamRate" min="0" max="15" value="4">
+          <div class="scale"><span>0</span><span>15</span></div>
+        </div>
+
+        <div class="control">
+          <div class="control-top">
+            <div class="g">Weeks worked per month
+              <small>Vacation, weather, and slow weeks are real. Four is a full month.</small>
+            </div>
+            <div class="val" id="vWeeks">4</div>
+          </div>
+          <input type="range" id="sWeeks" min="1" max="5" value="4">
+          <div class="scale"><span>1</span><span>5</span></div>
+        </div>
+
+        <!-- RATE CARD -->
+        <div class="rates">
+          <div class="rates-head">
+            <span class="mono-label" style="color:var(--text-2)">Rate card</span>
+            <span class="warn">Example rates — replace with published comp</span>
+          </div>
+          <div class="rates-body">
+            <div class="rate-field">
+              <label for="rInstall">Commission per personal install</label>
+              <div class="wrapin"><span>$</span><input id="rInstall" type="number" min="0" step="5" value="100"></div>
+            </div>
+            <div class="rate-field">
+              <label for="rOverride">Override per team install</label>
+              <div class="wrapin"><span>$</span><input id="rOverride" type="number" min="0" step="5" value="25"></div>
+            </div>
+          </div>
+        </div>
+
+        <p class="disclaimer">
+          These two numbers drive every figure on this page. Swap in the real published rates per campaign and the calculator is production ready — nothing else needs to change.
+        </p>
+      </div>
+
+      <!-- RESULT -->
+      <aside class="result">
+        <div class="result-inner">
+          <div class="result-head">
+            <span class="mono-label">Projected</span>
+            <span class="tag live"><span class="dot"></span>Live</span>
+          </div>
+
+          <div class="payout">
+            <div class="k">Per month</div>
+            <div class="v" id="outMonth">$2,400</div>
+            <div class="s" id="outYear">About $28,800 a year at this pace</div>
+          </div>
+
+          <div class="split">
+            <div>
+              <div class="k">Your production</div>
+              <div class="v" id="outOwn">$2,400</div>
+            </div>
+            <div>
+              <div class="k">Team override</div>
+              <div class="v steel" id="outTeam">$0</div>
+            </div>
+          </div>
+
+          <div class="rung-out">
+            <div class="k">Rung at this pace</div>
+            <div class="v">
+              <span class="code" id="outCode">EL</span>
+              <span class="name" id="outName">Entry Level</span>
+            </div>
+            <p id="outNote">You sell, you get paid on what you sell. Everyone starts here.</p>
+
+            <div class="gates" id="outGates"></div>
+          </div>
+        </div>
+
+        <a class="btn btn-primary" href="apply.html" style="width:100%; margin-top:20px">Join the Team</a>
+      </aside>
+    </div>
+  </div>
+</main>
+
+<footer>
+  <div class="wrap foot">
+    <div class="foot-links">
+      <a href="../index.html">Home</a>
+      <a href="apply.html">Apply</a>
+      <a href="portal.html">Portal</a>
+      <a href="mailto:careers@elevatedmgmt.co">Contact</a>
+    </div>
+    <p>Elevated Management Group</p>
+  </div>
+</footer>
+
+<script>
+(function () {
+  /* ============================================================
+     LADDER GATES — the single place the ladder is defined.
+     Swap these for the published per-campaign thresholds and both
+     the rung readout and the gate list update everywhere.
+     ============================================================ */
+  var LADDER = [
+    { code: 'EL',  name: 'Entry Level',        installs: 0,  reps: 0,
+      note: 'You sell, you get paid on what you sell. Everyone starts here.' },
+    { code: 'STL', name: 'Sales Team Leader',  installs: 30, reps: 2,
+      note: 'Your own production plus the first reps you bring in. The first rung where your team pays you.' },
+    { code: 'STC', name: 'Sales Team Captain', installs: 40, reps: 6,
+      note: 'A team deep enough to run without you in every conversation. You are coaching leaders now.' },
+    { code: 'JP',  name: 'Junior Partner',     installs: 40, reps: 12,
+      note: 'You are building the organization instead of working inside it. The top of the published ladder.' }
+  ];
+
+  var el = function (id) { return document.getElementById(id); };
+  var money = function (n) {
+    return '$' + Math.round(n).toLocaleString('en-US');
+  };
+
+  var inputs = ['sInstalls', 'sReps', 'sTeamRate', 'sWeeks', 'rInstall', 'rOverride'].map(el);
+
+  function calc() {
+    var installs = +el('sInstalls').value;
+    var reps     = +el('sReps').value;
+    var teamRate = +el('sTeamRate').value;
+    var weeks    = +el('sWeeks').value;
+    var rInst    = Math.max(0, +el('rInstall').value || 0);
+    var rOver    = Math.max(0, +el('rOverride').value || 0);
+
+    el('vInstalls').textContent = installs;
+    el('vReps').textContent     = reps;
+    el('vTeamRate').textContent = teamRate;
+    el('vWeeks').textContent    = weeks;
+
+    /* monthly volume */
+    var ownMonthly  = installs * weeks;
+    var teamMonthly = reps * teamRate * weeks;
+
+    /* 30-day personal installs decide the rung gate */
+    var trailing30 = installs * 4;
+
+    /* find the highest rung whose gates are both met */
+    var rung = LADDER[0];
+    for (var i = LADDER.length - 1; i >= 0; i--) {
+      if (trailing30 >= LADDER[i].installs && reps >= LADDER[i].reps) { rung = LADDER[i]; break; }
+    }
+
+    /* overrides only pay from STL up */
+    var paysOverride = rung.code !== 'EL';
+    var ownPay  = ownMonthly * rInst;
+    var teamPay = paysOverride ? teamMonthly * rOver : 0;
+    var total   = ownPay + teamPay;
+
+    el('outMonth').textContent = money(total);
+    el('outYear').textContent  = 'About ' + money(total * 12) + ' a year at this pace';
+    el('outOwn').textContent   = money(ownPay);
+    el('outTeam').textContent  = paysOverride ? money(teamPay) : 'Locked at EL';
+    el('outCode').textContent  = rung.code;
+    el('outName').textContent  = rung.name;
+    el('outNote').textContent  = rung.note;
+
+    /* next rung gates */
+    var idx  = LADDER.indexOf(rung);
+    var next = LADDER[idx + 1];
+    var host = el('outGates');
+    host.innerHTML = '';
+
+    if (!next) {
+      host.innerHTML = '<div class="gate-mini"><span>Top of the published ladder</span>'
+                     + '<span class="c met">All gates met</span></div>';
+      return;
+    }
+
+    [
+      { label: 'Installs, trailing 30 days', have: trailing30, need: next.installs },
+      { label: 'Producing reps recruited',   have: reps,       need: next.reps }
+    ].forEach(function (g) {
+      var met = g.have >= g.need;
+      var d = document.createElement('div');
+      d.className = 'gate-mini';
+      d.innerHTML = '<span>' + g.label + ' for ' + next.code + '</span>'
+                  + '<span class="c ' + (met ? 'met' : 'miss') + '">'
+                  + g.have + ' of ' + g.need + (met ? ' — met' : '') + '</span>';
+      host.appendChild(d);
+    });
+  }
+
+  inputs.forEach(function (i) {
+    i.addEventListener('input', calc);
+    i.addEventListener('change', calc);
+  });
+
+  calc();
+})();
+</script>
+
+</body>
+</html>
