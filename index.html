@@ -23,6 +23,7 @@
     --text-2:    #A7ADB6;
     --muted:     #767D87;
     --steel:     #9DB6CE;
+    --gold:      #D6B45C;   /* ladder accent, warm counterpart to --steel */
     --white:     #F4F5F6;
 
     --display: "Arial Black", "Helvetica Neue", Helvetica, "Segoe UI", system-ui, sans-serif;
@@ -236,11 +237,11 @@
   #ladder {
     background: linear-gradient(180deg,
       var(--bg) 0%,
-      #10151A 20%,
-      #171E25 42%,
-      #1E262F 62%,
-      #232C36 80%,
-      #141A20 93%,
+      #17130A 20%,
+      #221B0C 42%,
+      #2E2410 62%,
+      #382C13 80%,
+      #1C170C 93%,
       var(--bg) 100%);
   }
   .ladder {
@@ -269,7 +270,9 @@
     line-height: 1;
     color: var(--white);
   }
-  .rung-4 .rung-code { color: var(--steel); }
+  /* Gold rather than the page's steel accent, so the top rung and the
+     note read against the gold ladder gradient instead of fighting it. */
+  .rung-4 .rung-code { color: var(--gold); }
   .rung-name {
     font-family: var(--mono);
     font-size: 11px;
@@ -284,7 +287,7 @@
     font-size: 15px;
     color: var(--muted);
     max-width: 60ch;
-    border-left: 2px solid var(--steel);
+    border-left: 2px solid var(--gold);
     padding-left: 20px;
     line-height: 1.65;
   }
@@ -562,25 +565,24 @@
         </div>
         <div>
           <div class="sec-head rise">
-            <h2>Your numbers, the day they land</h2>
-            <p class="lede">Every rep gets a login. Not a weekly screenshot in a group chat.</p>
+            <h2>Our movement</h2>
+            <p class="lede">Elevated management runs on 5 core values.</p>
           </div>
           <div class="portal-list">
             <div class="portal-item rise">
-              <h3>My money</h3>
-              <p>Earned, pending, and paid for the current period, with the next payout date.</p>
+              <h3>Build faith</h3>
             </div>
             <div class="portal-item rise">
-              <h3>My production</h3>
-              <p>What you closed, your close rate, and how the period compares to the last one.</p>
+              <h3>Get in the best physical shape</h3>
             </div>
             <div class="portal-item rise">
-              <h3>My team</h3>
-              <p>Once you reach STL, your roster, their production, and the override it earned you.</p>
+              <h3>Make life-changing money</h3>
             </div>
             <div class="portal-item rise">
-              <h3>Where I stand</h3>
-              <p>Your current rung, and the two things that move you off it.</p>
+              <h3>Impact the most people</h3>
+            </div>
+            <div class="portal-item rise">
+              <h3>Create opportunity</h3>
             </div>
           </div>
         </div>
