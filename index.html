@@ -227,31 +227,6 @@
   .sec-head h2 { font-size: clamp(30px, 4.6vw, 58px); }
   .sec-head .lede { margin-top: 22px; }
 
-  /* ---------------- numbers band ---------------- */
-  /* TODO(adam): replace the placeholder chips with real figures.
-     Nothing here is invented on purpose. */
-  .band { padding: 62px 0; border-top: 1px solid var(--line-soft); background: var(--bg-2); }
-  .band-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); }
-  .band-cell { background: var(--bg-2); padding: 30px 26px; }
-  .band-val {
-    display: inline-block;
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.18em;
-    color: var(--muted);
-    border: 1px dashed rgba(255,255,255,0.22);
-    padding: 9px 16px;
-  }
-  .band-label {
-    margin-top: 16px;
-    font-family: var(--mono);
-    font-size: 10.5px;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    color: var(--text-2);
-    line-height: 1.5;
-  }
-
   /* ---------------- ladder ---------------- */
   /* Background fades lighter from EL to JP, top to bottom, so the
      climb reads visually as well as in the copy. The glow lives on
@@ -432,7 +407,6 @@
     .hero-cta-wrap { padding-bottom: 88px; }
     .hero-cta-wrap .btn, .closing-cta .btn { width: calc(100% - 36px); max-width: 340px; }
     .closing-cta { flex-direction: column; }
-    .band-grid { grid-template-columns: 1fr 1fr; }
     .traits { grid-template-columns: 1fr; gap: 44px; }
     .divs { grid-template-columns: 1fr; }
     .div-live { grid-column: auto; }
@@ -515,30 +489,6 @@
     <div class="hero-cta-wrap rise">
       <a href="#join" class="btn btn-primary">Join the Team</a>
       <a href="#ladder" class="btn btn-ghost">Our Team</a>
-    </div>
-  </section>
-
-  <!-- NUMBERS: deliberate placeholders, no invented figures -->
-  <section class="band">
-    <div class="wrap">
-      <div class="band-grid rise">
-        <div class="band-cell">
-          <span class="band-val">Add figure</span>
-          <div class="band-label">Installs<br>2026</div>
-        </div>
-        <div class="band-cell">
-          <span class="band-val">Add figure</span>
-          <div class="band-label">Paid to reps<br>2026</div>
-        </div>
-        <div class="band-cell">
-          <span class="band-val">Add figure</span>
-          <div class="band-label">Active<br>territories</div>
-        </div>
-        <div class="band-cell">
-          <span class="band-val">Add figure</span>
-          <div class="band-label">Reps promoted<br>past EL</div>
-        </div>
-      </div>
     </div>
   </section>
 
