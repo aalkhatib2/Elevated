@@ -186,30 +186,38 @@
 
   /* ---------------- hero ---------------- */
   /* Poster hero: the wordmark is baked into the photography plate
-     (matches the brand reference), rendered at full width with no
-     cropping so the mark is never clipped on any viewport. The CTA
+     (matches the brand reference), rendered at full width. The CTA
      is real HTML sitting just below it, blended into the page with
      a gradient so the seam between photo and page background
      disappears regardless of the plate's exact bottom pixel value. */
   .hero { position: relative; }
-  /* Height is capped against the viewport's own height (dvh), not just
-     a pixel floor, so the wordmark plus the CTAs below it always fit
-     on screen. A flat 400px floor overflowed landscape phones, whose
-     entire viewport is shorter than that. */
-  .hero-art { position: relative; width: 100%; overflow: hidden; line-height: 0; background: var(--bg); height: min(clamp(400px, 58vh, 620px), 62dvh); }
-  /* Square plate: crop only vertically on wide viewports so the full-width
-     wordmark is never clipped horizontally. Mobile falls back to the whole,
-     uncropped square (see the 767px query). */
+  /* The plate is a ~2.31:1 banner (wordmark and the dune-to-sky fade
+     composed close together in the same frame), so the container is
+     sized off the image's own ratio instead of a fixed height. That
+     means the full picture renders identically at every viewport
+     width, mobile through desktop, with no per-breakpoint cropping.
+     min/max just guard the extremes: a very narrow phone doesn't
+     collapse the wordmark to nothing, an ultrawide screen doesn't
+     stretch the band taller than a hero should be. */
+  .hero-art {
+    position: relative; width: 100%; overflow: hidden; line-height: 0; background: var(--bg);
+    aspect-ratio: 2400 / 1037;
+    min-height: 200px;
+    max-height: 560px;
+  }
   .hero-art img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
   .hero-art::after {
     content: "";
-    position: absolute; left: 0; right: 0; bottom: 0; height: 24%;
+    position: absolute; left: 0; right: 0; bottom: 0; height: 20%;
     background: linear-gradient(to bottom, rgba(10,11,13,0) 0%, var(--bg) 94%);
     pointer-events: none;
   }
+  /* Buttons sit close under the plate now that the plate itself is
+     short, rather than needing a big gap to feel separated from a
+     tall image. */
   .hero-cta-wrap {
     margin-top: -2px;
-    padding: 0 0 132px;
+    padding: 0 0 64px;
     display: flex;
     justify-content: center;
     gap: 14px;
@@ -413,14 +421,7 @@
   }
 
   @media (max-width: 767px) {
-    /* Portrait phones show the plate whole and uncropped, so the
-       wordmark is never trimmed at the edges. object-fit is left at
-       cover rather than fill: with height:auto the box already
-       matches the image's own ratio, and fill would stretch it if
-       that ever stopped being true. */
-    .hero-art { height: auto; }
-    .hero-art img { height: auto; object-fit: cover; }
-    .hero-cta-wrap { padding-bottom: 88px; }
+    .hero-cta-wrap { padding-bottom: 48px; }
     .hero-cta-wrap .btn, .closing-cta .btn { width: calc(100% - 36px); max-width: 340px; }
     .closing-cta { flex-direction: column; }
     .traits { grid-template-columns: 1fr; gap: 44px; }
@@ -432,14 +433,14 @@
   }
 
   /* Short viewports: landscape phones and small desktop windows.
-     Keyed on height, not width, because a landscape phone is wider
-     than the phone breakpoint but far shorter than a desktop. Without
-     this the hero alone is taller than the whole screen and the CTAs
-     sit permanently below the fold. */
+     aspect-ratio derives the hero's height purely from its width, so
+     on a wide-but-short viewport it doesn't know the height is tight.
+     max-height forces it to shrink here, at the cost of object-fit
+     cropping the sides slightly - the one case where this hero still
+     needs a height override. */
   @media (max-height: 520px) and (orientation: landscape) {
-    .hero-art { height: 62dvh; }
-    .hero-art img { height: 100%; object-fit: cover; }
-    .hero-cta-wrap { padding-bottom: 44px; }
+    .hero-art { max-height: 42dvh; }
+    .hero-cta-wrap { padding-bottom: 32px; }
     .sec { padding: 56px 0; }
   }
 
@@ -499,8 +500,8 @@
   <section class="hero">
     <h1 class="sr-only">Elevated Field Sales</h1>
     <div class="hero-art rise">
-      <img src="hero-elevated.jpg" alt="The Elevated wordmark over desert dunes at dawn"
-           width="2048" height="2048" fetchpriority="high" decoding="async">
+      <img src="hero-elevated.jpg" alt="The Elevated wordmark over desert dunes, sand fading into the sky at dawn"
+           width="2400" height="1037" fetchpriority="high" decoding="async">
     </div>
     <div class="hero-cta-wrap rise">
       <a href="#join" class="btn btn-primary">Join the Team</a>
