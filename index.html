@@ -163,16 +163,19 @@
   /* ---------------- numbers band ---------------- */
   /* TODO(adam): replace the placeholder chips with real figures.
      Nothing here is invented on purpose. */
-  .band { padding: 62px 0; border-top: 1px solid var(--line-soft); background: var(--bg-2); }
-  .band-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: var(--line-soft); border: 1px solid var(--line-soft); }
-  .band-cell { background: var(--bg-2); padding: 30px 26px; }
+  /* Deliberate one-off: beige, breaking the page's dark theme lock
+     on request, to set this band apart as its own moment. Every
+     token below is re-scoped locally so contrast holds on light. */
+  .band { padding: 62px 0; border-top: 1px solid var(--line-soft); background: #EDE4D2; }
+  .band-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1px; background: rgba(20,15,5,0.14); border: 1px solid rgba(20,15,5,0.14); }
+  .band-cell { background: #EDE4D2; padding: 30px 26px; }
   .band-val {
     display: inline-block;
     font-family: var(--mono);
     font-size: 12px;
     letter-spacing: 0.18em;
-    color: var(--muted);
-    border: 1px dashed rgba(255,255,255,0.22);
+    color: #6B5F4E;
+    border: 1px dashed rgba(20,15,5,0.32);
     padding: 9px 16px;
   }
   .band-label {
@@ -181,7 +184,7 @@
     font-size: 10.5px;
     letter-spacing: 0.18em;
     text-transform: uppercase;
-    color: var(--text-2);
+    color: #4A4234;
     line-height: 1.5;
   }
 
