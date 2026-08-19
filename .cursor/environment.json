@@ -1,11 +1,12 @@
 {
   "name": "Elevated landing page",
   "install": "test -f index.html && test -f hero-elevated.jpg && test -f elevated-logo.jpg && python3 -c \"import sys; print('Static landing page files present; Python', sys.version.split()[0])\"",
+  "start": "bash .cursor/start-landing.sh",
   "terminals": [
     {
-      "name": "Landing page",
-      "command": "python3 -m http.server 5173 --bind 0.0.0.0",
-      "description": "Serves the static Elevated field sales landing page at http://localhost:5173"
+      "name": "Landing page logs",
+      "command": "touch /tmp/elevated-landing.log; tail -f /tmp/elevated-landing.log",
+      "description": "HTTP access logs for the static Elevated landing page on port 5173"
     }
   ],
   "ports": [
