@@ -1,0 +1,153 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Above All Else — Tagline Options</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500;600&family=Grenze+Gotisch:wght@300;400;500&family=Pirata+One&family=UnifrakturMaguntia&family=Cormorant+Garamond:ital,wght@0,300;0,400;1,300;1,400&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg:        #0A0B0D;
+    --bg-2:      #101216;
+    --line-soft: rgba(255,255,255,0.055);
+    --text:      #EDEEF0;
+    --text-2:    #A7ADB6;
+    --muted:     #767D87;
+    --steel:     #9DB6CE;
+    --mono: ui-monospace, "Cascadia Mono", "SF Mono", Consolas, monospace;
+    --body: "Helvetica Neue", Helvetica, "Segoe UI", system-ui, sans-serif;
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: var(--body); -webkit-font-smoothing: antialiased;
+  }
+  .page { max-width: 1120px; margin: 0 auto; padding: 56px 24px 96px; }
+
+  .page-head { border-bottom: 1px solid var(--line-soft); padding-bottom: 28px; margin-bottom: 8px; }
+  .page-head h1 {
+    margin: 0; font-family: "Arial Black", Helvetica, sans-serif; font-weight: 900;
+    text-transform: uppercase; letter-spacing: -0.02em; font-size: clamp(26px, 4vw, 40px);
+  }
+  .page-head p { margin: 14px 0 0; color: var(--text-2); font-size: 16px; max-width: 62ch; line-height: 1.6; }
+
+  .opt { padding: 52px 0; border-bottom: 1px solid var(--line-soft); }
+  .opt-meta { display: flex; align-items: baseline; gap: 14px; flex-wrap: wrap; margin-bottom: 26px; }
+  .opt-num {
+    font-family: var(--mono); font-size: 11px; letter-spacing: 0.2em;
+    color: var(--steel); text-transform: uppercase;
+  }
+  .opt-name {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.12em;
+    text-transform: uppercase; color: var(--text);
+  }
+  .opt-note { color: var(--muted); font-size: 14.5px; line-height: 1.6; max-width: 60ch; margin: 0 0 26px; }
+
+  /* Stage: the wordmark plate cropped to its type area, with the
+     candidate tagline sitting directly beneath it, so each option is
+     judged against the actual mark rather than in isolation. */
+  .stage { background: var(--bg); overflow: hidden; }
+  .stage-art { height: 210px; overflow: hidden; position: relative; }
+  .stage-art img {
+    width: 100%; height: 100%;
+    object-fit: cover; object-position: center 34%;
+    display: block;
+  }
+  .stage-art::after {
+    content: ""; position: absolute; left: 0; right: 0; bottom: 0; height: 55%;
+    background: linear-gradient(to bottom, rgba(10,11,13,0) 0%, var(--bg) 92%);
+    pointer-events: none;
+  }
+  .tagline { text-align: center; padding: 0 16px 46px; margin-top: -14px; position: relative; }
+
+  /* --- the five candidates --- */
+  .t-cinzel {
+    font-family: "Cinzel", serif; font-weight: 500;
+    font-size: clamp(19px, 2.5vw, 30px); letter-spacing: 0.34em;
+    text-transform: uppercase; color: #DFE3E8; text-indent: 0.34em;
+  }
+  .t-grenze {
+    font-family: "Grenze Gotisch", serif; font-weight: 400;
+    font-size: clamp(26px, 3.4vw, 42px); letter-spacing: 0.14em;
+    text-transform: uppercase; color: #DFE3E8; text-indent: 0.14em;
+  }
+  .t-pirata {
+    font-family: "Pirata One", serif; font-weight: 400;
+    font-size: clamp(24px, 3.1vw, 38px); letter-spacing: 0.1em;
+    color: #DFE3E8; text-indent: 0.1em;
+  }
+  .t-unifraktur {
+    font-family: "UnifrakturMaguntia", serif; font-weight: 400;
+    font-size: clamp(24px, 3.1vw, 38px); letter-spacing: 0.07em;
+    color: #DFE3E8; text-indent: 0.07em;
+  }
+  .t-cormorant {
+    font-family: "Cormorant Garamond", serif; font-weight: 300; font-style: italic;
+    font-size: clamp(24px, 3.2vw, 40px); letter-spacing: 0.2em;
+    color: #DFE3E8; text-indent: 0.2em;
+  }
+
+  @media (max-width: 640px) {
+    .stage-art { height: 150px; }
+    .opt { padding: 38px 0; }
+  }
+</style>
+</head>
+<body>
+<div class="page">
+
+  <div class="page-head">
+    <h1>&ldquo;Above all else&rdquo;</h1>
+    <p>Five directions for the line under the wordmark, each shown against the actual mark. The plate is cropped to its type area so the pairing is judged the way a visitor sees it.</p>
+  </div>
+
+  <div class="opt">
+    <div class="opt-meta"><span class="opt-num">01</span><span class="opt-name">Cinzel</span></div>
+    <p class="opt-note">Engraved Roman capitals. Closest structural match to the wordmark, whose letters are Roman underneath the gothic weathering. Widest tracking of the five, so it reads as a considered subtitle rather than a second logo. Safest and most legible.</p>
+    <div class="stage">
+      <div class="stage-art"><img src="../hero-elevated.jpg" alt="Elevated wordmark"></div>
+      <div class="tagline t-cinzel">Above all else</div>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="opt-meta"><span class="opt-num">02</span><span class="opt-name">Grenze Gotisch</span></div>
+    <p class="opt-note">A condensed gothic that keeps blackletter character while staying readable at small sizes. The tonal twin of the wordmark: same family of shapes, dialled down so it supports rather than competes.</p>
+    <div class="stage">
+      <div class="stage-art"><img src="../hero-elevated.jpg" alt="Elevated wordmark"></div>
+      <div class="tagline t-grenze">Above all else</div>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="opt-meta"><span class="opt-num">03</span><span class="opt-name">Pirata One</span></div>
+    <p class="opt-note">Full blackletter display weight. The most literal match to the mark's texture and the boldest of the set. Strong at large sizes; the heavy strokes start to fill in on small screens.</p>
+    <div class="stage">
+      <div class="stage-art"><img src="../hero-elevated.jpg" alt="Elevated wordmark"></div>
+      <div class="tagline t-pirata">Above all else</div>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="opt-meta"><span class="opt-num">04</span><span class="opt-name">UnifrakturMaguntia</span></div>
+    <p class="opt-note">Authentic Fraktur, the most historically gothic option. Maximum atmosphere, lowest legibility: the capital A and the double-l are genuinely hard to parse at a glance. Worth seeing, hard to recommend for a line people need to read quickly.</p>
+    <div class="stage">
+      <div class="stage-art"><img src="../hero-elevated.jpg" alt="Elevated wordmark"></div>
+      <div class="tagline t-unifraktur">Above all else</div>
+    </div>
+  </div>
+
+  <div class="opt">
+    <div class="opt-meta"><span class="opt-num">05</span><span class="opt-name">Cormorant Garamond Italic</span></div>
+    <p class="opt-note">The deliberate counterpoint. Rather than echoing the gothic, it answers it with a light high-contrast italic serif. Reads as a motto or a signature, and gives the mark room to be the loud element. Pairs with the Veni Vidi Vici line already on the page.</p>
+    <div class="stage">
+      <div class="stage-art"><img src="../hero-elevated.jpg" alt="Elevated wordmark"></div>
+      <div class="tagline t-cormorant">Above all else</div>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
