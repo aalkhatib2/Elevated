@@ -186,7 +186,17 @@
   }
 
   /* ---------------- ladder ---------------- */
-  .ladder { margin-top: 76px; display: flex; flex-direction: column; }
+  /* Background fades lighter from EL to JP, top to bottom, so the
+     climb reads visually as well as in the copy. Stays within the
+     dark theme (slate lightening toward the steel accent) rather
+     than crossing into a light background. */
+  .ladder {
+    margin-top: 76px;
+    display: flex;
+    flex-direction: column;
+    background: linear-gradient(180deg, #0A0B0D 0%, #141A1F 45%, #212B34 100%);
+    padding: 4px 32px 8px;
+  }
   .rung {
     display: grid;
     grid-template-columns: 168px 1fr;
