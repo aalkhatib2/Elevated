@@ -1,0 +1,5 @@
+# Design exploration variants — not part of the shipped site
+mockups/
+
+# Local dev / editor
+.claude/
