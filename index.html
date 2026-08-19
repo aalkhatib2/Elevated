@@ -23,7 +23,6 @@
     --text-2:    #A7ADB6;
     --muted:     #767D87;
     --steel:     #9DB6CE;
-    --gold:      #D6B45C;   /* ladder accent, warm counterpart to --steel */
     --white:     #F4F5F6;
 
     --display: "Arial Black", "Helvetica Neue", Helvetica, "Segoe UI", system-ui, sans-serif;
@@ -237,11 +236,11 @@
   #ladder {
     background: linear-gradient(180deg,
       var(--bg) 0%,
-      #17130A 20%,
-      #221B0C 42%,
-      #2E2410 62%,
-      #382C13 80%,
-      #1C170C 93%,
+      #10151A 20%,
+      #171E25 42%,
+      #1E262F 62%,
+      #232C36 80%,
+      #141A20 93%,
       var(--bg) 100%);
   }
   .ladder {
@@ -270,9 +269,7 @@
     line-height: 1;
     color: var(--white);
   }
-  /* Gold rather than the page's steel accent, so the top rung and the
-     note read against the gold ladder gradient instead of fighting it. */
-  .rung-4 .rung-code { color: var(--gold); }
+  .rung-4 .rung-code { color: var(--steel); }
   .rung-name {
     font-family: var(--mono);
     font-size: 11px;
@@ -287,7 +284,7 @@
     font-size: 15px;
     color: var(--muted);
     max-width: 60ch;
-    border-left: 2px solid var(--gold);
+    border-left: 2px solid var(--steel);
     padding-left: 20px;
     line-height: 1.65;
   }
