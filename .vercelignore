@@ -3,3 +3,6 @@ mockups/
 
 # Local dev / editor
 .claude/
+
+# Prototypes — not part of the shipped site yet
+prototypes/
