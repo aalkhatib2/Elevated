@@ -296,7 +296,10 @@
 
 
   /* ---------------- divisions ---------------- */
-  .divs { margin-top: 76px; display: grid; grid-template-columns: 1.35fr 1fr 1fr; gap: 20px; }
+  /* All three campaigns carry the same status now, so the grid is
+     even rather than featuring one card the way it did when only
+     Fiber was live. */
+  .divs { margin-top: 76px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
   .div-card {
     border: 1px solid var(--line);
     padding: 40px 34px;
@@ -312,7 +315,6 @@
       var(--bg-3);
     border-color: rgba(157,182,206,0.34);
   }
-  .div-queued { background: var(--bg); }
   .div-status {
     font-family: var(--mono);
     font-size: 10.5px;
@@ -400,7 +402,6 @@
   /* ---------------- responsive ---------------- */
   @media (max-width: 1024px) {
     .divs { grid-template-columns: 1fr 1fr; }
-    .div-live { grid-column: 1 / -1; min-height: 260px; }
     .portal-grid { grid-template-columns: 1fr; gap: 48px; }
   }
 
@@ -424,7 +425,6 @@
     .closing-cta { flex-direction: column; }
     .traits { grid-template-columns: 1fr; gap: 44px; }
     .divs { grid-template-columns: 1fr; }
-    .div-live { grid-column: auto; }
     .div-card { min-height: 0; }
     .rung { grid-template-columns: 1fr; gap: 18px; padding: 30px 0; }
     .rung-1, .rung-2, .rung-3, .rung-4 { margin-left: 0; }
@@ -594,7 +594,7 @@
       <div class="sec-head rise">
         <p class="eyebrow">Divisions</p>
         <h2 style="margin-top:20px">Campaigns</h2>
-        <p class="lede">Three campaigns, at three different stages. We would rather tell you which is which than have you find out in week two.</p>
+        <p class="lede">Three campaigns, all live and hiring right now.</p>
       </div>
       <div class="divs">
         <div class="div-card div-live rise">
@@ -605,19 +605,21 @@
           </div>
           <a href="#join" class="btn btn-ghost btn-sm" style="align-self:flex-start; margin-top:28px">Join the Team</a>
         </div>
-        <div class="div-card rise">
+        <div class="div-card div-live rise">
           <div>
-            <p class="div-status">In training</p>
+            <p class="div-status">Live and hiring</p>
             <h3>Virtual High Ticket</h3>
-            <p>Closing high-ticket wellness solutions, fully remote. Onboarding and training are running now.</p>
+            <p>Closing high-ticket wellness solutions, fully remote. Active territories, reps closing deals today.</p>
           </div>
+          <a href="#join" class="btn btn-ghost btn-sm" style="align-self:flex-start; margin-top:28px">Join the Team</a>
         </div>
-        <div class="div-card div-queued rise">
+        <div class="div-card div-live rise">
           <div>
-            <p class="div-status">Queued</p>
+            <p class="div-status">Live and hiring</p>
             <h3>Life Insurance</h3>
-            <p>Remote sales for licensed producers. Next campaign in line, not open yet.</p>
+            <p>Remote sales for licensed producers. Active territories, taking reps now.</p>
           </div>
+          <a href="#join" class="btn btn-ghost btn-sm" style="align-self:flex-start; margin-top:28px">Join the Team</a>
         </div>
       </div>
     </div>
