@@ -8,7 +8,7 @@
 <link rel="canonical" href="https://joinelevated.net/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" href="favicon.ico" sizes="48x48">
@@ -48,7 +48,13 @@
     --white:     #F4F5F6;
 
     --display: "Arial Black", "Helvetica Neue", Helvetica, "Segoe UI", system-ui, sans-serif;
-    --body:    "Helvetica Neue", Helvetica, "Segoe UI", system-ui, -apple-system, sans-serif;
+    /* Montserrat is loaded via the Google Fonts link in <head>. It sits
+       at the front of --body so every element already using the token
+       picks it up, rather than scattering per-element font-family
+       overrides. The original stack stays behind it as the fallback
+       for the brief moment before the webfont lands (font-display:
+       swap) and if it ever fails to load. */
+    --body:    "Montserrat", "Helvetica Neue", Helvetica, "Segoe UI", system-ui, -apple-system, sans-serif;
     --mono:    ui-monospace, "Cascadia Mono", "SF Mono", Consolas, monospace;
 
     --wrap: 1280px;
@@ -651,7 +657,6 @@
       <div class="sec-head rise" id="growthHead">
         <p class="eyebrow">The Ladder</p>
         <h2 style="margin-top:20px">Your Growth</h2>
-        <p class="lede lede-motto">&ldquo;Veni &middot; Vidi &middot; Vici&rdquo; &mdash; I came, I saw, I conquered.</p>
       </div>
 
       <div class="ladder">
