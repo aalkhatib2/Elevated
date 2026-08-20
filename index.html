@@ -109,7 +109,12 @@
     backdrop-filter: blur(14px);
     -webkit-backdrop-filter: blur(14px);
     border-bottom: 1px solid var(--line-soft);
+    transition: transform .35s cubic-bezier(.4,0,.2,1);
   }
+  /* Visible at rest, hides once the user scrolls into the hero, comes
+     back once the ladder is reached (see the IntersectionObserver pair
+     near the bottom of the file). */
+  header.nav-hidden { transform: translateY(-100%); }
   .nav { height: 68px; display: flex; align-items: center; justify-content: space-between; gap: 28px; }
   .wordmark {
     font-family: var(--display);
@@ -185,31 +190,50 @@
   .mobile-menu a:active { color: var(--white); }
 
   /* ---------------- hero ---------------- */
-  /* Poster hero: the wordmark is baked into the photography plate
-     (matches the brand reference), rendered at full width. The CTA
-     is real HTML sitting just below it, blended into the page with
-     a gradient so the seam between photo and page background
-     disappears regardless of the plate's exact bottom pixel value. */
+  /* Two independent layers rather than one flattened photo:
+     .hero-art is a text-free background plate, safe to crop however
+     cover wants at any viewport. .hero-wordmark is a real, separate
+     element sized off its own aspect ratio (2000/476), so the letters
+     are structurally never cropped, and it has a hard clamp() floor of
+     clearance below the sticky header at every viewport width - not a
+     tuned guess. The CTA is real HTML below both, blended into the
+     page with a gradient so the seam disappears regardless of the
+     plate's exact bottom pixel value. */
   .hero { position: relative; }
-  /* The plate is a ~2.31:1 banner (wordmark and the dune-to-sky fade
-     composed close together in the same frame), so the container is
-     sized off the image's own ratio instead of a fixed height. That
-     means the full picture renders identically at every viewport
-     width, mobile through desktop, with no per-breakpoint cropping.
-     min/max just guard the extremes: a very narrow phone doesn't
-     collapse the wordmark to nothing, an ultrawide screen doesn't
-     stretch the band taller than a hero should be. */
   .hero-art {
     position: relative; width: 100%; overflow: hidden; line-height: 0; background: var(--bg);
-    aspect-ratio: 2400 / 1037;
+    aspect-ratio: 2400 / 1055;
     min-height: 200px;
     max-height: 560px;
   }
-  .hero-art img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  /* Own class rather than the `.hero-art img` tag selector: a tag
+     selector would out-specificity .hero-wordmark's single class and
+     silently win the object-fit/sizing properties on it once the
+     wordmark moved inside .hero-art (below). */
+  .hero-bg-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
   .hero-art::after {
     content: "";
     position: absolute; left: 0; right: 0; bottom: 0; height: 20%;
     background: linear-gradient(to bottom, rgba(10,11,13,0) 0%, var(--bg) 94%);
+    pointer-events: none;
+  }
+  /* Sized and positioned as a percentage of .hero-art's own height
+     (measured against hero-bg.jpg: clear sky ends around 38% down,
+     dune is solid by ~49%), not viewport width. That is the actual
+     fix for "fit together" - .hero-art's height is itself clamped
+     between a 200px floor and a 560px ceiling, so anything sized off
+     viewport width alone drifts out of proportion with the photo the
+     moment either clamp is active. Percentage-of-height tracks
+     whatever .hero-art's real height is, always. Centered via
+     left/right/margin on a replaced element (not transform, which
+     .rise.in sets to none for its own reveal animation and would
+     silently override at equal specificity). */
+  .hero-wordmark {
+    position: absolute;
+    top: 4%;
+    left: 0; right: 0; margin: 0 auto;
+    height: 30%; width: auto;
+    z-index: 2;
     pointer-events: none;
   }
   /* Buttons sit close under the plate now that the plate itself is
@@ -404,6 +428,7 @@
   @media (prefers-reduced-motion: reduce) {
     .rise { opacity: 1 !important; transform: none !important; transition: none !important; }
     .btn { transition: none; }
+    header { transition: none; }
     * { scroll-behavior: auto !important; }
   }
 
@@ -440,6 +465,10 @@
      needs a height override. */
   @media (max-height: 520px) and (orientation: landscape) {
     .hero-art { max-height: 42dvh; }
+    /* .hero-wordmark needs no override here: being sized as a
+       percentage of .hero-art's own height, it scales down with the
+       shorter box automatically (verified: 812x375 -> hero-art 200px,
+       wordmark top 8px / height 60px, comfortably inside). */
     .hero-cta-wrap { padding-bottom: 32px; }
     .sec { padding: 56px 0; }
   }
@@ -474,6 +503,7 @@
 </head>
 <body>
 
+<div id="topSentinel" style="height:1px" aria-hidden="true"></div>
 <header>
   <nav class="nav wrap" aria-label="Main">
     <a href="#top" class="wordmark">Elevated</a>
@@ -496,12 +526,18 @@
 
 <main id="top">
 
-  <!-- HERO: poster wordmark, full-bleed and uncropped, with a real CTA below -->
+  <!-- HERO: two independent layers, not one flattened photo. The
+       background plate is text-free, free to be cropped however cover
+       wants; the wordmark is a real, separate element inside it, sized
+       as a percentage of hero-art's own height so it always lands in
+       the plate's clear-sky band regardless of which height clamp is
+       active, and is structurally never cropped by object-fit math. -->
   <section class="hero">
     <h1 class="sr-only">Elevated Field Sales</h1>
     <div class="hero-art rise">
-      <img src="hero-elevated.jpg" alt="The Elevated wordmark over desert dunes, sand fading into the sky at dawn"
-           width="2400" height="1037" fetchpriority="high" decoding="async">
+      <img class="hero-bg-img" src="hero-bg.jpg" alt="" width="2400" height="1055" fetchpriority="high" decoding="async">
+      <img class="hero-wordmark" src="wordmark-elevated.webp" alt="Elevated"
+           width="2000" height="476" decoding="async">
     </div>
     <div class="hero-cta-wrap rise">
       <a href="#join" class="btn btn-primary">Join the Team</a>
@@ -679,6 +715,32 @@
   (function () {
     if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
     document.documentElement.style.scrollBehavior = "smooth";
+  })();
+
+  // Nav auto-hide. Visible at rest (scroll 0), hides the moment the
+  // user scrolls into the hero, reappears once the ladder is reached.
+  // Needs two booleans, not one: "is the hero on screen" alone can't
+  // tell scroll-position-0 apart from scroll-position-1px, since the
+  // hero is ~100% visible in both. IntersectionObserver only, no
+  // scroll listeners, matching the reveal observer above.
+  (function () {
+    var header = document.querySelector("header");
+    var hero = document.querySelector(".hero");
+    var sentinel = document.getElementById("topSentinel");
+    if (!header || !hero || !sentinel || !("IntersectionObserver" in window)) return;
+
+    var atTop = true, heroVisible = true;
+    function sync() { header.classList.toggle("nav-hidden", heroVisible && !atTop); }
+
+    new IntersectionObserver(function (entries) {
+      atTop = entries[0].isIntersecting;
+      sync();
+    }, { threshold: 0 }).observe(sentinel);
+
+    new IntersectionObserver(function (entries) {
+      heroVisible = entries[0].isIntersecting;
+      sync();
+    }, { threshold: 0 }).observe(hero);
   })();
 
   // Mobile menu toggle. State lives on the button's aria-expanded
