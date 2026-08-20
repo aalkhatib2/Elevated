@@ -6,6 +6,9 @@
 <title>Elevated Field Sales</title>
 <meta name="description" content="Field sales recruiting for Elevated. See the ladder, join a live campaign, book an interview.">
 <link rel="canonical" href="https://joinelevated.net/">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" href="favicon.ico" sizes="48x48">
@@ -266,6 +269,33 @@
     z-index: 2;
     pointer-events: none;
   }
+  /* Tagline under the wordmark. Engraved Roman caps (Cinzel) with wide
+     tracking, so it reads as a subtitle to the mark rather than
+     competing with it - the direction picked from the tagline
+     comparison earlier. Sits in normal flow between the plate and the
+     CTAs, not absolutely positioned, so it stays put at any width. */
+  .hero-tagline {
+    /* Negative top pull: .hero-art's bottom ~48% is the fade-to-page
+       gradient, which is visually empty, so a positive margin here
+       reads as a large gap. Pulling up sits the line closer to the
+       wordmark. Bottom margin keeps clearance from the CTA row, which
+       the pull would otherwise close to zero.
+       position+z-index are required, not decorative: the pull moves
+       this line back over .hero-art, and a static element would be
+       painted over by the plate's own <img>. */
+    position: relative;
+    z-index: 3;
+    margin: clamp(-56px, -5vw, -24px) auto 26px;
+    text-align: center;
+    font-family: "Cinzel", Georgia, "Times New Roman", serif;
+    font-weight: 500;
+    font-size: clamp(13px, 1.9vw, 22px);
+    letter-spacing: 0.34em;
+    text-indent: 0.34em;   /* offsets trailing letter-space so it stays optically centered */
+    text-transform: uppercase;
+    color: #DFE3E8;
+    line-height: 1.3;
+  }
   /* Buttons sit close under the plate now that the plate itself is
      short, rather than needing a big gap to feel separated from a
      tall image. */
@@ -407,6 +437,40 @@
   .closing-mail { margin-top: 34px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--muted); }
   .closing-mail a { color: var(--steel); border-bottom: 1px solid rgba(157,182,206,0.4); padding-bottom: 2px; }
 
+  /* ---------------- partners ---------------- */
+  /* Logos are supplied at wildly different intrinsic sizes (208x35 up
+     to 1591x858), so cells are a fixed height and each logo is
+     constrained by max-height + object-fit: contain. That normalizes
+     them optically without distorting any one mark. */
+  .partners-grid { margin-top: 64px; display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 18px; }
+  .partner-cell {
+    display: flex; align-items: center; justify-content: center;
+    padding: 44px 30px; min-height: 184px;
+    position: relative; text-decoration: none;
+    background-color: var(--bg-2);
+    background-image: radial-gradient(115% 100% at 12% 0%, rgba(157,182,206,0.16), transparent 62%);
+    border: 1px solid var(--line);
+    transition: background-color .25s cubic-bezier(.16,1,.3,1), border-color .25s cubic-bezier(.16,1,.3,1);
+  }
+  .partner-cell:hover { background-color: var(--bg-3); border-color: rgba(157,182,206,0.45); }
+  .partner-cell img { max-width: 100%; max-height: 72px; width: auto; height: auto; object-fit: contain; }
+  .partner-visit {
+    position: absolute; top: 14px; right: 16px;
+    font-family: var(--mono); font-size: 10.5px;
+    letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--muted); transition: color .25s cubic-bezier(.16,1,.3,1);
+  }
+  .partner-cell:hover .partner-visit { color: var(--white); }
+  .partner-cta { flex-direction: column; align-items: flex-start; justify-content: center; gap: 12px; padding: 34px 26px; }
+  .partner-cta-kicker { font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--white); font-weight: 700; }
+  .partner-cta-mail {
+    font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em;
+    color: var(--text); overflow-wrap: anywhere;
+    transition: color .25s cubic-bezier(.16,1,.3,1);
+  }
+  .partner-cell:hover .partner-cta-mail { color: var(--steel); }
+  .partner-cta-note { font-size: 12px; line-height: 1.5; color: var(--muted); }
+
   /* ---------------- footer ---------------- */
   footer { border-top: 1px solid var(--line-soft); padding: 56px 0 44px; }
   .foot { display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; }
@@ -467,6 +531,7 @@
   @media (max-width: 1024px) {
     .divs { grid-template-columns: 1fr 1fr; }
     .portal-grid { grid-template-columns: 1fr; gap: 48px; }
+    .partners-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
   }
 
   @media (max-width: 860px) {
@@ -482,6 +547,7 @@
     .closing-cta { flex-direction: column; }
     .traits { grid-template-columns: 1fr; gap: 44px; }
     .divs { grid-template-columns: 1fr; }
+    .partners-grid { grid-template-columns: 1fr; }
     .div-card { min-height: 0; }
     .rung { grid-template-columns: 1fr; gap: 18px; padding: 30px 0; }
     .rung-1, .rung-2, .rung-3, .rung-4 { margin-left: 0; }
@@ -541,6 +607,7 @@
     <div class="nav-links">
       <a href="#ladder">The Ladder</a>
       <a href="#divisions">Divisions</a>
+      <a href="#partners">Partners</a>
     </div>
     <div class="nav-right">
       <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
@@ -552,6 +619,7 @@
   <div class="mobile-menu" id="mobileMenu">
     <a href="#ladder">The Ladder</a>
     <a href="#divisions">Divisions</a>
+    <a href="#partners">Partners</a>
   </div>
 </header>
 
@@ -570,9 +638,10 @@
       <img class="hero-wordmark" src="wordmark-elevated.webp" alt="Elevated"
            width="2000" height="476" decoding="async">
     </div>
+    <p class="hero-tagline rise">Above all else</p>
     <div class="hero-cta-wrap rise">
       <a href="#join" class="btn btn-primary">Join the Team</a>
-      <a href="#ladder" class="btn btn-ghost">Our Team</a>
+      <a href="#ladder" class="btn btn-ghost">Our Mission</a>
     </div>
   </section>
 
@@ -598,7 +667,7 @@
             <div class="rung-code">STL</div>
             <div class="rung-name">Sales Team Leader</div>
           </div>
-          <div class="rung-col"><p class="rung-body">Build teams, duplicate systems, and scale.</p><p class="rung-detail">Create your own culture &middot; Give opportunity &middot; Grow your business</p></div>
+          <div class="rung-col"><p class="rung-body">Build teams, duplicate systems, and scale.</p><p class="rung-detail">Create your own culture &middot; Scale opportunity &middot; Grow your business</p></div>
         </div>
         <div class="rung rung-3 rise">
           <div>
@@ -616,7 +685,7 @@
         </div>
       </div>
 
-      <p class="ladder-note rise">Exact thresholds are published per division and given to you in writing on day one.</p>
+      <p class="ladder-note rise lede-motto">Not just a team. A lifestyle.</p>
     </div>
   </section>
 
@@ -626,7 +695,7 @@
       <div class="sec-head rise">
         <p class="eyebrow">Divisions</p>
         <h2 style="margin-top:20px">Campaigns</h2>
-        <p class="lede">All live campaigns hiring right now.</p>
+        <p class="lede">Three campaigns, multiple routes to success.</p>
       </div>
       <div class="divs">
         <div class="div-card div-live rise">
@@ -641,7 +710,7 @@
           <div>
             <p class="div-status">Live and hiring</p>
             <h3>Virtual High Ticket</h3>
-            <p>Closing high-ticket wellness solutions, fully remote. Active territories, reps closing deals today.</p>
+            <p>Closing high-ticket peptide packages, fully remote with residual income. B2C and B2B.</p>
           </div>
           <a href="#join" class="btn btn-ghost btn-sm" style="align-self:flex-start; margin-top:28px">Join the Team</a>
         </div>
@@ -668,7 +737,7 @@
         <div>
           <div class="sec-head rise">
             <h2>Our movement</h2>
-            <p class="lede">Elevated management runs on 5 core values.</p>
+            <p class="lede">Elevated Management runs on 5 core values. Not just a team, a family of growth in all aspects.</p>
           </div>
           <div class="portal-list">
             <div class="portal-item rise">
@@ -697,6 +766,51 @@
     </div>
   </section>
 
+  <!-- PARTNERS: logo grid, last cell is the inbound-partnership CTA -->
+  <section class="sec" id="partners">
+    <div class="wrap">
+      <div class="sec-head rise">
+        <p class="eyebrow">Partners</p>
+        <h2 style="margin-top:20px">Our Partners</h2>
+      </div>
+      <div class="partners-grid">
+        <a class="partner-cell rise" href="https://telehealth.micom.ai/" target="_blank" rel="noopener">
+          <span class="partner-visit">Visit</span>
+          <img src="partner-achilles.png" alt="Achilles Peptides" width="131" height="140" style="max-height:80px" loading="lazy" decoding="async">
+        </a>
+        <a class="partner-cell rise" href="https://citrusglencapital.com/" target="_blank" rel="noopener">
+          <span class="partner-visit">Visit</span>
+          <img src="partner-citrus-glen.png" alt="Citrus Glen Capital" width="197" height="28" loading="lazy" decoding="async">
+        </a>
+        <a class="partner-cell rise" href="https://www.t-mobile.com/" target="_blank" rel="noopener">
+          <span class="partner-visit">Visit</span>
+          <img src="partner-tmobile.png" alt="T-Mobile" width="1000" height="500" style="max-height:64px" loading="lazy" decoding="async">
+        </a>
+        <a class="partner-cell rise" href="https://equityinsurancepartners.com/" target="_blank" rel="noopener">
+          <span class="partner-visit">Visit</span>
+          <img src="partner-equity-insurance.png" alt="Equity Insurance Partners" width="208" height="35" loading="lazy" decoding="async">
+        </a>
+        <a class="partner-cell rise" href="https://www.motorsportautoglass.com/" target="_blank" rel="noopener">
+          <span class="partner-visit">Visit</span>
+          <img src="partner-motorsport-autoglass.png" alt="Motorsport Autoglass" width="1591" height="858" style="max-height:68px" loading="lazy" decoding="async">
+        </a>
+        <a class="partner-cell rise" href="https://fatrat.ai/" target="_blank" rel="noopener">
+          <span class="partner-visit">Visit</span>
+          <img src="partner-fatrat.png" alt="FatRat" width="216" height="85" style="max-height:56px" loading="lazy" decoding="async">
+        </a>
+        <a class="partner-cell rise" href="https://palmettoenergysolutions.com/" target="_blank" rel="noopener">
+          <span class="partner-visit">Visit</span>
+          <img src="partner-palmetto-energy.png" alt="Palmetto Energy Solutions" width="977" height="320" style="max-height:64px" loading="lazy" decoding="async">
+        </a>
+        <a class="partner-cell partner-cta rise" href="mailto:partners@joinelevated.net">
+          <span class="partner-cta-kicker">Interested in working with us?</span>
+          <span class="partner-cta-mail">partners@joinelevated.net</span>
+          <span class="partner-cta-note">Plain reply, one business day.</span>
+        </a>
+      </div>
+    </div>
+  </section>
+
   <!-- CLOSING -->
   <section class="closing" id="join">
     <div class="wrap">
@@ -705,7 +819,7 @@
       <div class="closing-cta rise">
         <a href="apply.html" class="btn btn-primary">Book Interview</a>
       </div>
-      <p class="closing-mail rise">Or write to <a href="mailto:partners@joinelevated.net">partners@joinelevated.net</a>. Plain reply, one business day.</p>
+      <p class="closing-mail rise">Contact us at <a href="mailto:partners@joinelevated.net">partners@joinelevated.net</a>.</p>
     </div>
   </section>
 </main>
@@ -715,6 +829,7 @@
     <div class="foot-links">
       <a href="#ladder">The Ladder</a>
       <a href="#divisions">Divisions</a>
+      <a href="#partners">Partners</a>
       <a href="#join">Join the Team</a>
     </div>
     <p class="foot-copy">Elevated Management Group</p>
