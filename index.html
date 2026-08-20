@@ -4,6 +4,25 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Elevated Field Sales</title>
+<meta name="description" content="Field sales recruiting for Elevated. See the ladder, join a live campaign, book an interview.">
+<link rel="canonical" href="https://joinelevated.net/">
+<link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
+<link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
+<link rel="icon" href="favicon.ico" sizes="48x48">
+<link rel="apple-touch-icon" href="apple-touch-icon.png">
+<meta name="theme-color" content="#0A0B0D">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Elevated">
+<meta property="og:title" content="Elevated Field Sales">
+<meta property="og:description" content="Field sales recruiting for Elevated. See the ladder, join a live campaign, book an interview.">
+<meta property="og:url" content="https://joinelevated.net/">
+<meta property="og:image" content="https://joinelevated.net/og-image.jpg">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Elevated Field Sales">
+<meta name="twitter:description" content="Field sales recruiting for Elevated. See the ladder, join a live campaign, book an interview.">
+<meta name="twitter:image" content="https://joinelevated.net/og-image.jpg">
 <style>
   /* ============================================================
      ELEVATED - field sales recruiting landing page
@@ -193,13 +212,20 @@
   /* Two independent layers rather than one flattened photo:
      .hero-art is a text-free background plate, safe to crop however
      cover wants at any viewport. .hero-wordmark is a real, separate
-     element sized off its own aspect ratio (2000/476), so the letters
-     are structurally never cropped, and it has a hard clamp() floor of
-     clearance below the sticky header at every viewport width - not a
-     tuned guess. The CTA is real HTML below both, blended into the
-     page with a gradient so the seam disappears regardless of the
-     plate's exact bottom pixel value. */
-  .hero { position: relative; }
+     element inside it, sized as a percentage of .hero-art's own
+     height, so the letters are structurally never cropped and stay
+     proportionate to the photo at every viewport. The CTA is real
+     HTML below both, blended into the page with a gradient so the
+     seam disappears regardless of the plate's exact bottom pixel
+     value. */
+  .hero {
+    position: relative;
+    /* Explicit gap so the plate is visibly below the sticky nav, not
+       flush against it - structurally there was already no overlap
+       (header occupies its own space in flow), but flush read as
+       touching/cramped. */
+    margin-top: clamp(10px, 2vw, 20px);
+  }
   .hero-art {
     position: relative; width: 100%; overflow: hidden; line-height: 0; background: var(--bg);
     aspect-ratio: 2400 / 1055;
@@ -211,10 +237,14 @@
      silently win the object-fit/sizing properties on it once the
      wordmark moved inside .hero-art (below). */
   .hero-bg-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
+  /* Fade zone stops well clear of the wordmark (bottom edge at 34%,
+     see .hero-wordmark below), so extending it doesn't touch the mark
+     - purely a longer, more gradual melt of the dune into the page
+     background. Nothing is cropped or resized to make room for this. */
   .hero-art::after {
     content: "";
-    position: absolute; left: 0; right: 0; bottom: 0; height: 20%;
-    background: linear-gradient(to bottom, rgba(10,11,13,0) 0%, var(--bg) 94%);
+    position: absolute; left: 0; right: 0; bottom: 0; height: 48%;
+    background: linear-gradient(to bottom, rgba(10,11,13,0) 0%, rgba(10,11,13,0.55) 60%, var(--bg) 96%);
     pointer-events: none;
   }
   /* Sized and positioned as a percentage of .hero-art's own height
@@ -548,7 +578,7 @@
   <!-- LADDER: ascending stepped rows -->
   <section class="sec" id="ladder">
     <div class="wrap">
-      <div class="sec-head rise">
+      <div class="sec-head rise" id="growthHead">
         <p class="eyebrow">The Ladder</p>
         <h2 style="margin-top:20px">Your Growth</h2>
         <p class="lede lede-motto">&ldquo;Veni &middot; Vidi &middot; Vici&rdquo; &mdash; I came, I saw, I conquered.</p>
@@ -718,19 +748,25 @@
   })();
 
   // Nav auto-hide. Visible at rest (scroll 0), hides the moment the
-  // user scrolls into the hero, reappears once the ladder is reached.
-  // Needs two booleans, not one: "is the hero on screen" alone can't
-  // tell scroll-position-0 apart from scroll-position-1px, since the
-  // hero is ~100% visible in both. IntersectionObserver only, no
-  // scroll listeners, matching the reveal observer above.
+  // user scrolls down, reappears once "Your Growth" has been scrolled
+  // past (not merely once the ladder section starts - the heading
+  // itself has to exit the top of the viewport). Symmetric: scrolling
+  // back up past that heading re-hides the nav.
+  //
+  // "Has fully exited above" needs boundingClientRect, not just
+  // isIntersecting - isIntersecting is false both before the element
+  // is reached (still below the viewport) and after it's scrolled
+  // past (above the viewport), and only the second case should count.
+  // IntersectionObserver only, no scroll listeners, matching the
+  // reveal observer above.
   (function () {
     var header = document.querySelector("header");
-    var hero = document.querySelector(".hero");
+    var growthHead = document.getElementById("growthHead");
     var sentinel = document.getElementById("topSentinel");
-    if (!header || !hero || !sentinel || !("IntersectionObserver" in window)) return;
+    if (!header || !growthHead || !sentinel || !("IntersectionObserver" in window)) return;
 
-    var atTop = true, heroVisible = true;
-    function sync() { header.classList.toggle("nav-hidden", heroVisible && !atTop); }
+    var atTop = true, pastGrowth = false;
+    function sync() { header.classList.toggle("nav-hidden", !pastGrowth && !atTop); }
 
     new IntersectionObserver(function (entries) {
       atTop = entries[0].isIntersecting;
@@ -738,9 +774,10 @@
     }, { threshold: 0 }).observe(sentinel);
 
     new IntersectionObserver(function (entries) {
-      heroVisible = entries[0].isIntersecting;
+      var e = entries[0];
+      pastGrowth = !e.isIntersecting && e.boundingClientRect.top < 0;
       sync();
-    }, { threshold: 0 }).observe(hero);
+    }, { threshold: 0 }).observe(growthHead);
   })();
 
   // Mobile menu toggle. State lives on the button's aria-expanded
