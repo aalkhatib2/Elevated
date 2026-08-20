@@ -4,14 +4,16 @@
     {
       "name": "elevated-landing",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "5173"],
-      "port": 5173
+      "runtimeArgs": [".claude/static_server.py"],
+      "port": 5173,
+      "autoPort": true
     },
     {
       "name": "elevated-mockups",
       "runtimeExecutable": "python",
-      "runtimeArgs": ["-m", "http.server", "5174"],
-      "port": 5174
+      "runtimeArgs": [".claude/static_server.py"],
+      "port": 5174,
+      "autoPort": true
     }
   ]
 }
