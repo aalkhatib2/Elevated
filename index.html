@@ -393,7 +393,8 @@
   .portal-media { position: relative; }
   .portal-media img { width: 100%; height: 100%; max-height: 560px; object-fit: cover; display: block; filter: grayscale(0.35) contrast(1.06); }
   .portal-list { margin-top: 40px; display: flex; flex-direction: column; }
-  .portal-item { padding: 24px 0; border-top: 1px solid var(--line-soft); }
+  .portal-item { padding: 24px 0; border-top: 1px solid var(--line-soft); display: flex; align-items: center; gap: 18px; }
+  .portal-num { flex: 0 0 auto; width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 50%; display: grid; place-items: center; font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em; color: var(--text-2); }
   .portal-item:last-child { border-bottom: 1px solid var(--line-soft); }
   .portal-item h3 { font-size: 18px; }
   .portal-item p { margin-top: 9px; color: var(--text-2); font-size: 15.5px; max-width: 46ch; }
@@ -625,14 +626,14 @@
       <div class="sec-head rise">
         <p class="eyebrow">Divisions</p>
         <h2 style="margin-top:20px">Campaigns</h2>
-        <p class="lede">Three campaigns, all live and hiring right now.</p>
+        <p class="lede">All live campaigns hiring right now.</p>
       </div>
       <div class="divs">
         <div class="div-card div-live rise">
           <div>
             <p class="div-status">Live and hiring</p>
             <h3>Fiber</h3>
-            <p>Verizon fiber contracts, door to door. Active territories, reps on the ground, commissions paying today. If you want to start this month, you start here.</p>
+            <p>Fiber, solar, alarms, pest, autoglass &mdash; anything at the door.</p>
           </div>
           <a href="#join" class="btn btn-ghost btn-sm" style="align-self:flex-start; margin-top:28px">Join the Team</a>
         </div>
@@ -671,18 +672,23 @@
           </div>
           <div class="portal-list">
             <div class="portal-item rise">
+              <span class="portal-num">1</span>
               <h3>Build faith</h3>
             </div>
             <div class="portal-item rise">
+              <span class="portal-num">2</span>
               <h3>Get in the best physical shape</h3>
             </div>
             <div class="portal-item rise">
+              <span class="portal-num">3</span>
               <h3>Make life-changing money</h3>
             </div>
             <div class="portal-item rise">
+              <span class="portal-num">4</span>
               <h3>Impact the most people</h3>
             </div>
             <div class="portal-item rise">
+              <span class="portal-num">5</span>
               <h3>Create opportunity</h3>
             </div>
           </div>
