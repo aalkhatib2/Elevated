@@ -182,9 +182,15 @@
     }
 
     if (wordmark) {
+      /* Translate only, no opacity fade. An earlier version faded this to
+         opacity 0.1 over the scroll range to sell the parallax depth, but
+         in practice that reads as the wordmark vanishing almost as soon as
+         you start scrolling, well before it has actually left the viewport
+         - the fade badly outpaces the scroll. The lag from yPercent alone
+         (wordmark moves 42% of its own height while the page scrolls the
+         full hero) already sells the depth cue on its own. */
       gsap.to(wordmark, {
         yPercent: 42,
-        opacity: 0.1,
         ease: 'none',
         scrollTrigger: { trigger: heroArt, start: 'top top', end: 'bottom top', scrub: true }
       });
