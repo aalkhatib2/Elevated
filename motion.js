@@ -196,13 +196,13 @@
          neither sets `overwrite`.
 
          Lateral movement is what actually sells cloud motion; the scale
-         is there to keep the drift from reading as a flat slide. 30s and
-         sine.inOut keep it below the threshold where you notice it
-         moving and start watching it instead of the copy. */
+         is there to keep the drift from reading as a flat slide.
+         sine.inOut keeps the turnaround from registering as a stop, so
+         the travel stays readable as drift rather than as a loop. */
       var drift = gsap.to(heroBg, {
         scale: 1.24,
         xPercent: -2,
-        duration: 30,
+        duration: 20,
         ease: 'sine.inOut',
         yoyo: true,
         repeat: -1
