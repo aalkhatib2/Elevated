@@ -829,6 +829,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
             <button class="btn btn-primary" data-next="" disabled="">Confirm Interview</button>
             <button class="back" data-back="">Back</button>
           </div>
+          <p id="submitError" style="display:none;margin-top:16px;font-family:var(--mono);font-size:12px;letter-spacing:0.04em;color:#C97B7B">Something went wrong sending your application. Please try again.</p>
         </section>
 
         <!-- DONE -->
@@ -885,11 +886,39 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
 
 <script>
 (function () {
+  var WEB3FORMS_ACCESS_KEY = "b8dfee03-a76d-4f57-9200-a08274ab68f0";
+
   var answers = { name: null, phone: null, email: null, exp: null, camp: null, slot: null };
   var current = 1;
 
   var steps = document.querySelectorAll('.step');
   var railSteps = document.querySelectorAll('.rail-step');
+
+  function submitApplication(a) {
+    return fetch('https://api.web3forms.com/submit', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify({
+        access_key: WEB3FORMS_ACCESS_KEY,
+        subject: 'New Elevated application — ' + a.name,
+        from_name: 'Elevated Apply Form',
+        name: a.name,
+        phone: a.phone,
+        email: a.email,
+        experience: a.exp,
+        campaign: a.camp,
+        interview_slot: a.slot,
+        botcheck: ''
+      })
+    }).then(function (r) { return r.json(); });
+  }
+
+  function showSubmitError(btn) {
+    btn.disabled = false;
+    btn.textContent = 'Confirm Interview';
+    var err = document.getElementById('submitError');
+    if (err) err.style.display = 'block';
+  }
 
   function recommend() {
     if (answers.exp === 'Virtual Sales') return 'Virtual High Ticket';
@@ -973,7 +1002,22 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
       validate();
       return;
     }
-    if (e.target.closest('[data-next]')) { show(Math.min(current + 1, 5)); return; }
+    if (e.target.closest('[data-next]')) {
+      var nextBtn = e.target.closest('[data-next]');
+      if (current === 4) {
+        var err = document.getElementById('submitError');
+        if (err) err.style.display = 'none';
+        nextBtn.disabled = true;
+        nextBtn.textContent = 'Sending...';
+        submitApplication(answers).then(function (res) {
+          if (res && res.success) { show(5); }
+          else { showSubmitError(nextBtn); }
+        }).catch(function () { showSubmitError(nextBtn); });
+        return;
+      }
+      show(Math.min(current + 1, 5));
+      return;
+    }
     if (e.target.closest('[data-back]')) { show(Math.max(current - 1, 1)); return; }
   });
 
