@@ -16,7 +16,7 @@
    Element contract (set in the markup, read here):
      [data-reveal]  generic rise + fade, batched with a proximity stagger
      [data-split]   heading / lede unmasked line by line
-   Hero, ladder and partner grid are addressed by their own classes.
+   Hero and ladder are addressed by their own classes.
    ========================================================================== */
 (function () {
   'use strict';
@@ -290,30 +290,7 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 5. Partner grid (index.html only)
-   *
-   * `grid: 'auto'` measures the cells' real positions, so the cascade stays
-   * diagonal whether the grid is at 4, 2 or 1 columns.
-   * ------------------------------------------------------------------ */
-  var partnersGrid = q('.partners-grid');
-  if (partnersGrid) {
-    var cells = qa('.partner-cell', partnersGrid);
-    gsap.set(cells, { opacity: 0, y: 28 });
-    ScrollTrigger.create({
-      trigger: partnersGrid,
-      start: 'top 82%',
-      once: true,
-      onEnter: function () {
-        gsap.to(cells, {
-          opacity: 1, y: 0, duration: 0.8,
-          stagger: { grid: 'auto', from: 'start', amount: 0.6 }
-        });
-      }
-    });
-  }
-
-  /* ------------------------------------------------------------------ *
-   * 6. In-page anchors
+   * 5. In-page anchors
    *
    * CSS `scroll-behavior: smooth` fights ScrollTrigger's scrub and pin (it
    * makes pinned sections jump), so the old documentElement override is gone
@@ -336,7 +313,7 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 7. Apply funnel (apply.html only)
+   * 6. Apply funnel (apply.html only)
    *
    * Deliberately no pinning and no scrub here - this is a conversion flow,
    * and nothing should stand between a candidate and the next field. The
@@ -418,7 +395,7 @@
   }
 
   /* ------------------------------------------------------------------ *
-   * 8. Recalculate once the page has actually settled.
+   * 7. Recalculate once the page has actually settled.
    *
    * Every trigger's start/end is derived from layout. The webfonts
    * (Montserrat, Cinzel) and the hero plate both change layout after first

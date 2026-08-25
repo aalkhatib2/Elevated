@@ -54,6 +54,14 @@
   .row-money { grid-template-columns: 110px 1fr 130px 120px; }
   .row-prod  { grid-template-columns: 110px 1fr 150px 120px; }
   .row-team  { grid-template-columns: 1fr 90px 130px 120px; }
+  .row-board { grid-template-columns: 60px 1fr 110px 130px 130px; }
+  .row-board .rank { font-family: var(--display); font-weight: 900; font-size: 20px; color: var(--muted); }
+  .row-board.is-me .rank { color: var(--steel); }
+  .row-board.is-me .what { color: var(--white); }
+  .figure-pill {
+    display: inline-block; font-family: var(--mono); font-size: 12px; letter-spacing: 0.02em;
+    color: var(--muted); border: 1px solid var(--line-soft); padding: 6px 12px;
+  }
   .row.head { padding: 14px 0; border-bottom: 1px solid var(--line); }
   .row.head span { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
   .row .date { font-family: var(--mono); font-size: 12px; color: var(--muted); }
@@ -79,44 +87,9 @@
   .pipe .bar { margin-top: 14px; height: 3px; background: var(--line-soft); }
   .pipe .bar i { display: block; height: 100%; background: var(--steel); }
 
-  /* ---- where I stand ---- */
-  .stand-grid { display: grid; grid-template-columns: 1fr 380px; gap: 56px; align-items: start; }
-  .meter-block { border: 1px solid var(--line); padding: 34px; background: var(--bg-2); }
-  .meter-top { display: flex; justify-content: space-between; align-items: flex-end; gap: 20px; flex-wrap: wrap; }
-  .meter-top .now { font-family: var(--display); font-weight: 900; font-size: 46px; letter-spacing: -0.03em; }
-  .meter-top .next { text-align: right; }
-  .meter-top .next .k { font-family: var(--mono); font-size: 10px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--muted); }
-  .meter-top .next .v { font-family: var(--display); font-weight: 900; font-size: 30px; color: var(--steel); letter-spacing: -0.02em; margin-top: 4px; }
-
-  .gate { margin-top: 30px; }
-  .gate + .gate { margin-top: 24px; }
-  .gate-label { display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
-  .gate-label .g { font-size: 15px; }
-  .gate-label .c { font-family: var(--mono); font-size: 12px; color: var(--text-2); }
-  .gate-label .c b { color: var(--white); font-weight: 400; }
-  .track { margin-top: 10px; height: 8px; background: var(--bg-3); border: 1px solid var(--line-soft); position: relative; }
-  .track i { position: absolute; inset: 0 auto 0 0; background: var(--steel); }
-  .track.met i { background: var(--pos); }
-
-  .verdict { margin-top: 32px; padding: 22px 24px; background: var(--bg-3); border-left: 2px solid var(--steel); }
-  .verdict .h { font-family: var(--display); font-weight: 900; font-size: 20px; text-transform: uppercase; letter-spacing: -0.02em; }
-  .verdict p { margin-top: 8px; color: var(--text-2); font-size: 15px; line-height: 1.6; }
-
-  /* ---- rung list ---- */
-  .rungs { display: flex; flex-direction: column; }
-  .rung-item { padding: 18px 0; border-bottom: 1px solid var(--line-soft); display: flex; justify-content: space-between; align-items: baseline; gap: 16px; }
-  .rung-item .c { font-family: var(--display); font-weight: 900; font-size: 20px; }
-  .rung-item .n { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
-  .rung-item.is-now { box-shadow: inset 3px 0 0 var(--steel); padding-left: 16px; }
-  .rung-item.is-now .c { color: var(--steel); }
-  .rung-item.is-past { opacity: .45; }
-
-  @media (max-width: 1000px) {
-    .stand-grid { grid-template-columns: 1fr; gap: 40px; }
-  }
   @media (max-width: 767px) {
     .stats, .pipeline { grid-template-columns: 1fr 1fr; }
-    .row-money, .row-prod, .row-team { grid-template-columns: 1fr auto; gap: 8px 16px; }
+    .row-money, .row-prod, .row-team, .row-board { grid-template-columns: 1fr auto; gap: 8px 16px; }
     .row .date { grid-column: 1 / -1; }
     .row.head { display: none; }
     .row .amt, .row .st { text-align: left; }
@@ -139,7 +112,7 @@
       <div class="nav-links">
         <a href="../index.html#ladder">Your Growth</a>
         <a href="apply.html">Apply</a>
-        <a href="calculator.html">Calculator</a>
+        <a href="#">Our mission</a>
       </div>
       <a class="btn btn-ghost btn-sm" href="../index.html">Back to Site</a>
     </nav>
@@ -160,16 +133,16 @@
         </div>
       </div>
       <div class="rep-stamp">
-        <div class="k">Current rung</div>
+        <div class="k">Current Position</div>
         <div class="v">EL</div>
       </div>
     </div>
 
     <div class="tabs" role="tablist">
-      <button class="tab" role="tab" aria-selected="true"  data-pane="money">My money</button>
+      <button class="tab" role="tab" aria-selected="true"  data-pane="money">Commission</button>
       <button class="tab" role="tab" aria-selected="false" data-pane="prod">My production</button>
       <button class="tab" role="tab" aria-selected="false" data-pane="team">My team</button>
-      <button class="tab" role="tab" aria-selected="false" data-pane="stand">Where I stand</button>
+      <button class="tab" role="tab" aria-selected="false" data-pane="board">Leaderboard</button>
     </div>
 
     <!-- ============ MY MONEY ============ -->
@@ -262,78 +235,35 @@
       </div>
     </section>
 
-    <!-- ============ WHERE I STAND ============ -->
-    <section class="pane" data-pane="stand">
-      <div class="stand-grid">
-        <div>
-          <div class="meter-block">
-            <div class="meter-top">
-              <div>
-                <div class="mono-label">You are here</div>
-                <div class="now">EL</div>
-              </div>
-              <div class="next">
-                <div class="k">Next rung</div>
-                <div class="v">STL</div>
-              </div>
-            </div>
-
-            <div class="gate">
-              <div class="gate-label">
-                <span class="g">Personal installs, trailing 30 days</span>
-                <span class="c"><b>24</b> of 30</span>
-              </div>
-              <div class="track"><i style="width:80%"></i></div>
-            </div>
-
-            <div class="gate">
-              <div class="gate-label">
-                <span class="g">Producing reps recruited</span>
-                <span class="c"><b>1</b> of 2</span>
-              </div>
-              <div class="track"><i style="width:50%"></i></div>
-            </div>
-
-            <div class="gate">
-              <div class="gate-label">
-                <span class="g">Weeks active without a gap</span>
-                <span class="c"><b>12</b> of 8</span>
-              </div>
-              <div class="track met"><i style="width:100%"></i></div>
-            </div>
-
-            <div class="verdict">
-              <div class="h">6 installs and 1 rep from STL</div>
-              <p>Your tenure gate is already met. At your current pace you clear the install threshold in about nine days. The rep is the long pole — bring one more producer and STL is yours the moment both land.</p>
-            </div>
-          </div>
+    <!-- ============ LEADERBOARD ============ -->
+    <section class="pane" data-pane="board">
+      <div class="block" style="margin-top:0">
+        <div class="block-head">
+          <h2>Team standings</h2>
+          <span class="mono-label">Ranked by production, this period</span>
         </div>
-
-        <aside>
-          <div class="block-head" style="margin-bottom:8px"><h2>The published ladder</h2></div>
-          <div class="rungs">
-            <div class="rung-item is-now">
-              <div><div class="c">EL</div><div class="n">Entry Level</div></div>
-              <span class="st-pill set">You are here</span>
-            </div>
-            <div class="rung-item">
-              <div><div class="c">STL</div><div class="n">Sales Team Leader</div></div>
-              <span class="st-pill wait">2 gates left</span>
-            </div>
-            <div class="rung-item">
-              <div><div class="c">STC</div><div class="n">Sales Team Captain</div></div>
-              <span class="st-pill wait">Locked</span>
-            </div>
-            <div class="rung-item">
-              <div><div class="c">JP</div><div class="n">Junior Partner</div></div>
-              <span class="st-pill wait">Locked</span>
-            </div>
-          </div>
-          <p class="lede" style="margin-top:26px; font-size:15px">
-            Thresholds are published per campaign and handed to you in writing on day one. They do not move while you are climbing toward them.
-          </p>
-          <a class="btn btn-ghost btn-sm" href="calculator.html" style="margin-top:22px">Model the Next Rung</a>
-        </aside>
+        <div class="row head row-board"><span>Rank</span><span>Rep</span><span>Rung</span><span style="text-align:right">Production</span><span style="text-align:right">Revenue</span></div>
+        <div class="row row-board is-me">
+          <span class="rank">01</span>
+          <span class="what">Marcus Deland</span>
+          <span class="amt" style="text-align:left">EL</span>
+          <span class="amt">7 installs</span>
+          <span class="st"><span class="figure-pill">Add figure</span></span>
+        </div>
+        <div class="row row-board">
+          <span class="rank">02</span>
+          <span class="what">Devon Marsh</span>
+          <span class="amt" style="text-align:left">EL</span>
+          <span class="amt">4 installs</span>
+          <span class="st"><span class="figure-pill">Add figure</span></span>
+        </div>
+        <div class="row row-board">
+          <span class="rank">03</span>
+          <span class="what">Priya Raman</span>
+          <span class="amt" style="text-align:left">EL</span>
+          <span class="amt">2 installs</span>
+          <span class="st"><span class="figure-pill">Add figure</span></span>
+        </div>
       </div>
     </section>
 
@@ -352,15 +282,44 @@
   </div>
 </footer>
 
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
 <script>
 (function () {
+  /* GSAP is optional: the tab switching below toggles classes first and
+     only then asks for a tween, so this page works unchanged if the CDN
+     never answers. Dashboard motion budget - nothing past ~0.4s. */
+  var MOTION = !!window.gsap &&
+    !window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
   var tabs = document.querySelectorAll('.tab');
   var panes = document.querySelectorAll('.pane');
   tabs.forEach(function (t) {
     t.addEventListener('click', function () {
       tabs.forEach(function (x) { x.setAttribute('aria-selected', String(x === t)); });
-      panes.forEach(function (p) { p.classList.toggle('on', p.dataset.pane === t.dataset.pane); });
+      panes.forEach(function (p) {
+        var on = p.dataset.pane === t.dataset.pane;
+        p.classList.toggle('on', on);
+        if (on && MOTION) {
+          gsap.fromTo(p, { opacity: 0, y: 8 },
+            { opacity: 1, y: 0, duration: 0.3, ease: 'power2.out',
+              clearProps: 'opacity,transform' });
+        }
+      });
     });
+  });
+
+  if (!MOTION) return;
+
+  /* The CSS keyframe on .pane would otherwise run alongside the tween. */
+  document.querySelectorAll('.pane').forEach(function (p) { p.style.animation = 'none'; });
+
+  gsap.from('.block', { opacity: 0, y: 12, duration: 0.4, ease: 'power2.out', stagger: 0.06 });
+
+  /* Pipeline bars draw out to the width already set inline, rather than
+     being there the instant the page paints. */
+  gsap.from('.pipe .bar i', {
+    scaleX: 0, transformOrigin: '0% 50%',
+    duration: 0.7, ease: 'power3.out', stagger: 0.08, delay: 0.2
   });
 })();
 </script>

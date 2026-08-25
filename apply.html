@@ -606,8 +606,11 @@ button { font: inherit; }
 
 header { position: sticky; top: 0; z-index: 50; background: var(--header-fill); backdrop-filter: blur(14px); border-bottom: 1px solid var(--line-soft); }
 .nav { height: var(--header-h); display: flex; align-items: center; justify-content: space-between; gap: 24px; }
-.wordmark { font-family: var(--display); font-weight: var(--weight-display); font-size: var(--size-wordmark); letter-spacing: var(--track-wordmark); text-transform: uppercase; color: var(--white); }
-.wordmark:hover { color: var(--white); }
+/* The blackletter E monogram, not type. Height-only sizing keeps the
+   intrinsic 549x715 proportions intact and optically centred in the bar. */
+.wordmark { display: inline-flex; align-items: center; flex: 0 0 auto; }
+.wordmark img { height: 40px; width: auto; display: block; }
+@media (max-width: 430px) { .wordmark img { height: 32px; } }
 .nav-links { display: flex; gap: var(--gap-nav); }
 .nav-links a { font-family: var(--mono); font-size: var(--size-label-sm); letter-spacing: var(--track-nav); text-transform: uppercase; color: var(--text-2); transition: color .2s; }
 .nav-links a:hover { color: var(--white); }
@@ -773,7 +776,9 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
 <header>
   <div class="wrap">
     <nav class="nav">
-      <a class="wordmark" href="index.html">Elevated</a>
+      <a class="wordmark" href="index.html">
+        <img src="elevated-logo.webp" alt="Elevated" width="549" height="715" decoding="async">
+      </a>
       <a class="btn btn-ghost btn-sm" href="index.html">Back to Site</a>
     </nav>
   </div>
