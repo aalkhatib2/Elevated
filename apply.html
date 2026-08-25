@@ -8,6 +8,24 @@
 <link rel="icon" href="favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
 <meta name="theme-color" content="#0A0B0D">
+
+<!-- Motion. Same engine as the landing page (motion.js), but this is a
+     conversion funnel, so it gets micro-interaction only: no pinning, no
+     scroll-scrub, nothing that puts an animation between a candidate and
+     the next field. See the ELEVATED motion notes in index.html for why the
+     motion-pending class is set from script and cleared on a timeout. -->
+<script>
+  document.documentElement.classList.add('motion-pending');
+  setTimeout(function () {
+    document.documentElement.classList.remove('motion-pending');
+  }, 1500);
+</script>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollToPlugin.min.js"></script>
+<script defer src="motion.js"></script>
 <style>/* Elevated — colour primitives.
    The identity is a locked dark cinematic monochrome. There is no light theme
    by design; every value below is authored against #0A0B0D. */
@@ -626,7 +644,19 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   .apply-grid { display: grid; grid-template-columns: 1fr 400px; gap: 64px; align-items: start; }
 
   /* ---- progress rail ---- */
-  .rail { display: flex; gap: 0; margin-bottom: 48px; border-top: 1px solid var(--line-soft); }
+  .rail { position: relative; display: flex; gap: 0; margin-bottom: 48px; border-top: 1px solid var(--line-soft); }
+  /* A single continuous bar under the four step markers, scaled to the
+     current step by motion.js. The per-step border-top colours below still
+     mark which step is which; this shows how far through the whole thing
+     you are, which four separate 2px rules never quite communicate. */
+  .rail-fill {
+    position: absolute; top: -1px; left: 0;
+    width: 100%; height: 2px;
+    background: var(--steel);
+    transform: scaleX(0.25);
+    transform-origin: 0% 50%;
+    pointer-events: none;
+  }
   .rail-step { flex: 1; padding-top: 14px; border-top: 2px solid transparent; margin-top: -1px; transition: border-color .3s, color .3s; }
   .rail-step .n { font-family: var(--mono); font-size: 10.5px; letter-spacing: 0.2em; color: var(--muted); }
   .rail-step .t { margin-top: 4px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
@@ -637,9 +667,25 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   .rail-step.active .n { color: var(--steel); }
 
   /* ---- steps ---- */
-  .step { display: none; animation: fade .4s cubic-bezier(.16,1,.3,1); }
+  /* The CSS keyframe that used to run here has been handed to motion.js,
+     which can also tween the host's height so the card stops snapping
+     between steps of very different lengths. The class toggling below is
+     unchanged and still works on its own if GSAP never loads. */
+  .step { display: none; }
   .step.on { display: block; }
-  @keyframes fade { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: none; } }
+
+  /* Reveal blindfold - see the head comment. Deliberately narrow on this
+     page: only decorative furniture is ever hidden, never a form control. */
+  .motion-pending [data-reveal] { visibility: hidden; }
+  @media (prefers-reduced-motion: reduce) {
+    .motion-pending [data-reveal] { visibility: visible; }
+  }
+
+  /* Confirmation checkmark, drawn rather than faded (motion.js tweens
+     strokeDashoffset). The end of the funnel is the one moment on this page
+     that deserves more than a crossfade. */
+  .confirm-check { width: 46px; height: 46px; display: block; margin-bottom: 22px; }
+  .confirm-check path { fill: none; stroke: var(--steel); stroke-width: 2.5; stroke-linecap: square; }
   .step h2 { font-size: clamp(30px, 4.2vw, 52px); max-width: 18ch; }
   .step .lede { margin-top: 18px; }
 
@@ -737,13 +783,18 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   <div class="wrap">
     <div class="apply-grid">
       <div>
-        <div class="rail" id="rail">
+        <div class="rail" id="rail" data-reveal>
+          <span class="rail-fill" aria-hidden="true"></span>
           <div class="rail-step active" data-s="1"><div class="n">01</div><div class="t">Information</div></div>
           <div class="rail-step" data-s="2"><div class="n">02</div><div class="t">Experience</div></div>
           <div class="rail-step" data-s="3"><div class="n">03</div><div class="t">Campaign</div></div>
           <div class="rail-step" data-s="4"><div class="n">04</div><div class="t">Interview</div></div>
         </div>
 
+        <!-- The five steps share a host element so motion.js can tween its
+             height between steps; without it the card snaps whenever the
+             next step is a very different length. -->
+        <div class="steps-host">
         <!-- STEP 1 -->
         <section class="step on" data-step="1">
           <p class="eyebrow">Question one of four</p>
@@ -834,6 +885,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
 
         <!-- DONE -->
         <section class="step confirm" data-step="5">
+          <svg class="confirm-check" viewBox="0 0 46 46" aria-hidden="true"><path d="M9 24 L19 34 L37 13"/></svg>
           <p class="eyebrow">Confirmed</p>
           <h2 style="margin-top:18px">You are booked.</h2>
           <p class="lede">A calendar invite is on its way. If anything changes, reply to it — a person reads that inbox.</p>
@@ -855,10 +907,11 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
             <a class="btn btn-ghost" href="prototypes/calculator.html">Run the Numbers</a>
           </div>
         </section>
+        </div>
       </div>
 
       <!-- MATCH PANEL -->
-      <aside class="match">
+      <aside class="match" data-reveal>
         <div class="match-inner" style="width:370px;height:584px">
           <div class="match-head">
             <span class="mono-label">Your PROFILE</span>
@@ -917,7 +970,11 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
     btn.disabled = false;
     btn.textContent = 'Confirm Interview';
     var err = document.getElementById('submitError');
-    if (err) err.style.display = 'block';
+    if (err) {
+      err.style.display = 'block';
+      // A submission failure that simply appears is easy to scroll past.
+      if (window.ElevatedMotion) window.ElevatedMotion.error(err);
+    }
   }
 
   function recommend() {
@@ -987,6 +1044,15 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
     }
     validate();
     window.scrollTo({ top: 0, behavior: 'smooth' });
+
+    // Hand the finished state change to the motion engine, which animates
+    // the incoming step, tweens the host height so the card stops snapping
+    // between steps of very different lengths, and advances the rail fill.
+    // Everything above has already happened by this point, so the funnel is
+    // fully functional whether or not motion.js loaded.
+    if (window.ElevatedMotion) {
+      window.ElevatedMotion.stepChange(document.querySelector('.step[data-step="' + n + '"]'), n);
+    }
   }
 
   document.addEventListener('click', function (e) {

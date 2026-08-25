@@ -8,6 +8,7 @@
 <link rel="canonical" href="https://joinelevated.net/">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -26,6 +27,30 @@
 <meta name="twitter:title" content="Elevated Field Sales">
 <meta name="twitter:description" content="Field sales recruiting for Elevated. See the ladder, join a live campaign, book an interview.">
 <meta name="twitter:image" content="https://joinelevated.net/og-image.jpg">
+
+<!-- Motion. GSAP drives every reveal on this page (see motion.js), which
+     means the page now has a third-party dependency it did not used to
+     have, so the failure path is handled explicitly rather than hoped for:
+
+     - `motion-pending` hides reveal targets for the few frames between
+       first paint and motion.js initialising, so nothing is painted in its
+       resting position and then yanked back to the start of its animation.
+     - It is added from script, never as a static class on <html>, so a
+       browser with JS off never receives it and simply gets the page.
+     - The timeout removes it whether or not the CDN ever answered. A
+       blocked or slow jsDelivr therefore costs a 1.5s wait at worst - it
+       can never leave a blank page behind. -->
+<script>
+  document.documentElement.classList.add('motion-pending');
+  setTimeout(function () {
+    document.documentElement.classList.remove('motion-pending');
+  }, 1500);
+</script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollToPlugin.min.js"></script>
+<script defer src="motion.js"></script>
 <style>
   /* ============================================================
      ELEVATED - field sales recruiting landing page
@@ -76,7 +101,11 @@
     font-size: 16px;
     line-height: 1.6;
     -webkit-font-smoothing: antialiased;
-    overflow-x: hidden;
+    /* clip, not hidden. `overflow-x: hidden` makes body a scroll container
+       in several browsers, and ScrollTrigger then measures pin positions
+       against the wrong scroller - the ladder pin jumps. clip suppresses
+       the same horizontal overflow without establishing a scroll port. */
+    overflow-x: clip;
   }
 
   /* fixed grain, never on a scrolling container */
@@ -264,9 +293,11 @@
      viewport width alone drifts out of proportion with the photo the
      moment either clamp is active. Percentage-of-height tracks
      whatever .hero-art's real height is, always. Centered via
-     left/right/margin on a replaced element (not transform, which
-     .rise.in sets to none for its own reveal animation and would
-     silently override at equal specificity). */
+     left/right/margin on a replaced element rather than a transform,
+     which matters more than ever now that motion.js animates this mark:
+     GSAP owns the transform property here (intro scale, then parallax
+     yPercent), so any centering that relied on translate would be
+     overwritten the moment the first tween ran. */
   .hero-wordmark {
     position: absolute;
     top: 4%;
@@ -342,10 +373,31 @@
       var(--bg) 100%);
   }
   .ladder {
+    position: relative;   /* positioning context for .ladder-line */
     margin-top: 76px;
     display: flex;
     flex-direction: column;
   }
+  /* The stringer the rungs hang off. A real element rather than a
+     pseudo-element because GSAP can only tween real nodes, and this is
+     scrubbed: scaleY runs 0 -> 1 from the top down as the climb advances.
+     Sits at the left edge, which is where rung-1 (EL) starts before the
+     rungs step rightward toward JP. */
+  .ladder-line {
+    position: absolute;
+    top: 0; bottom: 0;
+    /* Pulled out of the content column. At left: 0 it lands on exactly the
+       same x as rung-1's "EL", because that rung has no indent - the rail
+       would be drawn straight through the letterform. .wrap's padding is
+       24px from 600px up, so -14px still leaves 10px of clearance from the
+       viewport edge at the tightest desktop width. */
+    left: -14px;
+    width: 1px;
+    background: linear-gradient(180deg, rgba(157,182,206,0.15), var(--steel));
+    transform-origin: 50% 0%;
+    pointer-events: none;
+  }
+  @media (max-width: 767px) { .ladder-line { display: none; } }
   .rung {
     display: grid;
     grid-template-columns: 168px 1fr;
@@ -459,14 +511,29 @@
     transition: background-color .25s cubic-bezier(.16,1,.3,1), border-color .25s cubic-bezier(.16,1,.3,1);
   }
   .partner-cell:hover { background-color: var(--bg-3); border-color: rgba(157,182,206,0.45); }
-  .partner-cell img { max-width: 100%; max-height: 72px; width: auto; height: auto; object-fit: contain; }
+  /* Desaturated at rest so the wall of logos reads as one monochrome band
+     rather than seven competing brand palettes (T-Mobile magenta and the
+     Palmetto mark are the loudest offenders), and so hovering is an actual
+     reveal instead of a background tint. */
+  .partner-cell img {
+    max-width: 100%; max-height: 72px; width: auto; height: auto; object-fit: contain;
+    filter: grayscale(1);
+    opacity: 0.55;
+    transition: filter .35s cubic-bezier(.16,1,.3,1), opacity .35s cubic-bezier(.16,1,.3,1);
+  }
+  .partner-cell:hover img { filter: grayscale(0); opacity: 1; }
   .partner-visit {
     position: absolute; top: 14px; right: 16px;
     font-family: var(--mono); font-size: 10.5px;
     letter-spacing: 0.16em; text-transform: uppercase;
-    color: var(--muted); transition: color .25s cubic-bezier(.16,1,.3,1);
+    color: var(--muted);
+    opacity: 0; transform: translateY(6px);
+    transition: color .25s cubic-bezier(.16,1,.3,1),
+                opacity .25s cubic-bezier(.16,1,.3,1),
+                transform .25s cubic-bezier(.16,1,.3,1);
   }
-  .partner-cell:hover .partner-visit { color: var(--white); }
+  .partner-cell:hover .partner-visit,
+  .partner-cell:focus-visible .partner-visit { color: var(--white); opacity: 1; transform: none; }
   .partner-cta { flex-direction: column; align-items: flex-start; justify-content: center; gap: 12px; padding: 34px 26px; }
   .partner-cta-kicker { font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--white); font-weight: 700; }
   .partner-cta-mail {
@@ -523,13 +590,43 @@
   }
 
   /* ---------------- motion ---------------- */
-  .rise { opacity: 0; transform: translateY(22px); transition: opacity .75s cubic-bezier(.16,1,.3,1), transform .75s cubic-bezier(.16,1,.3,1); }
-  .rise.in { opacity: 1; transform: none; }
+  /* Every reveal on this page is driven by GSAP from motion.js. Nothing
+     here sets a resting `opacity: 0`, deliberately: the start states are
+     applied from JS only once GSAP is confirmed present, so if the CDN is
+     blocked the markup below is already in its final, readable state.
+
+     The only thing CSS contributes is this short blindfold, scoped to the
+     `motion-pending` class the inline <head> script adds and both motion.js
+     and a 1.5s timeout remove. visibility (not display) so layout - and
+     therefore every ScrollTrigger measurement - is already correct. */
+  .motion-pending [data-reveal],
+  .motion-pending [data-split],
+  .motion-pending .hero-art,
+  .motion-pending .hero-tagline,
+  .motion-pending .hero-cta-wrap,
+  .motion-pending .rung,
+  .motion-pending .partner-cell { visibility: hidden; }
+
+  /* SplitText wraps each line in an overflow:hidden mask so lines rise out
+     of nothing. Descenders in the display face get clipped at exactly the
+     line box, so the mask is given a little vertical room to breathe. */
+  .split-line { padding-bottom: 0.08em; }
 
   @media (prefers-reduced-motion: reduce) {
-    .rise { opacity: 1 !important; transform: none !important; transition: none !important; }
+    /* motion.js bails out entirely under this query - it never builds a
+       timeline - so all that is left to do here is make sure the blindfold
+       can never apply and that the CSS-level transitions are quiet. */
+    .motion-pending [data-reveal],
+    .motion-pending [data-split],
+    .motion-pending .hero-art,
+    .motion-pending .hero-tagline,
+    .motion-pending .hero-cta-wrap,
+    .motion-pending .rung,
+    .motion-pending .partner-cell { visibility: visible; }
+    .partner-visit { opacity: 1; transform: none; }
     .btn { transition: none; }
     header { transition: none; }
+    .partner-cell img { transition: none; }
     * { scroll-behavior: auto !important; }
   }
 
@@ -591,6 +688,11 @@
     .btn-ghost:hover { border-color: rgba(255,255,255,0.42); background: rgba(10,11,13,0.35); }
     .btn-primary:active { background: var(--steel); }
     .btn-ghost:active { border-color: var(--white); background: rgba(255,255,255,0.09); }
+    /* A finger cannot hover, so anything gated behind :hover has to be the
+       resting state here instead - otherwise touch users would only ever
+       see grey logos and never the "Visit" affordance. */
+    .partner-cell img { filter: grayscale(0); opacity: 1; }
+    .partner-visit { opacity: 1; transform: none; }
   }
 
   /* Narrow phones: the wordmark, the toggle, and a full-length CTA
@@ -639,13 +741,13 @@
        active, and is structurally never cropped by object-fit math. -->
   <section class="hero">
     <h1 class="sr-only">Elevated Field Sales</h1>
-    <div class="hero-art rise">
+    <div class="hero-art">
       <img class="hero-bg-img" src="hero-bg.jpg" alt="" width="2400" height="1055" fetchpriority="high" decoding="async">
       <img class="hero-wordmark" src="wordmark-elevated.webp" alt="Elevated"
            width="2000" height="476" decoding="async">
     </div>
-    <p class="hero-tagline rise">Above all else</p>
-    <div class="hero-cta-wrap rise">
+    <p class="hero-tagline">Above all else</p>
+    <div class="hero-cta-wrap">
       <a href="#join" class="btn btn-primary">Join the Team</a>
       <a href="#ladder" class="btn btn-ghost">Our Mission</a>
     </div>
@@ -654,34 +756,35 @@
   <!-- LADDER: ascending stepped rows -->
   <section class="sec" id="ladder">
     <div class="wrap">
-      <div class="sec-head rise" id="growthHead">
-        <p class="eyebrow">The Ladder</p>
-        <h2 style="margin-top:20px">Your Growth</h2>
+      <div class="sec-head" id="growthHead">
+        <p class="eyebrow" data-reveal>The Ladder</p>
+        <h2 style="margin-top:20px" data-split>Your Growth</h2>
       </div>
 
       <div class="ladder">
-        <div class="rung rung-1 rise">
+        <span class="ladder-line" aria-hidden="true"></span>
+        <div class="rung rung-1">
           <div>
             <div class="rung-code">EL</div>
             <div class="rung-name">Entry Level</div>
           </div>
           <div class="rung-col"><p class="rung-body">Learn, sell, grow.</p><p class="rung-detail">1-on-1 coaching &middot; Warm leads &middot; Production bonuses</p></div>
         </div>
-        <div class="rung rung-2 rise">
+        <div class="rung rung-2">
           <div>
             <div class="rung-code">STL</div>
             <div class="rung-name">Sales Team Leader</div>
           </div>
           <div class="rung-col"><p class="rung-body">Build teams, duplicate systems, and scale.</p><p class="rung-detail">Create your own culture &middot; Scale opportunity &middot; Grow your business</p></div>
         </div>
-        <div class="rung rung-3 rise">
+        <div class="rung rung-3">
           <div>
             <div class="rung-code">STC</div>
             <div class="rung-name">Sales Team Captain</div>
           </div>
           <div class="rung-col"><p class="rung-body">Overrides, commission bonuses, and exclusive travel events.</p></div>
         </div>
-        <div class="rung rung-4 rise">
+        <div class="rung rung-4">
           <div>
             <div class="rung-code">JP</div>
             <div class="rung-name">Junior Partner</div>
@@ -690,20 +793,20 @@
         </div>
       </div>
 
-      <p class="ladder-note rise lede-motto">Not just a team. A lifestyle.</p>
+      <p class="ladder-note lede-motto" data-reveal>Not just a team. A lifestyle.</p>
     </div>
   </section>
 
   <!-- DIVISIONS: honest status, asymmetric 3-cell grid -->
   <section class="sec" id="divisions">
     <div class="wrap">
-      <div class="sec-head rise">
-        <p class="eyebrow">Divisions</p>
-        <h2 style="margin-top:20px">Campaigns</h2>
-        <p class="lede">Three campaigns, multiple routes to success.</p>
+      <div class="sec-head">
+        <p class="eyebrow" data-reveal>Divisions</p>
+        <h2 style="margin-top:20px" data-split>Campaigns</h2>
+        <p class="lede" data-split>Three campaigns, multiple routes to success.</p>
       </div>
       <div class="divs">
-        <div class="div-card div-live rise">
+        <div class="div-card div-live" data-reveal>
           <div>
             <p class="div-status">Live and hiring</p>
             <h3>Fiber</h3>
@@ -711,7 +814,7 @@
           </div>
           <a href="#join" class="btn btn-ghost btn-sm" style="align-self:flex-start; margin-top:28px">Join the Team</a>
         </div>
-        <div class="div-card div-live rise">
+        <div class="div-card div-live" data-reveal>
           <div>
             <p class="div-status">Live and hiring</p>
             <h3>Virtual High Ticket</h3>
@@ -719,7 +822,7 @@
           </div>
           <a href="#join" class="btn btn-ghost btn-sm" style="align-self:flex-start; margin-top:28px">Join the Team</a>
         </div>
-        <div class="div-card div-live rise">
+        <div class="div-card div-live" data-reveal>
           <div>
             <p class="div-status">Live and hiring</p>
             <h3>Life Insurance</h3>
@@ -735,33 +838,33 @@
   <section class="sec">
     <div class="wrap">
       <div class="portal-grid">
-        <div class="portal-media portal-media-logo rise">
+        <div class="portal-media portal-media-logo" data-reveal>
           <img src="elevated-logo.webp" alt="The Elevated blackletter monogram"
                width="549" height="715" loading="lazy" decoding="async">
         </div>
         <div>
-          <div class="sec-head rise">
-            <h2>Our movement</h2>
-            <p class="lede">Elevated Management runs on 5 core values. Not just a team, a family of growth in all aspects.</p>
+          <div class="sec-head">
+            <h2 data-split>Our movement</h2>
+            <p class="lede" data-split>Elevated Management runs on 5 core values. Not just a team, a family of growth in all aspects.</p>
           </div>
           <div class="portal-list">
-            <div class="portal-item rise">
+            <div class="portal-item" data-reveal>
               <span class="portal-num">1</span>
               <h3>Build faith</h3>
             </div>
-            <div class="portal-item rise">
+            <div class="portal-item" data-reveal>
               <span class="portal-num">2</span>
               <h3>Get in the best physical shape</h3>
             </div>
-            <div class="portal-item rise">
+            <div class="portal-item" data-reveal>
               <span class="portal-num">3</span>
               <h3>Make life-changing money</h3>
             </div>
-            <div class="portal-item rise">
+            <div class="portal-item" data-reveal>
               <span class="portal-num">4</span>
               <h3>Impact the most people</h3>
             </div>
-            <div class="portal-item rise">
+            <div class="portal-item" data-reveal>
               <span class="portal-num">5</span>
               <h3>Create opportunity</h3>
             </div>
@@ -774,40 +877,40 @@
   <!-- PARTNERS: logo grid, last cell is the inbound-partnership CTA -->
   <section class="sec" id="partners">
     <div class="wrap">
-      <div class="sec-head rise">
-        <p class="eyebrow">Partners</p>
-        <h2 style="margin-top:20px">Our Partners</h2>
+      <div class="sec-head">
+        <p class="eyebrow" data-reveal>Partners</p>
+        <h2 style="margin-top:20px" data-split>Our Partners</h2>
       </div>
       <div class="partners-grid">
-        <a class="partner-cell rise" href="https://telehealth.micom.ai/" target="_blank" rel="noopener">
+        <a class="partner-cell" href="https://telehealth.micom.ai/" target="_blank" rel="noopener">
           <span class="partner-visit">Visit</span>
           <img src="partner-achilles.png" alt="Achilles Peptides" width="131" height="140" style="max-height:80px" loading="lazy" decoding="async">
         </a>
-        <a class="partner-cell rise" href="https://citrusglencapital.com/" target="_blank" rel="noopener">
+        <a class="partner-cell" href="https://citrusglencapital.com/" target="_blank" rel="noopener">
           <span class="partner-visit">Visit</span>
           <img src="partner-citrus-glen.png" alt="Citrus Glen Capital" width="197" height="28" loading="lazy" decoding="async">
         </a>
-        <a class="partner-cell rise" href="https://www.t-mobile.com/" target="_blank" rel="noopener">
+        <a class="partner-cell" href="https://www.t-mobile.com/" target="_blank" rel="noopener">
           <span class="partner-visit">Visit</span>
           <img src="partner-tmobile.png" alt="T-Mobile" width="1000" height="500" style="max-height:64px" loading="lazy" decoding="async">
         </a>
-        <a class="partner-cell rise" href="https://equityinsurancepartners.com/" target="_blank" rel="noopener">
+        <a class="partner-cell" href="https://equityinsurancepartners.com/" target="_blank" rel="noopener">
           <span class="partner-visit">Visit</span>
           <img src="partner-equity-insurance.png" alt="Equity Insurance Partners" width="208" height="35" loading="lazy" decoding="async">
         </a>
-        <a class="partner-cell rise" href="https://www.motorsportautoglass.com/" target="_blank" rel="noopener">
+        <a class="partner-cell" href="https://www.motorsportautoglass.com/" target="_blank" rel="noopener">
           <span class="partner-visit">Visit</span>
           <img src="partner-motorsport-autoglass.png" alt="Motorsport Autoglass" width="1591" height="858" style="max-height:68px" loading="lazy" decoding="async">
         </a>
-        <a class="partner-cell rise" href="https://fatrat.ai/" target="_blank" rel="noopener">
+        <a class="partner-cell" href="https://fatrat.ai/" target="_blank" rel="noopener">
           <span class="partner-visit">Visit</span>
           <img src="partner-fatrat.png" alt="FatRat" width="216" height="85" style="max-height:56px" loading="lazy" decoding="async">
         </a>
-        <a class="partner-cell rise" href="https://palmettoenergysolutions.com/" target="_blank" rel="noopener">
+        <a class="partner-cell" href="https://palmettoenergysolutions.com/" target="_blank" rel="noopener">
           <span class="partner-visit">Visit</span>
           <img src="partner-palmetto-energy.png" alt="Palmetto Energy Solutions" width="977" height="320" style="max-height:64px" loading="lazy" decoding="async">
         </a>
-        <a class="partner-cell partner-cta rise" href="mailto:partners@joinelevated.net">
+        <a class="partner-cell partner-cta" href="mailto:partners@joinelevated.net">
           <span class="partner-cta-kicker">Interested in working with us?</span>
           <span class="partner-cta-mail">partners@joinelevated.net</span>
           <span class="partner-cta-note">Plain reply, one business day.</span>
@@ -819,12 +922,12 @@
   <!-- CLOSING -->
   <section class="closing" id="join">
     <div class="wrap">
-      <h2 class="rise">Become Elevated</h2>
-      <p class="lede lede-tagline rise">Join the movement.</p>
-      <div class="closing-cta rise">
+      <h2 data-split>Become Elevated</h2>
+      <p class="lede lede-tagline" data-split>Join the movement.</p>
+      <div class="closing-cta" data-reveal>
         <a href="apply.html" class="btn btn-primary">Book Interview</a>
       </div>
-      <p class="closing-mail rise">Contact us at <a href="mailto:partners@joinelevated.net">partners@joinelevated.net</a>.</p>
+      <p class="closing-mail" data-reveal>Contact us at <a href="mailto:partners@joinelevated.net">partners@joinelevated.net</a>.</p>
     </div>
   </section>
 </main>
@@ -842,36 +945,13 @@
 </footer>
 
 <script>
-  // Scroll reveal. IntersectionObserver only, no scroll listeners.
-  // Purpose: sequence content as it enters, so the ladder reads bottom rung first.
-  (function () {
-    var reduce = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
-    var nodes = document.querySelectorAll(".rise");
-    if (reduce || !("IntersectionObserver" in window)) {
-      nodes.forEach(function (n) { n.classList.add("in"); });
-      return;
-    }
-    var io = new IntersectionObserver(function (entries) {
-      entries.forEach(function (e) {
-        if (!e.isIntersecting) return;
-        var group = Array.prototype.filter.call(
-          e.target.parentElement ? e.target.parentElement.children : [],
-          function (c) { return c.classList && c.classList.contains("rise"); }
-        );
-        var i = group.indexOf(e.target);
-        e.target.style.transitionDelay = (i > 0 ? Math.min(i, 5) * 0.07 : 0) + "s";
-        e.target.classList.add("in");
-        io.unobserve(e.target);
-      });
-    }, { threshold: 0.16, rootMargin: "0px 0px -8% 0px" });
-    nodes.forEach(function (n) { io.observe(n); });
-  })();
-
-  // Smooth in-page nav, disabled under reduced motion.
-  (function () {
-    if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return;
-    document.documentElement.style.scrollBehavior = "smooth";
-  })();
+  // Scroll reveals, the hero sequence, the ladder pin, the partner cascade
+  // and smooth in-page scrolling all live in motion.js now. They used to be
+  // an IntersectionObserver and a scrollBehavior override here; both were
+  // removed rather than kept alongside GSAP, because two systems writing
+  // opacity and transform to the same nodes fight each other, and CSS
+  // smooth scrolling in particular makes ScrollTrigger's pinned sections
+  // jump. What remains below is page state, not motion.
 
   // Nav auto-hide. Visible at rest (scroll 0), hides the moment the
   // user scrolls down, reappears once "Your Growth" has been scrolled
