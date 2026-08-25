@@ -179,6 +179,47 @@
           onToggle: function (self) { heroBg.style.willChange = self.isActive ? 'transform' : ''; }
         }
       });
+
+      /* Ken Burns drift, so the sky reads as alive rather than as a
+         photograph that happens to be behind the nav.
+
+         It rides the parallax's existing headroom instead of adding its
+         own: the plate is already pre-scaled to 1.18, so topping out at
+         1.24 with a 2% lateral shift stays far inside the 9% of margin
+         that pre-scale buys, and no drift position can expose a
+         container edge.
+
+         The property split is the important part. The scroll tween above
+         owns yPercent; this one owns scale and xPercent. Disjoint
+         channels mean GSAP folds both into one transform matrix rather
+         than the two tweens overwriting each other - which is also why
+         neither sets `overwrite`.
+
+         Lateral movement is what actually sells cloud motion; the scale
+         is there to keep the drift from reading as a flat slide. 30s and
+         sine.inOut keep it below the threshold where you notice it
+         moving and start watching it instead of the copy. */
+      var drift = gsap.to(heroBg, {
+        scale: 1.24,
+        xPercent: -2,
+        duration: 30,
+        ease: 'sine.inOut',
+        yoyo: true,
+        repeat: -1
+      });
+
+      /* Paused once the hero leaves the viewport. An infinite tween that
+         never stops holds a compositor layer and a repaint budget for a
+         plate nobody is looking at - the cost lands hardest on the phones
+         least able to absorb it. Default-playing (rather than waiting for
+         an initial onToggle) means the drift is already running on a page
+         that loads at the top, where the hero always is. */
+      ScrollTrigger.create({
+        trigger: heroArt,
+        start: 'top bottom',
+        end: 'bottom top',
+        onToggle: function (self) { self.isActive ? drift.play() : drift.pause(); }
+      });
     }
 
     if (wordmark) {
