@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Sign In — Elevated Portal</title>
+<link rel="stylesheet" href="../elevated.css">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<div class="login-shell">
+  <div class="login-card">
+    <div class="login-brand">
+      <div class="rail-mark">E</div>
+      <div class="n">Elevated</div>
+    </div>
+
+    <p class="eyebrow" style="margin-top:28px">Agent Portal</p>
+    <h1 style="font-size:28px;margin-top:10px">Sign in</h1>
+
+    <form id="loginForm" class="login-form" novalidate>
+      <label class="login-field">
+        <span class="mono-label">Username</span>
+        <input type="text" name="username" autocomplete="username" required>
+      </label>
+      <label class="login-field">
+        <span class="mono-label">Password</span>
+        <input type="password" name="password" autocomplete="current-password" required>
+      </label>
+      <p class="login-error" id="loginError" hidden></p>
+      <button class="btn btn-primary" type="submit" style="width:100%;margin-top:8px">Sign In</button>
+    </form>
+
+    <p class="lede" style="margin-top:24px;font-size:13.5px">
+      Don't have a login yet? Ask your team lead to set one up for you.
+    </p>
+  </div>
+</div>
+
+<script>
+(function () {
+  var form = document.getElementById('loginForm');
+  var errorEl = document.getElementById('loginError');
+
+  function nextUrl() {
+    var params = new URLSearchParams(location.search);
+    var next = params.get('next');
+    // Only ever redirect within this same portal — never trust an arbitrary
+    // external "next" value from the query string.
+    return next && next.indexOf('/prototypes/portal/') === 0 ? next : 'overview.html';
+  }
+
+  form.addEventListener('submit', function (e) {
+    e.preventDefault();
+    errorEl.hidden = true;
+    var btn = form.querySelector('button[type="submit"]');
+    btn.disabled = true;
+
+    fetch('/api/login', {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ username: form.username.value.trim(), password: form.password.value })
+    })
+      .then(function (res) {
+        return res.json().then(function (data) { return { ok: res.ok, data: data }; });
+      })
+      .then(function (result) {
+        if (!result.ok || !result.data.ok) {
+          throw new Error((result.data && result.data.error) || 'Sign in failed');
+        }
+        location.href = nextUrl();
+      })
+      .catch(function (err) {
+        errorEl.textContent = err.message || 'Sign in failed';
+        errorEl.hidden = false;
+        btn.disabled = false;
+      });
+  });
+})();
+</script>
+
+</body>
+</html>

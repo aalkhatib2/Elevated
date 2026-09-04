@@ -4,5 +4,15 @@ mockups/
 # Local dev / editor
 .claude/
 
-# Prototypes — not part of the shipped site yet
-prototypes/
+# Local-only tooling: DB seed script + schema, never deployed
+scripts/
+
+# Prototypes — mostly not part of the shipped site. The agent portal now
+# ships (it needs to, to run its /api routes); everything else under
+# prototypes/ (the old draft apply/calculator pages) stays local-only.
+# NOTE: excluding a bare "prototypes/" here would block the negations below
+# from working at all — has to be "prototypes/*" for the "!" lines to take.
+prototypes/*
+!prototypes/elevated.css
+!prototypes/portal/
+!prototypes/portal/**

@@ -560,6 +560,23 @@
   .portal-item h3 { font-size: 18px; }
   .portal-item p { margin-top: 9px; color: var(--text-2); font-size: 15.5px; max-width: 46ch; }
 
+  /* ---------------- rep access ---------------- */
+  /* A quiet utility band for reps who already work here, not a second
+     recruiting CTA - Book Interview below is this page's one conversion
+     goal, so this deliberately reads smaller (a shorter padding than
+     --sec-pad, a sub-heading size, the same ghost button as every other
+     secondary action) rather than competing with it. */
+  .rep-access { padding: clamp(40px, 6vw, 64px) 0; }
+  .rep-access-inner {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 32px;
+    flex-wrap: wrap;
+  }
+  .rep-access-copy h3 { font-size: clamp(22px, 2.4vw, 30px); margin-top: 10px; }
+  .rep-access-copy .lede { margin-top: 10px; font-size: 15px; }
+
   /* ---------------- closing ---------------- */
   .closing { padding: calc(var(--sec-pad) * 1.12) 0 var(--sec-pad); border-top: 1px solid var(--line-soft); text-align: center; background: var(--bg-2); }
   .closing h2 { font-size: clamp(32px, 5.6vw, 72px); max-width: 18ch; margin: 0 auto; }
@@ -785,8 +802,9 @@
 
   @media (max-width: 767px) {
     .hero-cta-wrap { padding-bottom: 48px; }
-    .hero-cta-wrap .btn, .closing-cta .btn { width: calc(100% - 36px); max-width: 340px; }
+    .hero-cta-wrap .btn, .closing-cta .btn, .rep-access-btn { width: calc(100% - 36px); max-width: 340px; }
     .closing-cta { flex-direction: column; }
+    .rep-access-inner { flex-direction: column; align-items: flex-start; }
     .traits { grid-template-columns: 1fr; gap: 44px; }
     .divs { grid-template-columns: 1fr; }
     .div-card { min-height: 0; }
@@ -894,6 +912,19 @@
     <p class="hero-tagline">Above all else</p>
     <div class="hero-cta-wrap">
       <a href="#join" class="btn btn-primary">Join the Team</a>
+    </div>
+  </section>
+
+  <!-- REP ACCESS: sign-in link for reps already on the team, not a
+       recruiting CTA - see .rep-access above for why it's styled small. -->
+  <section class="sec rep-access" id="rep-portal">
+    <div class="wrap rep-access-inner">
+      <div class="rep-access-copy">
+        <p class="eyebrow" data-reveal>Already with us</p>
+        <h3 data-split>Rep Portal</h3>
+        <p class="lede" data-split>Sign in to see your orders, pulled live from the weekly sales tracker.</p>
+      </div>
+      <a href="prototypes/portal/login.html" class="btn btn-ghost rep-access-btn" data-reveal>Sign In</a>
     </div>
   </section>
 
@@ -1039,6 +1070,7 @@
       <button type="button" class="link-btn" data-partners-trigger
               aria-expanded="false" aria-controls="partnersPanel">Partners</button>
       <a href="#join">Join the Team</a>
+      <a href="prototypes/portal/login.html">Rep Portal</a>
     </div>
     <p class="foot-copy">Elevated Management Group</p>
   </div>

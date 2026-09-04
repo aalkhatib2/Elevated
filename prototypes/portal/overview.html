@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Overview — Elevated Portal</title>
+<link rel="stylesheet" href="../elevated.css">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<div class="proto-flag">
+  <div class="wrap" style="max-width:none;padding:0 34px">
+    <span><b>Prototype</b> — /portal/overview</span>
+    <span>Sample rep, placeholder figures</span>
+  </div>
+</div>
+
+<div class="app">
+
+  <!-- ============ SIDEBAR ============ -->
+  <aside class="rail">
+    <div class="rail-brand">
+      <div class="rail-mark">E</div>
+      <div class="n">Elevated</div>
+    </div>
+
+    <div class="rail-id">
+      <div class="rail-who"><span class="dot"></span><span data-field="fullName">Marcus Deland</span></div>
+      <span class="rail-badge">Rep</span>
+      <dl class="rail-kv">
+        <dt>Team</dt><dd data-field="team">Elevated</dd>
+        <dt>Division</dt><dd data-field="division">Fiber</dd>
+        <dt>Market</dt><dd data-field="market">Salt Lake City</dd>
+        <dt>Rep code</dt><dd data-field="repCode">4688257</dd>
+      </dl>
+    </div>
+
+    <button class="rail-search" type="button">Quick search<span class="kbd">Ctrl K</span></button>
+
+    <nav class="rail-nav">
+      <a href="overview.html" aria-current="page"><span class="sq"></span>Overview</a>
+      <a href="orders.html"><span class="sq"></span>Orders</a>
+      <a href="commission.html"><span class="sq"></span>Commission</a>
+      <a href="team.html"><span class="sq"></span>My Team</a>
+    </nav>
+
+    <div class="rail-foot">
+      <a href="#">Help</a>
+      <div class="theme-seg">
+        <button type="button" aria-pressed="false" title="Light">&#9788;</button>
+        <button type="button" aria-pressed="false" title="Dark">&#9790;</button>
+        <button type="button" aria-pressed="true" title="System">&#9635;</button>
+      </div>
+      <a href="login.html" data-signout>Sign out</a>
+    </div>
+  </aside>
+
+  <!-- ============ MAIN ============ -->
+  <div class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>Overview</h1>
+        <div class="sub">All time &middot; Everything below respects this range</div>
+      </div>
+      <div class="topbar-right">
+        <div class="seg">
+          <button type="button" aria-pressed="true">All Time</button>
+          <button type="button" aria-pressed="false">Last Month</button>
+          <button type="button" aria-pressed="false">Last Week</button>
+          <button type="button" aria-pressed="false">This Week</button>
+        </div>
+        <button class="chip" type="button"><span style="width:7px;height:7px;background:currentColor;display:inline-block"></span>Data Filters</button>
+      </div>
+    </div>
+
+    <div class="pad">
+
+      <!-- ---- milestone rail ---- -->
+      <section class="road">
+        <div class="road-top">
+          <span class="road-eyebrow"><span class="sq"></span>Road to the Summit</span>
+          <span class="road-year">2026</span>
+        </div>
+
+        <div class="road-body">
+          <div>
+            <div class="road-tier">Foothill</div>
+            <div class="road-count"><b>124</b><span>/ 600</span></div>
+            <div class="road-gap"><b>126</b> to Ascent &middot; <b>476</b> to the summit</div>
+          </div>
+          <div class="road-pct">
+            <div class="v">21<i>%</i></div>
+            <div class="k">Complete</div>
+          </div>
+        </div>
+
+        <div class="road-rail">
+          <div class="fill" style="width:20.7%"></div>
+          <span class="road-node hit" style="left:16.67%"></span>
+          <span class="road-node" style="left:41.67%"></span>
+          <span class="road-node" style="left:66.67%"></span>
+          <span class="road-node" style="left:100%"></span>
+        </div>
+        <div class="road-marks">
+          <div class="road-mark hit" style="left:16.67%"><div class="n">Foothill</div><div class="q">100</div></div>
+          <div class="road-mark" style="left:41.67%"><div class="n">Ascent</div><div class="q">250</div></div>
+          <div class="road-mark" style="left:66.67%"><div class="n">Ridgeline</div><div class="q">400</div></div>
+          <div class="road-mark" style="left:100%"><div class="n">Summit</div><div class="q">600</div></div>
+        </div>
+      </section>
+
+      <!-- ---- next rung ---- -->
+      <div class="sec-label">
+        <div class="t">Next rung &mdash; Sales Team Leader</div>
+        <div class="d">All three gates have to be open at the same time. Thresholds are published and do not move while you climb toward them.</div>
+      </div>
+      <div class="gates">
+        <div class="gate">
+          <div class="g">Personal installs, trailing 30 days</div>
+          <div class="c"><b>24</b><span>of 30</span></div>
+          <div class="track"><i style="width:80%"></i></div>
+          <div class="s">6 to go &middot; about 9 days at your pace</div>
+        </div>
+        <div class="gate">
+          <div class="g">Producing reps recruited</div>
+          <div class="c"><b>1</b><span>of 2</span></div>
+          <div class="track"><i style="width:50%"></i></div>
+          <div class="s">The long pole</div>
+        </div>
+        <div class="gate met">
+          <div class="g">Weeks active without a gap</div>
+          <div class="c"><b>12</b><span>of 8</span></div>
+          <div class="track"><i style="width:100%"></i></div>
+          <div class="s">Gate met</div>
+        </div>
+      </div>
+
+      <!-- ---- money ---- -->
+      <div class="sec-label">
+        <div class="t">Money</div>
+        <div class="d">Based on clearance date &middot; All time</div>
+      </div>
+      <div class="kpis">
+        <article class="kpi" data-accent="pos">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Cleared this period</span><span class="chev"></span></button>
+          <div class="kpi-v">Add figure</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">19 installs &middot; deposited Aug 15</p>
+            <p class="kpi-note">Commission that has finished its clearance window and been paid out to you. Once a line clears it cannot be reversed.</p>
+            <a class="kpi-link" href="commission.html">View commission</a>
+          </div>
+        </article>
+        <article class="kpi" data-accent="warn">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Pending clearance</span><span class="chev"></span></button>
+          <div class="kpi-v">Add figure</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">6 installs awaiting &middot; oldest 11 days</p>
+            <p class="kpi-flag" data-tone="warn">Reversible until it clears</p>
+            <p class="kpi-note">Installs that are done but still inside the clearance window. If the customer cancels before the window closes, the line reverses instead of paying.</p>
+            <a class="kpi-link" href="orders.html">View orders</a>
+          </div>
+        </article>
+        <article class="kpi" data-accent="steel">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Owed to date</span><span class="chev"></span></button>
+          <div class="kpi-v">Add figure</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">Cleared plus pending, minus reversals &middot; updated 4 min ago</p>
+            <p class="kpi-note">Everything you have earned that has not yet hit your account. This is the number to check against your own count.</p>
+            <a class="kpi-link" href="commission.html">View paylines</a>
+          </div>
+        </article>
+      </div>
+
+      <!-- ---- volume ---- -->
+      <div class="sec-label">
+        <div class="t">Volume</div>
+        <div class="d">Based on order date &middot; All time &middot; change with the range selector above</div>
+      </div>
+      <div class="kpis">
+        <article class="kpi" data-accent="steel">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Total orders</span><span class="chev"></span></button>
+          <div class="kpi-v">142</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">124 activated &middot; 87% activation rate</p>
+            <p class="kpi-note">Every order you have written in the selected range, whatever happened to it afterward.</p>
+            <a class="kpi-link" href="orders.html">View orders</a>
+          </div>
+        </article>
+        <article class="kpi" data-accent="pos">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Active</span><span class="chev"></span></button>
+          <div class="kpi-v">112</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">79% of orders &middot; 124 activated &middot; 90% retained</p>
+            <p class="kpi-flag" data-tone="pos">On service right now</p>
+            <p class="kpi-note">Customers on active service today. Activated counts every order that ever got an activation date. Retained is active divided by activated.</p>
+            <a class="kpi-link" href="orders.html">View orders</a>
+          </div>
+        </article>
+        <article class="kpi" data-accent="warn">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Pending install</span><span class="chev"></span></button>
+          <div class="kpi-v">11</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">8% of orders &middot; 4 with no date set &middot; oldest waiting 23 days</p>
+            <p class="kpi-flag" data-tone="warn">4 need a date</p>
+            <p class="kpi-note">Sold and waiting on the install. The four with no scheduled date are the ones worth a call today &mdash; nothing pays until the truck rolls.</p>
+            <a class="kpi-link" href="orders.html">View orders</a>
+          </div>
+        </article>
+      </div>
+
+      <!-- ---- health ---- -->
+      <div class="sec-label">
+        <div class="t">Health</div>
+        <div class="d">Based on order date &middot; All time &middot; these are the numbers that cost you money</div>
+      </div>
+      <div class="kpis">
+        <article class="kpi" data-accent="warn">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Cancelled</span><span class="chev"></span></button>
+          <div class="kpi-v">7</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">5% cancel rate</p>
+            <p class="kpi-flag" data-tone="warn">Lost before activation</p>
+            <p class="kpi-note">Orders killed before they ever turned on. Nothing was ever paid on these, so there is no chargeback &mdash; but they still count against your rate.</p>
+            <a class="kpi-link" href="orders.html">View orders</a>
+          </div>
+        </article>
+        <article class="kpi" data-accent="neg">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Churned</span><span class="chev"></span></button>
+          <div class="kpi-v">12</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">3 early churns &middot; 10% churn of activated &middot; 13% total loss</p>
+            <p class="kpi-flag" data-tone="neg">3 trigger a chargeback</p>
+            <p class="kpi-note">Customers who were active and later disconnected. An early churn is one inside 90 days of activating (120 days for activations since Apr 2026) &mdash; a chargeback if you were already paid, an unpaid loss if you were not.</p>
+            <a class="kpi-link" href="orders.html">View orders</a>
+          </div>
+        </article>
+        <article class="kpi" data-accent="pos">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Completed</span><span class="chev"></span></button>
+          <div class="kpi-v">124</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">131 due &middot; 95% completion rate</p>
+            <p class="kpi-note">Of the orders that should have installed by now, how many actually activated. Due means everything except pending orders whose install date is still in the future &mdash; so a fresh order never drags this number down.</p>
+            <a class="kpi-link" href="orders.html">View orders</a>
+          </div>
+        </article>
+      </div>
+
+      <!-- ---- mobile ---- -->
+      <div class="sec-label">
+        <div class="t">Mobile</div>
+        <div class="d">Based on sale date &middot; All time</div>
+      </div>
+      <div class="kpis">
+        <article class="kpi" data-accent="steel">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Mobile lines</span><span class="chev"></span></button>
+          <div class="kpi-v">34</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">1.6 lines per mobile order</p>
+            <p class="kpi-note">Phone lines you sold in this range. One sale can carry several lines, and each line pays.</p>
+            <a class="kpi-link" href="orders.html">View mobile</a>
+          </div>
+        </article>
+        <article class="kpi" data-accent="steel">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Mobile orders</span><span class="chev"></span></button>
+          <div class="kpi-v">21</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">15% attach rate on fiber installs</p>
+            <p class="kpi-note">How many mobile sales you made. Attempts that did not close a line are not counted here.</p>
+            <a class="kpi-link" href="orders.html">View mobile</a>
+          </div>
+        </article>
+        <article class="kpi" data-accent="steel">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Attach opportunity</span><span class="chev"></span></button>
+          <div class="kpi-v">91</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">Active fiber accounts with no mobile line</p>
+            <p class="kpi-flag" data-tone="pos">Warmest list you have</p>
+            <p class="kpi-note">Customers already on your fiber who never took a line. They have paid you once and they answer the phone.</p>
+            <a class="kpi-link" href="orders.html">View list</a>
+          </div>
+        </article>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<div class="fabs">
+  <button class="fab" type="button" title="Reminders and what is new">3<span class="badge"></span></button>
+  <button class="fab primary" type="button" title="Ask Ridge, your assistant">&#9670;</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script src="portal-auth.js"></script>
+<script src="portal.js"></script>
+
+</body>
+</html>

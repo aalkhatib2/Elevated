@@ -1,0 +1,207 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>My Team — Elevated Portal</title>
+<link rel="stylesheet" href="../elevated.css">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<div class="proto-flag">
+  <div class="wrap" style="max-width:none;padding:0 34px">
+    <span><b>Prototype</b> — /portal/team</span>
+    <span>Sample rep, placeholder figures</span>
+  </div>
+</div>
+
+<div class="app">
+
+  <aside class="rail">
+    <div class="rail-brand">
+      <div class="rail-mark">E</div>
+      <div class="n">Elevated</div>
+    </div>
+    <div class="rail-id">
+      <div class="rail-who"><span class="dot"></span><span data-field="fullName">Marcus Deland</span></div>
+      <span class="rail-badge">Rep</span>
+      <dl class="rail-kv">
+        <dt>Team</dt><dd data-field="team">Elevated</dd>
+        <dt>Division</dt><dd data-field="division">Fiber</dd>
+        <dt>Market</dt><dd data-field="market">Salt Lake City</dd>
+        <dt>Rep code</dt><dd data-field="repCode">4688257</dd>
+      </dl>
+    </div>
+    <button class="rail-search" type="button">Quick search<span class="kbd">Ctrl K</span></button>
+    <nav class="rail-nav">
+      <a href="overview.html"><span class="sq"></span>Overview</a>
+      <a href="orders.html"><span class="sq"></span>Orders</a>
+      <a href="commission.html"><span class="sq"></span>Commission</a>
+      <a href="team.html" aria-current="page"><span class="sq"></span>My Team</a>
+    </nav>
+    <div class="rail-foot">
+      <a href="#">Help</a>
+      <div class="theme-seg">
+        <button type="button" aria-pressed="false" title="Light">&#9788;</button>
+        <button type="button" aria-pressed="false" title="Dark">&#9790;</button>
+        <button type="button" aria-pressed="true" title="System">&#9635;</button>
+      </div>
+      <a href="login.html" data-signout>Sign out</a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>My Team</h1>
+        <div class="sub">All time &middot; Everything below respects this range</div>
+      </div>
+      <div class="topbar-right">
+        <div class="seg">
+          <button type="button" aria-pressed="true">All Time</button>
+          <button type="button" aria-pressed="false">Last Month</button>
+          <button type="button" aria-pressed="false">Last Week</button>
+          <button type="button" aria-pressed="false">This Week</button>
+        </div>
+        <button class="chip" type="button"><span style="width:7px;height:7px;background:currentColor;display:inline-block"></span>Data Filters</button>
+      </div>
+    </div>
+
+    <div class="pad">
+
+      <div class="kpis">
+        <article class="kpi" data-accent="steel">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Reps under you</span><span class="chev"></span></button>
+          <div class="kpi-v">2</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">1 producing this week &middot; 1 onboarding</p>
+            <p class="kpi-note">Reps you personally recruited. A rep counts as producing once they clear their first install in a period.</p>
+          </div>
+        </article>
+        <article class="kpi" data-accent="pos">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Team installs</span><span class="chev"></span></button>
+          <div class="kpi-v">6</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">This period &middot; does not include your own 7</p>
+            <p class="kpi-note">Installs written by your downline. These count toward your override once you reach STL, and they never count as your personal production.</p>
+          </div>
+        </article>
+        <article class="kpi" data-accent="warn">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Override earned</span><span class="chev"></span></button>
+          <div class="kpi-v">Add figure</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">Accruing but not payable</p>
+            <p class="kpi-flag" data-tone="warn">Unlocks at STL</p>
+            <p class="kpi-note">Your downline is already producing, so the override is being tracked. It starts paying the period after you clear STL &mdash; it is not backdated.</p>
+            <a class="kpi-link" href="overview.html">See what STL needs</a>
+          </div>
+        </article>
+      </div>
+
+      <div class="ptabs" role="tablist" style="margin-top:36px">
+        <button type="button" role="tab" aria-selected="true"  data-pane="downline">Downline</button>
+        <button type="button" role="tab" aria-selected="false" data-pane="board">Leaderboard</button>
+      </div>
+
+      <!-- ============ DOWNLINE ============ -->
+      <section class="ppane on" data-pane="downline" style="margin-top:20px">
+        <div class="tbl-wrap">
+          <div class="tbl-tools">
+            <input class="tbl-search" type="search" placeholder="Search your downline">
+            <button class="chip" type="button">Export CSV</button>
+            <span class="tbl-count">2 reps &middot; 1 open seat</span>
+          </div>
+          <div class="tbl-scroll">
+            <table class="tbl" style="min-width:760px">
+              <thead>
+                <tr><th>Rep</th><th>Rung</th><th class="td-r">Installs, period</th><th class="td-r">Installs, all time</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><span class="td-strong">Devon Marsh</span><span class="td-sub">Recruited Jul 2026 &middot; Salt Lake City</span></td>
+                  <td class="td-mono">EL</td>
+                  <td class="td-mono td-r">4</td><td class="td-mono td-r">31</td>
+                  <td><span class="pill" data-tone="pos">Producing</span></td>
+                </tr>
+                <tr>
+                  <td><span class="td-strong">Priya Raman</span><span class="td-sub">Recruited Aug 2026 &middot; Murray</span></td>
+                  <td class="td-mono">EL</td>
+                  <td class="td-mono td-r">2</td><td class="td-mono td-r">2</td>
+                  <td><span class="pill" data-tone="steel">Onboarding</span></td>
+                </tr>
+                <tr>
+                  <td><span style="color:var(--muted)">Open seat</span><span class="td-sub">One more producing rep opens the STL gate</span></td>
+                  <td class="td-mono">&mdash;</td>
+                  <td class="td-mono td-r">&mdash;</td><td class="td-mono td-r">&mdash;</td>
+                  <td><span class="pill" data-tone="mute">Invite</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <a class="btn btn-primary" href="../apply.html" style="margin-top:24px">Send Your Recruiting Link</a>
+      </section>
+
+      <!-- ============ LEADERBOARD ============ -->
+      <section class="ppane" data-pane="board" style="margin-top:20px">
+        <div class="sec-label" style="margin-top:0">
+          <div class="t">Team standings</div>
+          <div class="d">Everyone on Elevated, ranked by production this period. Same numbers everyone else sees.</div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-tools">
+            <input class="tbl-search" type="search" placeholder="Search reps">
+            <button class="chip" type="button">Export CSV</button>
+            <span class="tbl-count">3 reps</span>
+          </div>
+          <div class="tbl-scroll">
+            <table class="tbl" style="min-width:760px">
+              <thead>
+                <tr><th>Rank</th><th>Rep</th><th>Rung</th><th class="td-r">Production</th><th class="td-r">Revenue</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td style="font-family:var(--display);font-weight:900;font-size:20px;color:var(--steel)">01</td>
+                  <td><span class="td-strong">Marcus Deland</span><span class="td-sub">You</span></td>
+                  <td class="td-mono">EL</td>
+                  <td class="td-mono td-r">7 installs</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                </tr>
+                <tr>
+                  <td style="font-family:var(--display);font-weight:900;font-size:20px;color:var(--muted)">02</td>
+                  <td>Devon Marsh<span class="td-sub">Your downline</span></td>
+                  <td class="td-mono">EL</td>
+                  <td class="td-mono td-r">4 installs</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                </tr>
+                <tr>
+                  <td style="font-family:var(--display);font-weight:900;font-size:20px;color:var(--muted)">03</td>
+                  <td>Priya Raman<span class="td-sub">Your downline</span></td>
+                  <td class="td-mono">EL</td>
+                  <td class="td-mono td-r">2 installs</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<div class="fabs">
+  <button class="fab" type="button" title="Reminders and what is new">3<span class="badge"></span></button>
+  <button class="fab primary" type="button" title="Ask Ridge, your assistant">&#9670;</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script src="portal-auth.js"></script>
+<script src="portal.js"></script>
+
+</body>
+</html>

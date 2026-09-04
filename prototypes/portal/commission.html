@@ -1,0 +1,307 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Commission — Elevated Portal</title>
+<link rel="stylesheet" href="../elevated.css">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<div class="proto-flag">
+  <div class="wrap" style="max-width:none;padding:0 34px">
+    <span><b>Prototype</b> — /portal/commission</span>
+    <span>Sample rep, placeholder figures</span>
+  </div>
+</div>
+
+<div class="app">
+
+  <aside class="rail">
+    <div class="rail-brand">
+      <div class="rail-mark">E</div>
+      <div class="n">Elevated</div>
+    </div>
+    <div class="rail-id">
+      <div class="rail-who"><span class="dot"></span><span data-field="fullName">Marcus Deland</span></div>
+      <span class="rail-badge">Rep</span>
+      <dl class="rail-kv">
+        <dt>Team</dt><dd data-field="team">Elevated</dd>
+        <dt>Division</dt><dd data-field="division">Fiber</dd>
+        <dt>Market</dt><dd data-field="market">Salt Lake City</dd>
+        <dt>Rep code</dt><dd data-field="repCode">4688257</dd>
+      </dl>
+    </div>
+    <button class="rail-search" type="button">Quick search<span class="kbd">Ctrl K</span></button>
+    <nav class="rail-nav">
+      <a href="overview.html"><span class="sq"></span>Overview</a>
+      <a href="orders.html"><span class="sq"></span>Orders</a>
+      <a href="commission.html" aria-current="page"><span class="sq"></span>Commission</a>
+      <a href="team.html"><span class="sq"></span>My Team</a>
+    </nav>
+    <div class="rail-foot">
+      <a href="#">Help</a>
+      <div class="theme-seg">
+        <button type="button" aria-pressed="false" title="Light">&#9788;</button>
+        <button type="button" aria-pressed="false" title="Dark">&#9790;</button>
+        <button type="button" aria-pressed="true" title="System">&#9635;</button>
+      </div>
+      <a href="login.html" data-signout>Sign out</a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>Commission</h1>
+        <div class="sub">All time &middot; Everything below respects this range</div>
+      </div>
+      <div class="topbar-right">
+        <div class="seg">
+          <button type="button" aria-pressed="true">All Time</button>
+          <button type="button" aria-pressed="false">Last Month</button>
+          <button type="button" aria-pressed="false">Last Week</button>
+          <button type="button" aria-pressed="false">This Week</button>
+        </div>
+        <button class="chip" type="button"><span style="width:7px;height:7px;background:currentColor;display:inline-block"></span>Data Filters</button>
+      </div>
+    </div>
+
+    <div class="pad">
+
+      <div class="kpis">
+        <article class="kpi" data-accent="steel">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Total deals</span><span class="chev"></span></button>
+          <div class="kpi-v">124</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">Across 9 paydays since March</p>
+            <p class="kpi-note">Every install that has produced a commission line, whether it has paid, is pending, or was later reversed.</p>
+          </div>
+        </article>
+        <article class="kpi" data-accent="pos">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Gross commission</span><span class="chev"></span></button>
+          <div class="kpi-v">Add figure</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">Before any deduction</p>
+            <p class="kpi-note">The total your deals earned at the published rate card, before withholdings, housing, or any other deduction comes off.</p>
+          </div>
+        </article>
+        <article class="kpi" data-accent="steel">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Total payable</span><span class="chev"></span></button>
+          <div class="kpi-v">Add figure</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub">Gross, minus deductions, plus credits</p>
+            <p class="kpi-flag" data-tone="pos">This is what actually hits your account</p>
+            <p class="kpi-note">If this number and your own count disagree, open the payday row below &mdash; every line is itemized down to the install.</p>
+          </div>
+        </article>
+      </div>
+
+      <div class="ptabs" role="tablist" style="margin-top:36px">
+        <button type="button" role="tab" aria-selected="true"  data-pane="payroll">Payroll Summary</button>
+        <button type="button" role="tab" aria-selected="false" data-pane="details">Commission Details</button>
+        <button type="button" role="tab" aria-selected="false" data-pane="adjust">Adjustments</button>
+      </div>
+
+      <!-- ============ PAYROLL SUMMARY ============ -->
+      <section class="ppane on" data-pane="payroll" style="margin-top:20px">
+        <div class="tbl-wrap">
+          <div class="tbl-tools">
+            <input class="tbl-search" type="search" placeholder="Search paydays">
+            <button class="chip" type="button">Export CSV</button>
+            <span class="tbl-count">9 paydays</span>
+          </div>
+          <div class="tbl-scroll">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>Payday <span class="sort">&darr;</span></th>
+                  <th class="td-r">Deals</th>
+                  <th class="td-r">Gross</th>
+                  <th class="td-r">Deductions</th>
+                  <th class="td-r">Credits</th>
+                  <th class="td-r">Final Payable</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="td-mono td-strong">Aug 15</td><td class="td-mono td-r">19</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td class="td-mono td-r">&mdash;</td><td class="td-mono td-r">&mdash;</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td><span class="pill" data-tone="pos">Deposited</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono td-strong">Jul 31</td><td class="td-mono td-r">22</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td class="td-mono td-r">&mdash;</td><td class="td-mono td-r">&mdash;</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td><span class="pill" data-tone="pos">Deposited</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono td-strong">Jul 15</td><td class="td-mono td-r">17</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td class="td-mono td-r">&mdash;</td><td class="td-mono td-r">&mdash;</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td><span class="pill" data-tone="pos">Deposited</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono td-strong">Jun 30</td><td class="td-mono td-r">21</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td class="td-mono td-r">&mdash;</td><td class="td-mono td-r">&mdash;</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td><span class="pill" data-tone="pos">Deposited</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono td-strong">Aug 31</td><td class="td-mono td-r">6</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td class="td-mono td-r">&mdash;</td><td class="td-mono td-r">&mdash;</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td><span class="pill" data-tone="steel">Projected</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <p class="lede" style="margin-top:18px;font-size:14px">
+          Deduction and credit columns stay empty until the rate card is locked for the campaign. Housing, withholdings, incentives and overrides each get their own column once they do.
+        </p>
+      </section>
+
+      <!-- ============ COMMISSION DETAILS ============ -->
+      <section class="ppane" data-pane="details" style="margin-top:20px">
+        <div class="sec-label" style="margin-top:0">
+          <div class="t">Every line, down to the install</div>
+          <div class="d">One row per deal. Projected payday is when the line is expected to clear, not when it was sold.</div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-tools">
+            <input class="tbl-search" type="search" placeholder="Search customer, address, or order ID">
+            <button class="chip" type="button">Export CSV</button>
+            <span class="tbl-count">124 lines</span>
+          </div>
+          <div class="tbl-scroll">
+            <table class="tbl">
+              <thead>
+                <tr><th>Order ID</th><th>Install</th><th>Activated</th><th>Plan</th><th class="td-r">Net Commission</th><th>Projected Payday</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="td-mono">EL-40219</td>
+                  <td><span class="td-strong">1482 Ridgeline Dr</span><span class="td-sub">Salt Lake City, UT</span></td>
+                  <td class="td-mono">Aug 18</td><td class="td-mono">1 gig</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td class="td-mono">Aug 31</td>
+                  <td><span class="pill" data-tone="warn">Pending clearance</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono">EL-40217</td>
+                  <td><span class="td-strong">907 Cordell Ave</span><span class="td-sub">Salt Lake City, UT</span></td>
+                  <td class="td-mono">Aug 18</td><td class="td-mono">500 meg</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td class="td-mono">Aug 31</td>
+                  <td><span class="pill" data-tone="warn">Pending clearance</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono">EL-40204</td>
+                  <td><span class="td-strong">55 Bellhaven Ct</span><span class="td-sub">Millcreek, UT</span></td>
+                  <td class="td-mono">Aug 17</td><td class="td-mono">1 gig</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td class="td-mono">Aug 31</td>
+                  <td><span class="pill" data-tone="warn">Pending clearance</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono">EL-40098</td>
+                  <td><span class="td-strong">120 Alder Park Way</span><span class="td-sub">Murray, UT</span></td>
+                  <td class="td-mono">Aug 04</td><td class="td-mono">2 gig</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td class="td-mono">Aug 15</td>
+                  <td><span class="pill" data-tone="pos">Cleared</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono">EL-40061</td>
+                  <td><span class="td-strong">88 Wexler Ln</span><span class="td-sub">Murray, UT</span></td>
+                  <td class="td-mono">Aug 05</td><td class="td-mono">1 gig</td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td class="td-mono">Aug 15</td>
+                  <td><span class="pill" data-tone="neg">Reversed</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ ADJUSTMENTS ============ -->
+      <section class="ppane" data-pane="adjust" style="margin-top:20px">
+        <div class="sec-label" style="margin-top:0">
+          <div class="t">Chargebacks and reversals</div>
+          <div class="d">Every line that took money back, and exactly why. Nothing here is applied without a matching order.</div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-tools">
+            <input class="tbl-search" type="search" placeholder="Search adjustments">
+            <button class="chip" type="button">Export CSV</button>
+            <span class="tbl-count">3 adjustments</span>
+          </div>
+          <div class="tbl-scroll">
+            <table class="tbl" style="min-width:820px">
+              <thead>
+                <tr><th>Applied</th><th>Order ID</th><th>Reason</th><th class="td-r">Amount</th><th>Type</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="td-mono">Aug 15</td><td class="td-mono">EL-40061</td>
+                  <td><span class="td-strong">88 Wexler Ln</span><span class="td-sub">Disconnected 9 days after activation &mdash; inside the 120 day window</span></td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td><span class="pill" data-tone="neg">Chargeback</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono">Jul 31</td><td class="td-mono">EL-39804</td>
+                  <td><span class="td-strong">2044 Kestrel Rd</span><span class="td-sub">Disconnected 41 days after activation</span></td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td><span class="pill" data-tone="neg">Chargeback</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono">Jul 15</td><td class="td-mono">EL-39655</td>
+                  <td><span class="td-strong">907 Linden Grove</span><span class="td-sub">Churned before first payday &mdash; never paid, so nothing was clawed back</span></td>
+                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
+                  <td><span class="pill" data-tone="warn">Unpaid loss</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <div class="sec-label">
+          <div class="t">Open disputes</div>
+          <div class="d">Think an adjustment is wrong? Open a dispute from the row and it lands here.</div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="empty">
+            <div class="box"><i></i></div>
+            <h3>Nothing in dispute</h3>
+            <p>Every adjustment on your account has been accepted.</p>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<div class="fabs">
+  <button class="fab" type="button" title="Reminders and what is new">3<span class="badge"></span></button>
+  <button class="fab primary" type="button" title="Ask Ridge, your assistant">&#9670;</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script src="portal-auth.js"></script>
+<script src="portal.js"></script>
+
+</body>
+</html>

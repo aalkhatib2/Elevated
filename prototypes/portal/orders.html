@@ -1,0 +1,218 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Orders — Elevated Portal</title>
+<link rel="stylesheet" href="../elevated.css">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<div class="proto-flag">
+  <div class="wrap" style="max-width:none;padding:0 34px">
+    <span><b>Prototype</b> — /portal/orders</span>
+    <span>Timeline is live · Install Notes and Mobile are still sample</span>
+  </div>
+</div>
+
+<div class="app">
+
+  <aside class="rail">
+    <div class="rail-brand">
+      <div class="rail-mark">E</div>
+      <div class="n">Elevated</div>
+    </div>
+    <div class="rail-id">
+      <div class="rail-who"><span class="dot"></span><span data-field="fullName">Marcus Deland</span></div>
+      <span class="rail-badge">Rep</span>
+      <dl class="rail-kv">
+        <dt>Team</dt><dd data-field="team">Elevated</dd>
+        <dt>Division</dt><dd data-field="division">Fiber</dd>
+        <dt>Market</dt><dd data-field="market">Salt Lake City</dd>
+        <dt>Rep code</dt><dd data-field="repCode">4688257</dd>
+      </dl>
+    </div>
+    <button class="rail-search" type="button">Quick search<span class="kbd">Ctrl K</span></button>
+    <nav class="rail-nav">
+      <a href="overview.html"><span class="sq"></span>Overview</a>
+      <a href="orders.html" aria-current="page"><span class="sq"></span>Orders</a>
+      <a href="commission.html"><span class="sq"></span>Commission</a>
+      <a href="team.html"><span class="sq"></span>My Team</a>
+    </nav>
+    <div class="rail-foot">
+      <a href="#">Help</a>
+      <div class="theme-seg">
+        <button type="button" aria-pressed="false" title="Light">&#9788;</button>
+        <button type="button" aria-pressed="false" title="Dark">&#9790;</button>
+        <button type="button" aria-pressed="true" title="System">&#9635;</button>
+      </div>
+      <a href="login.html" data-signout>Sign out</a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>Orders</h1>
+        <div class="sub">All time &middot; Everything below respects this range</div>
+      </div>
+      <div class="topbar-right">
+        <div class="seg">
+          <button type="button" aria-pressed="true" data-orders-range="all">All Time</button>
+          <button type="button" aria-pressed="false" data-orders-range="last-month">Last Month</button>
+          <button type="button" aria-pressed="false" data-orders-range="last-week">Last Week</button>
+          <button type="button" aria-pressed="false" data-orders-range="this-week">This Week</button>
+        </div>
+        <button class="chip" type="button"><span style="width:7px;height:7px;background:currentColor;display:inline-block"></span>Data Filters</button>
+      </div>
+    </div>
+
+    <div class="pad">
+
+      <div class="ptabs" role="tablist">
+        <button type="button" role="tab" aria-selected="true"  data-pane="timeline">Timeline</button>
+        <button type="button" role="tab" aria-selected="false" data-pane="notes">Install Notes</button>
+        <button type="button" role="tab" aria-selected="false" data-pane="mobile">Mobile</button>
+      </div>
+
+      <!-- ============ TIMELINE ============ -->
+      <section class="ppane on" data-pane="timeline" style="margin-top:20px">
+        <div class="tbl-wrap">
+          <div class="tbl-tools">
+            <input class="tbl-search" type="search" placeholder="Search client, order #" data-orders-search>
+            <button class="chip" type="button">Export CSV</button>
+            <span class="tbl-count" data-orders-count>&hellip;</span>
+          </div>
+          <div class="tbl-scroll">
+            <table class="tbl">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Order Date <span class="sort">&darr;</span></th>
+                  <th>Order #</th>
+                  <th>Client Name</th>
+                  <th>Gigs</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody data-orders-body>
+                <tr><td colspan="6" style="padding:40px 16px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase">Loading your orders&hellip;</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ INSTALL NOTES ============ -->
+      <section class="ppane" data-pane="notes" style="margin-top:20px">
+        <p class="mono-label">Sample data — not yet connected to a live source</p>
+        <div class="sec-label" style="margin-top:16px">
+          <div class="t">What the network said</div>
+          <div class="d">Provider notes on installs that stalled or fell through. These are the orders worth a phone call.</div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-tools">
+            <input class="tbl-search" type="search" placeholder="Search notes">
+            <button class="chip" type="button">Export CSV</button>
+            <span class="tbl-count">4 flagged</span>
+          </div>
+          <div class="tbl-scroll">
+            <table class="tbl" style="min-width:820px">
+              <thead>
+                <tr><th>Date</th><th>Order ID</th><th>Address</th><th>Provider note</th><th>Outcome</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="td-mono">Aug 19</td><td class="td-mono">EL-40140</td>
+                  <td><span class="td-strong">415 Sagebrook Dr</span></td>
+                  <td>Buried drop required. Locate request submitted, waiting on the city.<span class="td-sub">Verizon dispatch</span></td>
+                  <td><span class="pill" data-tone="warn">Stalled</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono">Aug 18</td><td class="td-mono">EL-40177</td>
+                  <td><span class="td-strong">78 Halloway Cir</span></td>
+                  <td>Customer missed two scheduling calls. Needs a reschedule before the order ages out.<span class="td-sub">Verizon dispatch</span></td>
+                  <td><span class="pill" data-tone="warn">Needs contact</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono">Aug 06</td><td class="td-mono">EL-40061</td>
+                  <td><span class="td-strong">88 Wexler Ln</span></td>
+                  <td>Installed and activated Aug 5, disconnected Aug 14 at customer request.<span class="td-sub">Verizon billing</span></td>
+                  <td><span class="pill" data-tone="neg">Early churn</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono">Jul 30</td><td class="td-mono">EL-39988</td>
+                  <td><span class="td-strong">1290 Oakhurst Ave</span></td>
+                  <td>Address not serviceable at the unit level. No fiber to the building.<span class="td-sub">Verizon engineering</span></td>
+                  <td><span class="pill" data-tone="warn">Cancelled</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <!-- ============ MOBILE ============ -->
+      <section class="ppane" data-pane="mobile" style="margin-top:20px">
+        <p class="mono-label" style="margin-bottom:16px">Sample data — not yet connected to a live source</p>
+        <div class="tbl-wrap">
+          <div class="tbl-tools">
+            <input class="tbl-search" type="search" placeholder="Search mobile orders">
+            <button class="chip" type="button">Export CSV</button>
+            <span class="tbl-count">21 orders &middot; 34 lines</span>
+          </div>
+          <div class="tbl-scroll">
+            <table class="tbl" style="min-width:780px">
+              <thead>
+                <tr><th>Sale Date</th><th>Order ID</th><th>Customer</th><th class="td-r">Lines</th><th>Attached to</th><th>Status</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td class="td-mono">Aug 18</td><td class="td-mono">MB-8841</td>
+                  <td><span class="td-strong">1482 Ridgeline Dr</span></td>
+                  <td class="td-mono td-r">3</td><td class="td-mono">EL-40219</td>
+                  <td><span class="pill" data-tone="pos">Active</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono">Aug 17</td><td class="td-mono">MB-8836</td>
+                  <td><span class="td-strong">55 Bellhaven Ct</span></td>
+                  <td class="td-mono td-r">2</td><td class="td-mono">EL-40204</td>
+                  <td><span class="pill" data-tone="pos">Active</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono">Aug 14</td><td class="td-mono">MB-8820</td>
+                  <td><span class="td-strong">3340 Windmere Dr</span></td>
+                  <td class="td-mono td-r">1</td><td class="td-mono">Standalone</td>
+                  <td><span class="pill" data-tone="steel">Porting</span></td>
+                </tr>
+                <tr>
+                  <td class="td-mono">Aug 11</td><td class="td-mono">MB-8802</td>
+                  <td><span class="td-strong">120 Alder Park Way</span></td>
+                  <td class="td-mono td-r">4</td><td class="td-mono">EL-40098</td>
+                  <td><span class="pill" data-tone="pos">Active</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<div class="fabs">
+  <button class="fab" type="button" title="Reminders and what is new">3<span class="badge"></span></button>
+  <button class="fab primary" type="button" title="Ask Ridge, your assistant">&#9670;</button>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
+<script src="portal-auth.js"></script>
+<script src="portal.js"></script>
+<script src="orders.js"></script>
+
+</body>
+</html>

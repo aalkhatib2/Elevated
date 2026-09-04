@@ -14,6 +14,13 @@
       "runtimeArgs": [".claude/static_server.py"],
       "port": 5174,
       "autoPort": true
+    },
+    {
+      "name": "elevated-portal",
+      "runtimeExecutable": "node",
+      "runtimeArgs": ["scripts/dev-server.mjs"],
+      "port": 3000,
+      "autoPort": true
     }
   ]
 }
