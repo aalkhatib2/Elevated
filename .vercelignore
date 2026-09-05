@@ -7,12 +7,16 @@ mockups/
 # Local-only tooling: DB seed script + schema, never deployed
 scripts/
 
-# Prototypes — mostly not part of the shipped site. The agent portal now
-# ships (it needs to, to run its /api routes); everything else under
-# prototypes/ (the old draft apply/calculator pages) stays local-only.
-# NOTE: excluding a bare "prototypes/" here would block the negations below
-# from working at all — has to be "prototypes/*" for the "!" lines to take.
-prototypes/*
-!prototypes/elevated.css
-!prototypes/portal/
-!prototypes/portal/**
+# Prototypes — mostly not part of the shipped site. The agent portal ships
+# (it needs to, to run its /api routes), and so does elevated.css it shares.
+# Only the old draft apply/calculator pages stay local-only.
+#
+# Named explicitly rather than "prototypes/* + negate portal/" — a glob-then-
+# negate pattern here silently drops everything under prototypes/portal/:
+# ignore-file matching won't reliably re-include a nested directory's
+# contents once a parent-level glob has excluded it, even with a trailing
+# "/**" negation. Confirmed in production: prototypes/elevated.css (a
+# directly-negated single file) served fine; every file under
+# prototypes/portal/ 404'd.
+prototypes/apply.html
+prototypes/calculator.html
