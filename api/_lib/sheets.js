@@ -92,15 +92,39 @@ export function toNumber(raw) {
 // mislabels data when that happens without erroring, so it reads row 4 and
 // maps names instead: a tab can gain columns, in any order, and still parse.
 const HEADER_ALIASES = {
-  date:        ['date', 'order date'],
-  salesRep:    ['sales rep', 'rep', 'salesrep'],
-  orderId:     ['order #', 'order id', 'order number', 'order'],
-  gigs:        ['# of gigs', 'gigs', 'no of gigs', 'number of gigs'],
-  installDate: ['install date', 'installed', 'install'],
-  clientName:  ['client name', 'client', 'customer', 'customer name'],
-  commission:  ['commission', 'commission $', 'payout', 'expense'],
-  status:      ['status', 'order status'],
+  date:          ['date', 'order date'],
+  salesRep:      ['sales rep', 'rep', 'salesrep'],
+  orderId:       ['order #', 'order id', 'order number', 'order'],
+  gigs:          ['# of gigs', 'gigs', 'no of gigs', 'number of gigs'],
+  installDate:   ['install date', 'installed', 'install'],
+  clientName:    ['client name', 'client', 'customer', 'customer name'],
+  status:        ['status', 'order status'],
+  // Two separate money columns, deliberately not interchangeable: what the
+  // rep earns, and what the office collects from the carrier. Bare
+  // "commission" maps to the rep's number because that's what a rep reading
+  // their own portal means by it.
+  repCommission: ['rep commission', 'commission', 'rep pay', 'rep payout'],
+  officePay:     ['office pay', 'office', 'office revenue', 'gross'],
 };
+
+// Fallback rate card, used per order only when the sheet has no money column
+// for it. Sheet values always win, so a one-off override or a corrected row
+// stays correct — this just means the portal shows real numbers now instead
+// of waiting on someone to add formula columns to every weekly tab.
+//
+// Changing a rate here re-prices historical orders too. Once rates actually
+// change, put the money in the sheet (where each row keeps the rate it was
+// written at) rather than editing these.
+export const RATES = {
+  repCommission: { 1: 200, 2: 300 },
+  officePay:     { 1: 350, 2: 450 },
+};
+
+function rateFor(kind, gigs) {
+  if (gigs == null) return null;
+  const value = RATES[kind][gigs];
+  return value === undefined ? null : value;
+}
 
 function normalizeHeader(raw) {
   return String(raw || '').trim().toLowerCase().replace(/\s+/g, ' ');
@@ -145,6 +169,11 @@ export function parseWeekRows(week, values) {
       console.warn(`[sheets] "${week}" row ${i + 4}: unparseable # of Gigs "${gigsRaw}"`);
     }
 
+    const sheetRepCommission = toNumber(cell('repCommission'));
+    const sheetOfficePay = toNumber(cell('officePay'));
+    const repCommission = sheetRepCommission ?? rateFor('repCommission', gigs);
+    const officePay = sheetOfficePay ?? rateFor('officePay', gigs);
+
     rows.push({
       week,
       date,
@@ -153,10 +182,15 @@ export function parseWeekRows(week, values) {
       gigs,
       installDate: toISODate(cell('installDate')),
       clientName: text('clientName') || null,
-      // Both null until the sheet actually grows these columns — the header
-      // map just picks them up automatically once it does.
-      commission: toNumber(cell('commission')),
       status: text('status') || null,
+      repCommission,
+      officePay,
+      // What the office keeps. Only meaningful when both sides are known.
+      officeMargin:
+        repCommission != null && officePay != null ? officePay - repCommission : null,
+      // Lets the UI say "estimated at the standard rate" vs "this is the
+      // number the sheet actually records".
+      pricedFrom: sheetRepCommission != null || sheetOfficePay != null ? 'sheet' : 'rate-card',
     });
   }
   return rows;

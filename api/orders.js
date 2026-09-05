@@ -32,17 +32,14 @@ export default async function handler(req, res) {
       (acc, o) => {
         acc.orders += 1;
         acc.gigs += o.gigs || 0;
-        if (o.commission != null) {
-          acc.commission += o.commission;
-          acc.commissionRows += 1;
-        }
+        if (o.repCommission != null) acc.repCommission += o.repCommission;
+        if (o.officePay != null) acc.officePay += o.officePay;
+        if (o.officeMargin != null) acc.officeMargin += o.officeMargin;
+        if (o.pricedFrom === 'sheet') acc.pricedFromSheet += 1;
         return acc;
       },
-      { orders: 0, gigs: 0, commission: 0, commissionRows: 0 }
+      { orders: 0, gigs: 0, repCommission: 0, officePay: 0, officeMargin: 0, pricedFromSheet: 0 }
     );
-    // Distinguishes "every row is priced and they sum to zero" from "the sheet
-    // has no Commission column yet" — the UI shouldn't render $0 for the latter.
-    if (totals.commissionRows === 0) totals.commission = null;
 
     return res.status(200).json({
       rep: {
@@ -57,15 +54,18 @@ export default async function handler(req, res) {
         asOf: new Date().toISOString(),
       },
       totals,
-      orders: orders.map(({ date, orderId, gigs, clientName, status, week, installDate, commission }) => ({
-        date,
-        orderId,
-        gigs,
-        clientName,
-        status,
-        week,
-        installDate,
-        commission,
+      orders: orders.map((o) => ({
+        date: o.date,
+        orderId: o.orderId,
+        gigs: o.gigs,
+        clientName: o.clientName,
+        status: o.status,
+        week: o.week,
+        installDate: o.installDate,
+        repCommission: o.repCommission,
+        officePay: o.officePay,
+        officeMargin: o.officeMargin,
+        pricedFrom: o.pricedFrom,
       })),
     });
   } catch (err) {
