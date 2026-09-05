@@ -77,30 +77,86 @@ export function toISODate(raw) {
   return Number.isNaN(Date.parse(iso)) ? null : iso;
 }
 
+// Strips currency formatting — FORMATTED_VALUE means a money column arrives
+// as "$350.00" or "1,250", not a bare number.
+export function toNumber(raw) {
+  if (raw == null || raw === '') return null;
+  const n = Number.parseFloat(String(raw).replace(/[$,\s]/g, ''));
+  return Number.isFinite(n) ? n : null;
+}
+
+// Columns are located by header text, never by position. The weekly tabs have
+// already drifted apart — "AUG31 to SEP6" gained an "Install date" column that
+// the older tabs don't have, which silently shifted Client Name from E to F —
+// and a Commission column is landing on top of that. Positional parsing
+// mislabels data when that happens without erroring, so it reads row 4 and
+// maps names instead: a tab can gain columns, in any order, and still parse.
+const HEADER_ALIASES = {
+  date:        ['date', 'order date'],
+  salesRep:    ['sales rep', 'rep', 'salesrep'],
+  orderId:     ['order #', 'order id', 'order number', 'order'],
+  gigs:        ['# of gigs', 'gigs', 'no of gigs', 'number of gigs'],
+  installDate: ['install date', 'installed', 'install'],
+  clientName:  ['client name', 'client', 'customer', 'customer name'],
+  commission:  ['commission', 'commission $', 'payout', 'expense'],
+  status:      ['status', 'order status'],
+};
+
+function normalizeHeader(raw) {
+  return String(raw || '').trim().toLowerCase().replace(/\s+/g, ' ');
+}
+
+export function mapHeaders(headerRow = []) {
+  const cols = {};
+  headerRow.forEach((cell, i) => {
+    const norm = normalizeHeader(cell);
+    if (!norm) return;
+    for (const [field, aliases] of Object.entries(HEADER_ALIASES)) {
+      // First match wins, so a duplicate header later in the row can't
+      // silently steal a column that was already resolved.
+      if (cols[field] === undefined && aliases.includes(norm)) cols[field] = i;
+    }
+  });
+  return cols;
+}
+
 export function parseWeekRows(week, values) {
   const rows = [];
+  if (!values.length) return rows;
+
   // values[0] is the header row (sheet row 4); data starts at values[1] (row 5).
+  const cols = mapHeaders(values[0]);
+  if (cols.date === undefined || cols.salesRep === undefined) {
+    console.warn(`[sheets] "${week}": row 4 has no recognizable Date/Sales Rep header — skipping tab`);
+    return rows;
+  }
+
   for (let i = 1; i < values.length; i++) {
     const row = values[i] || [];
-    const [dateRaw, repRaw, orderId, gigsRaw, clientName] = row;
+    const cell = (field) => (cols[field] === undefined ? undefined : row[cols[field]]);
+    const text = (field) => String(cell(field) || '').trim();
 
-    const date = toISODate(dateRaw);
+    const date = toISODate(cell('date'));
     if (!date) break; // blank/unparseable Date cell = end of this tab's data
 
-    let gigs = Number.parseInt(gigsRaw, 10);
-    if (gigsRaw != null && gigsRaw !== '' && Number.isNaN(gigs)) {
-      console.warn(`[sheets] "${week}" row ${i + 5}: unparseable # of Gigs "${gigsRaw}"`);
+    const gigsRaw = cell('gigs');
+    const gigs = toNumber(gigsRaw);
+    if (gigsRaw != null && gigsRaw !== '' && gigs === null) {
+      console.warn(`[sheets] "${week}" row ${i + 4}: unparseable # of Gigs "${gigsRaw}"`);
     }
-    if (Number.isNaN(gigs)) gigs = null;
 
     rows.push({
       week,
       date,
-      salesRep: (repRaw || '').trim(),
-      orderId: (orderId || '').trim(),
+      salesRep: text('salesRep'),
+      orderId: text('orderId'),
       gigs,
-      clientName: (clientName || '').trim() || null,
-      status: null, // no Status column in the sheet yet — see plan Part 1
+      installDate: toISODate(cell('installDate')),
+      clientName: text('clientName') || null,
+      // Both null until the sheet actually grows these columns — the header
+      // map just picks them up automatically once it does.
+      commission: toNumber(cell('commission')),
+      status: text('status') || null,
     });
   }
   return rows;
@@ -118,7 +174,9 @@ async function loadAllOrders(knownFullNames = []) {
 
   if (weeks.length) {
     const data = await sheetsFetch('/values:batchGet', {
-      ranges: weeks.map((w) => `'${w}'!A4:E1000`),
+      // Through Z, not E: the header map needs to see every column a tab has
+      // grown (Install date, Commission, …), not just the original five.
+      ranges: weeks.map((w) => `'${w}'!A4:Z1000`),
       valueRenderOption: 'FORMATTED_VALUE',
     });
     (data.valueRanges || []).forEach((vr, idx) => {
