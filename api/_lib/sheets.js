@@ -11,15 +11,24 @@
 // columns Date | Sales Rep | Order # | # of Gigs | Client Name. Data ends
 // wherever the Date column goes blank — never assume a fixed row count.
 //
-// Auth: a restricted (Sheets-API-only) API key, not a service account — the
-// GCP project's org policy blocks service-account key creation and touching
-// Organization Policy Admin to lift it was out of scope. An API key only
-// works against a publicly link-readable resource, so the spreadsheet is
-// shared "Anyone with the link → Viewer". Deliberate, accepted tradeoff:
-// the sheet is link-readable by anyone who has the URL, not just this app.
-// Fine while it holds no dollar amounts; revisit (real service account, or
-// a personal OAuth refresh token — either keeps the sheet private and needs
-// no org-policy change) before anything sensitive lands in it.
+// Auth, in order of preference:
+//
+//   1. A service account (GOOGLE_SERVICE_ACCOUNT_EMAIL + _PRIVATE_KEY).
+//      Works against a *private* sheet — share the sheet with the service
+//      account's email as Viewer and the link can go back to restricted.
+//      This is the wanted end state now that money is in the data.
+//   2. A restricted, Sheets-API-only API key (GOOGLE_SHEETS_API_KEY).
+//      Only works against a publicly link-readable resource, so using it
+//      means the sheet stays shared "Anyone with the link → Viewer" —
+//      i.e. every rep's commission is visible to anyone holding the URL.
+//
+// The API key came first because the original GCP project's org policy
+// blocked service-account key creation. A GCP project created under a
+// personal account has no such policy, which is the way out.
+//
+// Whichever is configured, the fetch path is otherwise identical.
+
+import { createSign } from 'node:crypto';
 
 const WEEKLY_TAB_RE = /^[A-Z]{3}\d{1,2}\s+to\s+[A-Z]{3}\d{1,2}$/i;
 const CACHE_TTL_MS = 60 * 1000;
@@ -29,20 +38,87 @@ const CACHE_TTL_MS = 60 * 1000;
 // copies, and any instance can cold-start at any time.
 let cache = null; // { expiresAt, orders }
 
+// Access tokens last an hour; re-minting one per request would add a second
+// round trip to every page load for no reason.
+let tokenCache = null; // { token, expiresAt }
+
+// Signs a JWT with the service account's key and trades it for an access
+// token. Hand-rolled rather than pulling in googleapis: one sign, one POST,
+// against a stable documented endpoint — the dependency would be far larger
+// than the code it replaces.
+async function getServiceAccountToken() {
+  const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
+  const rawKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY;
+  if (!email || !rawKey) return null; // not configured — caller falls back to the API key
+
+  // 30s of slack so a token can't expire mid-flight.
+  if (tokenCache && tokenCache.expiresAt > Date.now() + 30_000) return tokenCache.token;
+
+  // Env vars can't carry real newlines, so the PEM is stored with literal \n.
+  const privateKey = rawKey.replace(/\\n/g, '\n');
+  const now = Math.floor(Date.now() / 1000);
+
+  const encode = (obj) => Buffer.from(JSON.stringify(obj)).toString('base64url');
+  const signingInput = [
+    encode({ alg: 'RS256', typ: 'JWT' }),
+    encode({
+      iss: email,
+      scope: 'https://www.googleapis.com/auth/spreadsheets.readonly',
+      aud: 'https://oauth2.googleapis.com/token',
+      iat: now,
+      exp: now + 3600,
+    }),
+  ].join('.');
+
+  const signature = createSign('RSA-SHA256').update(signingInput).sign(privateKey, 'base64url');
+
+  const res = await fetch('https://oauth2.googleapis.com/token', {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+    body: new URLSearchParams({
+      grant_type: 'urn:ietf:params:oauth:grant-type:jwt-bearer',
+      assertion: `${signingInput}.${signature}`,
+    }),
+  });
+
+  if (!res.ok) {
+    const body = await res.text().catch(() => '');
+    throw new Error(`Google token exchange failed: ${res.status} ${body}`);
+  }
+
+  const data = await res.json();
+  tokenCache = {
+    token: data.access_token,
+    expiresAt: Date.now() + (data.expires_in || 3600) * 1000,
+  };
+  return tokenCache.token;
+}
+
 async function sheetsFetch(path, params = {}) {
   const sheetId = process.env.GOOGLE_SHEET_ID;
   if (!sheetId) throw new Error('GOOGLE_SHEET_ID is not set');
-  const apiKey = process.env.GOOGLE_SHEETS_API_KEY;
-  if (!apiKey) throw new Error('GOOGLE_SHEETS_API_KEY is not set');
 
   const url = new URL(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}${path}`);
-  url.searchParams.set('key', apiKey);
   for (const [key, value] of Object.entries(params)) {
     if (Array.isArray(value)) value.forEach((v) => url.searchParams.append(key, v));
     else if (value !== undefined) url.searchParams.set(key, value);
   }
 
-  const res = await fetch(url);
+  const headers = {};
+  const token = await getServiceAccountToken();
+  if (token) {
+    headers.Authorization = `Bearer ${token}`;
+  } else {
+    const apiKey = process.env.GOOGLE_SHEETS_API_KEY;
+    if (!apiKey) {
+      throw new Error(
+        'No Sheets credentials: set GOOGLE_SERVICE_ACCOUNT_EMAIL + GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY (preferred), or GOOGLE_SHEETS_API_KEY'
+      );
+    }
+    url.searchParams.set('key', apiKey);
+  }
+
+  const res = await fetch(url, { headers });
   if (!res.ok) {
     const body = await res.text().catch(() => '');
     throw new Error(`Sheets API ${path} failed: ${res.status} ${body}`);
