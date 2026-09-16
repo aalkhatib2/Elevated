@@ -9,13 +9,6 @@
 </head>
 <body>
 
-<div class="proto-flag">
-  <div class="wrap" style="max-width:none;padding:0 34px">
-    <span><b>Prototype</b> — /portal/team</span>
-    <span>Sample rep, placeholder figures</span>
-  </div>
-</div>
-
 <div class="app">
 
   <aside class="rail">
@@ -74,28 +67,26 @@
       <div class="kpis">
         <article class="kpi" data-accent="steel">
           <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Reps under you</span><span class="chev"></span></button>
-          <div class="kpi-v">2</div>
+          <div class="kpi-v" data-team="repsUnderYou">&mdash;</div>
           <div class="kpi-fold">
-            <p class="kpi-sub">1 producing this week &middot; 1 onboarding</p>
-            <p class="kpi-note">Reps you personally recruited. A rep counts as producing once they clear their first install in a period.</p>
+            <p class="kpi-sub"><span data-team="producing">&mdash;</span> producing &middot; <span data-team="onboarding">&mdash;</span> onboarding</p>
+            <p class="kpi-note">Reps you personally recruited. A rep counts as producing once they have at least one order logged.</p>
           </div>
         </article>
         <article class="kpi" data-accent="pos">
           <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Team installs</span><span class="chev"></span></button>
-          <div class="kpi-v">6</div>
+          <div class="kpi-v" data-team="teamInstalls">&mdash;</div>
           <div class="kpi-fold">
-            <p class="kpi-sub">This period &middot; does not include your own 7</p>
-            <p class="kpi-note">Installs written by your downline. These count toward your override once you reach STL, and they never count as your personal production.</p>
+            <p class="kpi-sub">All time &middot; does not include your own orders</p>
+            <p class="kpi-note">Installs written by your downline, live from the Fiber Sales sheet. These never count as your own personal production.</p>
           </div>
         </article>
         <article class="kpi" data-accent="warn">
           <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Override earned</span><span class="chev"></span></button>
           <div class="kpi-v">Add figure</div>
           <div class="kpi-fold">
-            <p class="kpi-sub">Accruing but not payable</p>
-            <p class="kpi-flag" data-tone="warn">Unlocks at STL</p>
-            <p class="kpi-note">Your downline is already producing, so the override is being tracked. It starts paying the period after you clear STL &mdash; it is not backdated.</p>
-            <a class="kpi-link" href="overview.html">See what STL needs</a>
+            <p class="kpi-sub">Waiting on a commission column in the Fiber Sales sheet</p>
+            <p class="kpi-note">Same as your own commission &mdash; this goes live the moment the sheet has a real dollar figure to read.</p>
           </div>
         </article>
       </div>
@@ -111,32 +102,15 @@
           <div class="tbl-tools">
             <input class="tbl-search" type="search" placeholder="Search your downline">
             <button class="chip" type="button">Export CSV</button>
-            <span class="tbl-count">2 reps &middot; 1 open seat</span>
+            <span class="tbl-count" data-team-count="downline">&hellip;</span>
           </div>
           <div class="tbl-scroll">
-            <table class="tbl" style="min-width:760px">
+            <table class="tbl" style="min-width:640px">
               <thead>
-                <tr><th>Rep</th><th>Rung</th><th class="td-r">Installs, period</th><th class="td-r">Installs, all time</th><th>Status</th></tr>
+                <tr><th>Rep</th><th>Rung</th><th class="td-r">Installs, all time</th><th>Status</th></tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td><span class="td-strong">Devon Marsh</span><span class="td-sub">Recruited Jul 2026 &middot; Salt Lake City</span></td>
-                  <td class="td-mono">EL</td>
-                  <td class="td-mono td-r">4</td><td class="td-mono td-r">31</td>
-                  <td><span class="pill" data-tone="pos">Producing</span></td>
-                </tr>
-                <tr>
-                  <td><span class="td-strong">Priya Raman</span><span class="td-sub">Recruited Aug 2026 &middot; Murray</span></td>
-                  <td class="td-mono">EL</td>
-                  <td class="td-mono td-r">2</td><td class="td-mono td-r">2</td>
-                  <td><span class="pill" data-tone="steel">Onboarding</span></td>
-                </tr>
-                <tr>
-                  <td><span style="color:var(--muted)">Open seat</span><span class="td-sub">One more producing rep opens the STL gate</span></td>
-                  <td class="td-mono">&mdash;</td>
-                  <td class="td-mono td-r">&mdash;</td><td class="td-mono td-r">&mdash;</td>
-                  <td><span class="pill" data-tone="mute">Invite</span></td>
-                </tr>
+              <tbody data-team-body="downline">
+                <tr><td colspan="4" style="padding:40px 16px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase">Loading your team&hellip;</td></tr>
               </tbody>
             </table>
           </div>
@@ -154,35 +128,15 @@
           <div class="tbl-tools">
             <input class="tbl-search" type="search" placeholder="Search reps">
             <button class="chip" type="button">Export CSV</button>
-            <span class="tbl-count">3 reps</span>
+            <span class="tbl-count" data-team-count="leaderboard">&hellip;</span>
           </div>
           <div class="tbl-scroll">
-            <table class="tbl" style="min-width:760px">
+            <table class="tbl" style="min-width:640px">
               <thead>
                 <tr><th>Rank</th><th>Rep</th><th>Rung</th><th class="td-r">Production</th><th class="td-r">Revenue</th></tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td style="font-family:var(--display);font-weight:900;font-size:20px;color:var(--steel)">01</td>
-                  <td><span class="td-strong">Marcus Deland</span><span class="td-sub">You</span></td>
-                  <td class="td-mono">EL</td>
-                  <td class="td-mono td-r">7 installs</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                </tr>
-                <tr>
-                  <td style="font-family:var(--display);font-weight:900;font-size:20px;color:var(--muted)">02</td>
-                  <td>Devon Marsh<span class="td-sub">Your downline</span></td>
-                  <td class="td-mono">EL</td>
-                  <td class="td-mono td-r">4 installs</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                </tr>
-                <tr>
-                  <td style="font-family:var(--display);font-weight:900;font-size:20px;color:var(--muted)">03</td>
-                  <td>Priya Raman<span class="td-sub">Your downline</span></td>
-                  <td class="td-mono">EL</td>
-                  <td class="td-mono td-r">2 installs</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                </tr>
+              <tbody data-team-body="leaderboard">
+                <tr><td colspan="5" style="padding:40px 16px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase">Loading standings&hellip;</td></tr>
               </tbody>
             </table>
           </div>
@@ -202,6 +156,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
 <script src="portal-auth.js"></script>
 <script src="portal.js"></script>
+<script src="team.js"></script>
 
 </body>
 </html>

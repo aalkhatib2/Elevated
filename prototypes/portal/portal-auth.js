@@ -28,9 +28,12 @@
     };
     Object.keys(fields).forEach(function (key) {
       var value = fields[key];
-      if (value == null || value === '') return;
+      // Render an explicit dash for a missing field rather than skipping
+      // it — skipping would leave whatever placeholder was baked into the
+      // static HTML on screen, which reads as real data for this rep.
+      var text = (value == null || value === '') ? '—' : value;
       document.querySelectorAll('[data-field="' + key + '"]').forEach(function (el) {
-        el.textContent = value;
+        el.textContent = text;
       });
     });
   }

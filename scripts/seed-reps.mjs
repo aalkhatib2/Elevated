@@ -28,10 +28,14 @@ import { hashPassword } from '../api/_lib/password.js';
 // won't show up). Seeded from the spreadsheet's own "Summary" roster.
 const DEFAULT_PASSWORD = '000000';
 
+// recruited_by is another roster entry's *username* (resolved to their real
+// id after everyone's inserted, in a second pass below) — who brought this
+// rep onto the team, for My Team's downline and leaderboard. Leave unset for
+// anyone whose recruiter isn't known.
 const ROSTER = [
   { full_name: 'Adam Alkhatib', username: 'AAlkhatib', rep_code: '4688257', market: 'Salt Lake City', active: true },
   { full_name: 'Alejandro Benitez', username: 'ABenitez', active: false },
-  { full_name: 'Christian Dick', username: 'CDick', active: false },
+  { full_name: 'Christian Dick', username: 'Christian', active: true, recruited_by: 'AAlkhatib' },
   { full_name: 'Holden Mott', username: 'HMott', active: false },
   { full_name: 'Izaiah Jimenez', username: 'IJimenez', active: false },
   { full_name: 'Jahzir Johnson', username: 'JJohnson', active: false },
@@ -73,6 +77,17 @@ async function main() {
     `;
 
     results.push({ name: person.full_name, username: person.username, password });
+  }
+
+  // Second pass: resolve each recruited_by *username* to the real id it
+  // points at. Deferred until everyone in this run exists, so recruiter and
+  // recruit can be seeded in the same run regardless of list order.
+  for (const person of toSeed) {
+    if (!person.recruited_by) continue;
+    await sql`
+      update reps set recruited_by = (select id from reps where username = ${person.recruited_by})
+      where full_name = ${person.full_name}
+    `;
   }
 
   console.log('\nDone. Logins:\n');

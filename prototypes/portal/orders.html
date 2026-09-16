@@ -9,13 +9,6 @@
 </head>
 <body>
 
-<div class="proto-flag">
-  <div class="wrap" style="max-width:none;padding:0 34px">
-    <span><b>Prototype</b> — /portal/orders</span>
-    <span>Timeline is live · Install Notes and Mobile are still sample</span>
-  </div>
-</div>
-
 <div class="app">
 
   <aside class="rail">
@@ -73,7 +66,6 @@
 
       <div class="ptabs" role="tablist">
         <button type="button" role="tab" aria-selected="true"  data-pane="timeline">Timeline</button>
-        <button type="button" role="tab" aria-selected="false" data-pane="notes">Install Notes</button>
         <button type="button" role="tab" aria-selected="false" data-pane="mobile">Mobile</button>
       </div>
 
@@ -105,96 +97,13 @@
         </div>
       </section>
 
-      <!-- ============ INSTALL NOTES ============ -->
-      <section class="ppane" data-pane="notes" style="margin-top:20px">
-        <p class="mono-label">Sample data — not yet connected to a live source</p>
-        <div class="sec-label" style="margin-top:16px">
-          <div class="t">What the network said</div>
-          <div class="d">Provider notes on installs that stalled or fell through. These are the orders worth a phone call.</div>
-        </div>
-        <div class="tbl-wrap">
-          <div class="tbl-tools">
-            <input class="tbl-search" type="search" placeholder="Search notes">
-            <button class="chip" type="button">Export CSV</button>
-            <span class="tbl-count">4 flagged</span>
-          </div>
-          <div class="tbl-scroll">
-            <table class="tbl" style="min-width:820px">
-              <thead>
-                <tr><th>Date</th><th>Order ID</th><th>Address</th><th>Provider note</th><th>Outcome</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="td-mono">Aug 19</td><td class="td-mono">EL-40140</td>
-                  <td><span class="td-strong">415 Sagebrook Dr</span></td>
-                  <td>Buried drop required. Locate request submitted, waiting on the city.<span class="td-sub">Verizon dispatch</span></td>
-                  <td><span class="pill" data-tone="warn">Stalled</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono">Aug 18</td><td class="td-mono">EL-40177</td>
-                  <td><span class="td-strong">78 Halloway Cir</span></td>
-                  <td>Customer missed two scheduling calls. Needs a reschedule before the order ages out.<span class="td-sub">Verizon dispatch</span></td>
-                  <td><span class="pill" data-tone="warn">Needs contact</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono">Aug 06</td><td class="td-mono">EL-40061</td>
-                  <td><span class="td-strong">88 Wexler Ln</span></td>
-                  <td>Installed and activated Aug 5, disconnected Aug 14 at customer request.<span class="td-sub">Verizon billing</span></td>
-                  <td><span class="pill" data-tone="neg">Early churn</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono">Jul 30</td><td class="td-mono">EL-39988</td>
-                  <td><span class="td-strong">1290 Oakhurst Ave</span></td>
-                  <td>Address not serviceable at the unit level. No fiber to the building.<span class="td-sub">Verizon engineering</span></td>
-                  <td><span class="pill" data-tone="warn">Cancelled</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-      </section>
-
       <!-- ============ MOBILE ============ -->
       <section class="ppane" data-pane="mobile" style="margin-top:20px">
-        <p class="mono-label" style="margin-bottom:16px">Sample data — not yet connected to a live source</p>
         <div class="tbl-wrap">
-          <div class="tbl-tools">
-            <input class="tbl-search" type="search" placeholder="Search mobile orders">
-            <button class="chip" type="button">Export CSV</button>
-            <span class="tbl-count">21 orders &middot; 34 lines</span>
-          </div>
-          <div class="tbl-scroll">
-            <table class="tbl" style="min-width:780px">
-              <thead>
-                <tr><th>Sale Date</th><th>Order ID</th><th>Customer</th><th class="td-r">Lines</th><th>Attached to</th><th>Status</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="td-mono">Aug 18</td><td class="td-mono">MB-8841</td>
-                  <td><span class="td-strong">1482 Ridgeline Dr</span></td>
-                  <td class="td-mono td-r">3</td><td class="td-mono">EL-40219</td>
-                  <td><span class="pill" data-tone="pos">Active</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono">Aug 17</td><td class="td-mono">MB-8836</td>
-                  <td><span class="td-strong">55 Bellhaven Ct</span></td>
-                  <td class="td-mono td-r">2</td><td class="td-mono">EL-40204</td>
-                  <td><span class="pill" data-tone="pos">Active</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono">Aug 14</td><td class="td-mono">MB-8820</td>
-                  <td><span class="td-strong">3340 Windmere Dr</span></td>
-                  <td class="td-mono td-r">1</td><td class="td-mono">Standalone</td>
-                  <td><span class="pill" data-tone="steel">Porting</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono">Aug 11</td><td class="td-mono">MB-8802</td>
-                  <td><span class="td-strong">120 Alder Park Way</span></td>
-                  <td class="td-mono td-r">4</td><td class="td-mono">EL-40098</td>
-                  <td><span class="pill" data-tone="pos">Active</span></td>
-                </tr>
-              </tbody>
-            </table>
+          <div class="empty">
+            <div class="box"><i></i></div>
+            <h3>Mobile isn't live yet</h3>
+            <p>Mobile sales open in December 2026. This tab starts showing real orders once the program launches.</p>
           </div>
         </div>
       </section>

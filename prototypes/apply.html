@@ -61,6 +61,8 @@
   .slot:hover { border-color: var(--line); background: var(--bg-3); }
   .slot .d { display: block; font-size: 10px; color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
   .slot[aria-pressed="true"] { border-color: var(--steel); color: var(--steel); background: var(--bg-3); }
+  #days { grid-template-columns: repeat(4, 1fr); max-width: 620px; }
+  #times { grid-template-columns: repeat(4, 1fr); max-width: 620px; }
 
   .actions { margin-top: 46px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
   .back { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); cursor: pointer; background: none; border: none; }
@@ -96,7 +98,7 @@
   }
   @media (max-width: 640px) {
     .choices { grid-template-columns: 1fr; }
-    .slots { grid-template-columns: 1fr 1fr; }
+    .slots, #days, #times { grid-template-columns: 1fr 1fr; }
     .rail-step .t { display: none; }
   }
 </style>
@@ -209,7 +211,9 @@
           <p class="eyebrow">Question four of four</p>
           <h2 style="margin-top:18px">Book the interview</h2>
           <p class="lede">Straight into a real calendar from this same page. Twenty minutes, on video, with the person who runs the campaign.</p>
-          <div class="slots" id="slots"></div>
+          <div class="slots" id="days"></div>
+          <p class="mono-label" id="timesLabel" style="margin-top:28px;display:none">Pick a time on <span id="timesLabelDay"></span></p>
+          <div class="slots" id="times" hidden></div>
           <div class="actions">
             <button class="btn btn-primary" data-next disabled>Confirm Interview</button>
             <button class="back" data-back>Back</button>
@@ -273,7 +277,9 @@
 
 <script>
 (function () {
-  var answers = { exp: null, zip: null, camp: null, slot: null };
+  var answers = { exp: null, zip: null, camp: null, day: null, time: null };
+  var DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  var TIME_FRAMES = ['9:00 AM – 12:00 PM', '12:00 PM – 3:00 PM', '3:00 PM – 6:00 PM', '6:00 PM – 9:00 PM'];
   var current = 1;
 
   var steps = document.querySelectorAll('.step');
@@ -298,19 +304,34 @@
   }
 
   function buildSlots() {
-    var host = document.getElementById('slots');
+    var host = document.getElementById('days');
     if (host.children.length) return;
-    var days  = ['Tue 21', 'Tue 21', 'Wed 22', 'Wed 22', 'Thu 23', 'Thu 23'];
-    var times = ['9:00 AM', '2:30 PM', '10:00 AM', '4:00 PM', '11:30 AM', '1:00 PM'];
-    days.forEach(function (d, i) {
+    DAY_NAMES.forEach(function (day) {
       var b = document.createElement('button');
       b.className = 'slot';
       b.setAttribute('aria-pressed', 'false');
-      b.dataset.q = 'slot';
-      b.dataset.val = d + ' at ' + times[i];
-      b.innerHTML = '<span class="d">' + d + '</span>' + times[i];
+      b.dataset.q = 'day';
+      b.dataset.val = day;
+      b.textContent = day;
       host.appendChild(b);
     });
+  }
+
+  function buildTimes(day) {
+    var host = document.getElementById('times');
+    host.innerHTML = '';
+    TIME_FRAMES.forEach(function (t) {
+      var b = document.createElement('button');
+      b.className = 'slot';
+      b.setAttribute('aria-pressed', 'false');
+      b.dataset.q = 'time';
+      b.dataset.val = t;
+      b.textContent = t;
+      host.appendChild(b);
+    });
+    host.hidden = false;
+    document.getElementById('timesLabel').style.display = 'block';
+    document.getElementById('timesLabelDay').textContent = day;
   }
 
   function updatePanel() {
@@ -323,7 +344,7 @@
       else { el.textContent = 'Not answered'; el.classList.add('pending'); }
     });
 
-    var filled = Object.keys(answers).filter(function (k) { return answers[k]; }).length;
+    var filled = [answers.exp, answers.zip, answers.camp, answers.day && answers.time].filter(Boolean).length;
     document.getElementById('pct').textContent = Math.round(filled / 4 * 100) + '%';
 
     var h = document.getElementById('verdictH');
@@ -371,7 +392,7 @@
   function validate() {
     var btn = document.querySelector('.step[data-step="' + current + '"] [data-next]');
     if (!btn) return;
-    var rules = { 1: !!answers.exp, 2: !!answers.zip, 3: !!answers.camp, 4: !!answers.slot };
+    var rules = { 1: !!answers.exp, 2: !!answers.zip, 3: !!answers.camp, 4: !!(answers.day && answers.time) };
     btn.disabled = !rules[current];
   }
 
@@ -391,7 +412,7 @@
         exp: answers.exp,
         zip: t.city + ' — ' + answers.zip,
         camp: answers.camp,
-        slot: answers.slot
+        slot: answers.day + ', ' + answers.time
       };
       Object.keys(fills).forEach(function (k) {
         document.querySelector('[data-fill="' + k + '"]').textContent = fills[k];
@@ -409,7 +430,15 @@
         g.setAttribute('aria-pressed', 'false');
       });
       choice.setAttribute('aria-pressed', 'true');
-      answers[q] = choice.dataset.val;
+
+      if (q === 'day') {
+        answers.day = choice.dataset.val;
+        answers.time = null;
+        buildTimes(answers.day);
+      } else {
+        answers[q] = choice.dataset.val;
+      }
+
       updatePanel();
       validate();
       return;

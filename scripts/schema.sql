@@ -18,6 +18,13 @@ create table if not exists reps (
   division      text not null default 'Fiber',
   market        text,
   role          text not null default 'rep',
+  -- Who recruited this rep, for the My Team downline/leaderboard. Nullable —
+  -- most rows will have no recruiter (root of the org, or not tracked yet).
+  -- set null on delete: losing the recruiter's own row should orphan their
+  -- downline, not cascade-delete real people's accounts.
+  recruited_by  uuid references reps(id) on delete set null,
   created_at    timestamptz not null default now(),
   last_login_at timestamptz
 );
+
+alter table reps add column if not exists recruited_by uuid references reps(id) on delete set null;

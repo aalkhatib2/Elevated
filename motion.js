@@ -345,10 +345,18 @@
       var id = a.getAttribute('href');
       if (!id || id === '#' || !document.querySelector(id)) return;
       e.preventDefault();
+      /* #join is the last section before the footer, so "scroll to it"
+         really means "scroll to the bottom of the page". Target GSAP's
+         "max" instead of the section's own offset - on mobile the URL bar
+         collapsing mid-scroll shifts document height (pinned ScrollTrigger
+         sections above resize their spacers), which moves a fixed offsetY
+         target short of the bottom; "max" is re-read live every tick so it
+         still lands at the true bottom even as that height keeps changing. */
+      var isJoin = id === '#join';
       gsap.to(window, {
         duration: 0.8,
         ease: 'power2.inOut',
-        scrollTo: { y: id, offsetY: 68, autoKill: true }
+        scrollTo: isJoin ? { y: 'max', autoKill: true } : { y: id, offsetY: 68, autoKill: true }
       });
     });
   }

@@ -319,3 +319,17 @@ export async function getOrdersForRep(fullName, knownFullNames = []) {
   const target = normalizeName(fullName);
   return all.filter((o) => normalizeName(o.salesRep) === target);
 }
+
+// Order counts for a set of reps in one pass — for My Team's downline
+// totals and leaderboard, where looping getOrdersForRep would re-filter the
+// same (cached) order list once per rep for no benefit.
+export async function getOrderCountsByRep(fullNames) {
+  const all = await loadAllOrders(fullNames);
+  const counts = {};
+  fullNames.forEach((name) => { counts[normalizeName(name)] = 0; });
+  for (const o of all) {
+    const norm = normalizeName(o.salesRep);
+    if (norm in counts) counts[norm] += 1;
+  }
+  return counts;
+}
