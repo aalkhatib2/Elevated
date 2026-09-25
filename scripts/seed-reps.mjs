@@ -34,6 +34,7 @@ const DEFAULT_PASSWORD = '000000';
 // anyone whose recruiter isn't known.
 const ROSTER = [
   { full_name: 'Adam Alkhatib', username: 'AAlkhatib', rep_code: '4688257', market: 'Salt Lake City', active: true },
+  { full_name: 'Adrian Mindiola', username: 'AMindiola', active: false },
   { full_name: 'Alejandro Benitez', username: 'ABenitez', active: false },
   { full_name: 'Christian Dick', username: 'Christian', active: true, recruited_by: 'AAlkhatib' },
   { full_name: 'Holden Mott', username: 'HMott', active: false },

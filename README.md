@@ -103,6 +103,40 @@ a spreadsheet the team already keeps.
   `vercel dev` — the plain Python static server (`elevated-landing`/`elevated-mockups`
   in `.claude/launch.json`) can't run `/api`.
 
+## Autoglass tracker
+
+The Autoglass division (Motorsport Autoglass jobs) has its own Google Sheet,
+separate from the fiber tracker:
+<https://docs.google.com/spreadsheets/d/1dlmu48Cqaq_voF2mTACLV73mSTbxKDLHfjyorEDA9Ec/edit>.
+It is the only copy to edit — the `.xlsx` it started from is superseded.
+
+It stays separate because the fiber parser prices rows from `# of Gigs`
+(`RATES` in `api/_lib/sheets.js`) and would count autoglass jobs as fiber
+installs on the Team leaderboard.
+
+- **Layout**: mirrors the fiber sheet so the same parsing approach will work.
+  One tab per week named like `SEP21 to SEP27` (matches `WEEKLY_TAB_RE`), title
+  in A1, the tab's flat rate per job in `B2`, headers on row 4, jobs from
+  row 5. A blank Date cell ends the list — no gaps between jobs.
+- **Columns**: Date, Sales Rep, Job #, Client Name, Phone, Vehicle, Glass,
+  Service, Payment, Insurance Carrier, Claim #, Appointment Date, Status, Rep
+  Commission. Status is Pending / Scheduled / Completed / Cancelled /
+  Rescheduled.
+- **Pay**: flat per job. Rep Commission is a formula — the tab's `B2` rate once
+  Status is Completed, blank otherwise. Each tab keeps its own rate, so
+  changing it later doesn't re-price past weeks.
+- **New week**: duplicate last week's tab, rename it, clear the job rows. The
+  dropdowns and the commission formula carry over.
+- **Sales Rep** names must match `scripts/seed-reps.mjs` exactly (same rule as
+  fiber) — some reps sell both, and the portal will join on the name.
+- **Sharing**: "Anyone with the link → Viewer", a deliberate choice for now.
+  Unlike the fiber sheet it holds customer names and phone numbers, so move it
+  to Restricted before the portal starts reading it (service account, same as
+  `api/_lib/sheets.js`).
+- **Portal**: not wired yet. The path is a `GOOGLE_AUTOGLASS_SHEET_ID` env var
+  and a parser alongside `api/_lib/sheets.js`, then a Fiber/Autoglass toggle on
+  Orders.
+
 ## Deployment
 
 Hosted on **Vercel**, connected to this repo. Pushing to `main` auto-deploys to
