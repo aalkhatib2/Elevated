@@ -726,6 +726,8 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   .slot:hover { border-color: var(--line); background: var(--bg-3); }
   .slot .d { display: block; font-size: 10px; color: var(--muted); letter-spacing: 0.18em; text-transform: uppercase; margin-bottom: 6px; }
   .slot[aria-pressed="true"] { border-color: var(--steel); color: var(--steel); background: var(--bg-3); }
+  #days { grid-template-columns: repeat(4, 1fr); max-width: 620px; }
+  #times { grid-template-columns: repeat(4, 1fr); max-width: 620px; }
 
   .actions { margin-top: 46px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
   .back { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); cursor: pointer; background: none; border: none; }
@@ -761,7 +763,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   }
   @media (max-width: 640px) {
     .choices { grid-template-columns: 1fr; }
-    .slots { grid-template-columns: 1fr 1fr; }
+    .slots, #days, #times { grid-template-columns: 1fr 1fr; }
     .rail-step .t { display: none; }
   }
 </style>
@@ -880,7 +882,9 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
           <p class="eyebrow">Question four of four</p>
           <h2 style="margin-top:18px">Book the interview</h2>
           <p class="lede">Straight into a real calendar from this same page. Twenty minutes, on video, with the person who runs the campaign.</p>
-          <div class="slots" id="slots"></div>
+          <div class="slots" id="days"></div>
+          <p class="mono-label" id="timesLabel" style="margin-top:28px;display:none">Pick a time on <span id="timesLabelDay"></span></p>
+          <div class="slots" id="times" hidden></div>
           <div class="actions">
             <button class="btn btn-primary" data-next="" disabled="">Confirm Interview</button>
             <button class="back" data-back="">Back</button>
@@ -908,8 +912,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
             <div class="receipt-row"><span class="k">Starting rung</span><span class="v">EL — Entry Level</span></div>
           </div>
           <div class="actions">
-            <a class="btn btn-primary" href="prototypes/portal.html">Preview the Portal</a>
-            <a class="btn btn-ghost" href="prototypes/calculator.html">Run the Numbers</a>
+            <a class="btn btn-primary" href="index.html">Back to Site</a>
           </div>
         </section>
         </div>
@@ -934,8 +937,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   <div class="wrap foot">
     <div class="foot-links">
       <a href="index.html">Home</a>
-      <a href="prototypes/portal.html">Portal</a>
-      <a href="prototypes/calculator.html">Calculator</a>
+      <a href="prototypes/portal/login.html">Rep Portal</a>
       <a href="mailto:partners@joinelevated.net">Contact</a>
     </div>
     <p style="font-family:Courier New">Elevated Management Group</p>
@@ -946,8 +948,10 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
 (function () {
   var WEB3FORMS_ACCESS_KEY = "b8dfee03-a76d-4f57-9200-a08274ab68f0";
 
-  var answers = { name: null, phone: null, email: null, exp: null, camp: null, slot: null };
+  var answers = { name: null, phone: null, email: null, exp: null, camp: null, day: null, time: null };
   var current = 1;
+  var DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  var TIME_FRAMES = ['9:00 AM – 12:00 PM', '12:00 PM – 3:00 PM', '3:00 PM – 6:00 PM', '6:00 PM – 9:00 PM'];
 
   var steps = document.querySelectorAll('.step');
   var railSteps = document.querySelectorAll('.rail-step');
@@ -965,7 +969,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
         email: a.email,
         experience: a.exp,
         campaign: a.camp,
-        interview_slot: a.slot,
+        interview_slot: a.day + ', ' + a.time,
         botcheck: ''
       })
     }).then(function (r) { return r.json(); });
@@ -988,19 +992,34 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   }
 
   function buildSlots() {
-    var host = document.getElementById('slots');
+    var host = document.getElementById('days');
     if (host.children.length) return;
-    var days  = ['Tue 21', 'Tue 21', 'Wed 22', 'Wed 22', 'Thu 23', 'Thu 23'];
-    var times = ['9:00 AM', '2:30 PM', '10:00 AM', '4:00 PM', '11:30 AM', '1:00 PM'];
-    days.forEach(function (d, i) {
+    DAY_NAMES.forEach(function (day) {
       var b = document.createElement('button');
       b.className = 'slot';
       b.setAttribute('aria-pressed', 'false');
-      b.dataset.q = 'slot';
-      b.dataset.val = d + ' at ' + times[i];
-      b.innerHTML = '<span class="d">' + d + '</span>' + times[i];
+      b.dataset.q = 'day';
+      b.dataset.val = day;
+      b.textContent = day;
       host.appendChild(b);
     });
+  }
+
+  function buildTimes(day) {
+    var host = document.getElementById('times');
+    host.innerHTML = '';
+    TIME_FRAMES.forEach(function (t) {
+      var b = document.createElement('button');
+      b.className = 'slot';
+      b.setAttribute('aria-pressed', 'false');
+      b.dataset.q = 'time';
+      b.dataset.val = t;
+      b.textContent = t;
+      host.appendChild(b);
+    });
+    host.hidden = false;
+    document.getElementById('timesLabel').style.display = 'block';
+    document.getElementById('timesLabelDay').textContent = day;
   }
 
   function updatePanel() {
@@ -1020,7 +1039,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   function validate() {
     var btn = document.querySelector('.step[data-step="' + current + '"] [data-next]');
     if (!btn) return;
-    var rules = { 1: !!(answers.name && answers.phone && answers.email), 2: !!answers.exp, 3: !!answers.camp, 4: !!answers.slot };
+    var rules = { 1: !!(answers.name && answers.phone && answers.email), 2: !!answers.exp, 3: !!answers.camp, 4: !!(answers.day && answers.time) };
     btn.disabled = !rules[current];
   }
 
@@ -1041,7 +1060,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
         email: answers.email,
         exp: answers.exp,
         camp: answers.camp,
-        slot: answers.slot
+        slot: answers.day + ', ' + answers.time
       };
       Object.keys(fills).forEach(function (k) {
         document.querySelector('[data-fill="' + k + '"]').textContent = fills[k];
@@ -1068,7 +1087,15 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
         g.setAttribute('aria-pressed', 'false');
       });
       choice.setAttribute('aria-pressed', 'true');
-      answers[q] = choice.dataset.val;
+
+      if (q === 'day') {
+        answers.day = choice.dataset.val;
+        answers.time = null;
+        buildTimes(answers.day);
+      } else {
+        answers[q] = choice.dataset.val;
+      }
+
       updatePanel();
       validate();
       return;

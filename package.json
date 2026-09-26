@@ -6,6 +6,7 @@
     "node": "24.x"
   },
   "dependencies": {
-    "@neondatabase/serverless": "^0.10.4"
+    "@neondatabase/serverless": "^0.10.4",
+    "framer-motion": "^13.4.4"
   }
 }

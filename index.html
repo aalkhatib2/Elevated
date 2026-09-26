@@ -3,1296 +3,1436 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Elevated Field Sales</title>
-<meta name="description" content="Field sales recruiting for Elevated. See the ladder, join a live campaign, book an interview.">
+<title>Elevated — Field Sales</title>
+<meta name="description" content="Elevated is a field sales organization. Learn the work, build a team, run a division of your own. Book an interview.">
 <link rel="canonical" href="https://joinelevated.net/">
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-<link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;500&family=Montserrat:wght@400;500;700&display=swap" rel="stylesheet">
+<meta name="theme-color" content="#0A0B0D">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="Elevated">
+<meta property="og:title" content="Elevated — Field Sales">
+<meta property="og:description" content="Learn the work, build a team, run a division of your own.">
+<meta property="og:url" content="https://joinelevated.net/">
+<meta property="og:image" content="https://joinelevated.net/og-image.jpg">
+<meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
 <link rel="icon" href="favicon.ico" sizes="48x48">
 <link rel="apple-touch-icon" href="apple-touch-icon.png">
-<meta name="theme-color" content="#0A0B0D">
-<meta property="og:type" content="website">
-<meta property="og:site_name" content="Elevated">
-<meta property="og:title" content="Elevated Field Sales">
-<meta property="og:description" content="Field sales recruiting for Elevated. See the ladder, join a live campaign, book an interview.">
-<meta property="og:url" content="https://joinelevated.net/">
-<meta property="og:image" content="https://joinelevated.net/og-image.jpg">
-<meta property="og:image:width" content="1200">
-<meta property="og:image:height" content="630">
-<meta name="twitter:card" content="summary_large_image">
-<meta name="twitter:title" content="Elevated Field Sales">
-<meta name="twitter:description" content="Field sales recruiting for Elevated. See the ladder, join a live campaign, book an interview.">
-<meta name="twitter:image" content="https://joinelevated.net/og-image.jpg">
-
-<!-- Motion. GSAP drives every reveal on this page (see motion.js), which
-     means the page now has a third-party dependency it did not used to
-     have, so the failure path is handled explicitly rather than hoped for:
-
-     - `motion-pending` hides reveal targets for the few frames between
-       first paint and motion.js initialising, so nothing is painted in its
-       resting position and then yanked back to the start of its animation.
-     - It is added from script, never as a static class on <html>, so a
-       browser with JS off never receives it and simply gets the page.
-     - The timeout removes it whether or not the CDN ever answered. A
-       blocked or slow jsDelivr therefore costs a 1.5s wait at worst - it
-       can never leave a blank page behind. -->
-<script>
-  document.documentElement.classList.add('motion-pending');
-  setTimeout(function () {
-    document.documentElement.classList.remove('motion-pending');
-  }, 1500);
-</script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollToPlugin.min.js"></script>
-<script defer src="motion.js"></script>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-  /* ============================================================
-     ELEVATED - field sales recruiting landing page
-     Theme: locked dark. The brand is a dark cinematic monochrome
-     identity, so there is no light variant by design.
-     Radius system: 0 everywhere (sharp).
-     Accent: --steel, used identically in every section.
-     ============================================================ */
-
   :root {
-    --bg:        #0A0B0D;
-    --bg-2:      #101216;
-    --bg-3:      #15181D;
-    --line:      rgba(255,255,255,0.10);
-    --line-soft: rgba(255,255,255,0.055);
-    --text:      #EDEEF0;
-    --text-2:    #A7ADB6;
-    --muted:     #767D87;
-    --steel:     #9DB6CE;
-    --white:     #F4F5F6;
-
-    --display: "Arial Black", "Helvetica Neue", Helvetica, "Segoe UI", system-ui, sans-serif;
-    /* Montserrat is loaded via the Google Fonts link in <head>. It sits
-       at the front of --body so every element already using the token
-       picks it up, rather than scattering per-element font-family
-       overrides. The original stack stays behind it as the fallback
-       for the brief moment before the webfont lands (font-display:
-       swap) and if it ever fails to load. */
-    --body:    "Montserrat", "Helvetica Neue", Helvetica, "Segoe UI", system-ui, -apple-system, sans-serif;
-    --mono:    ui-monospace, "Cascadia Mono", "SF Mono", Consolas, monospace;
-
-    --wrap: 1280px;
-    /* Fluid tokens: these scale continuously with the viewport
-       rather than snapping at a breakpoint, so tablets and odd
-       widths get a proportionate size instead of inheriting the
-       nearest phone or desktop value. */
-    --pad: clamp(18px, 4vw, 24px);
-    --sec-pad: clamp(72px, 8.5vw, 132px);
+    --bg: #0A0B0D;
+    --bg-2: #111317;
+    --bg-3: #17191E;
+    --line: rgba(240,237,230,0.10);
+    --line-2: rgba(240,237,230,0.18);
+    --text: #F0EDE6;
+    --text-2: #B9B6AE;
+    --muted: #8E8B84;
+    --accent: #D9622B;       /* burnt orange: the only accent, used sparingly */
+    --accent-ink: #0A0B0D;
+    --head: "Oswald", "Arial Narrow", Impact, sans-serif;
+    --body: "Manrope", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    /* small uppercase labels: kickers, buttons, nav, step tags. Split from --head so
+       they can change without touching the big Oswald headlines. */
+    --label: "Manrope", "Helvetica Neue", Helvetica, Arial, sans-serif;
+    --wrap: 1240px;
+    --pad: clamp(20px, 5vw, 48px);
+    --sec: clamp(80px, 11vw, 150px);
+    --ease: cubic-bezier(.16,1,.3,1);
   }
-
   * { box-sizing: border-box; }
-
+  html { scroll-behavior: smooth; scroll-padding-top: 72px; }
   body {
-    margin: 0;
-    background: var(--bg);
-    color: var(--text);
-    font-family: var(--body);
-    font-size: 16px;
-    line-height: 1.6;
-    -webkit-font-smoothing: antialiased;
-    /* clip, not hidden. `overflow-x: hidden` makes body a scroll container
-       in several browsers, and ScrollTrigger then measures pin positions
-       against the wrong scroller - the ladder pin jumps. clip suppresses
-       the same horizontal overflow without establishing a scroll port. */
-    overflow-x: clip;
+    margin: 0; background: var(--bg); color: var(--text);
+    font-family: var(--body); font-size: 17px; line-height: 1.6;
+    -webkit-font-smoothing: antialiased; overflow-x: clip;
   }
-
-  /* fixed grain, never on a scrolling container */
-  body::after {
-    content: "";
-    position: fixed;
-    inset: 0;
-    z-index: 60;
-    pointer-events: none;
-    opacity: 0.035;
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='140' height='140'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='140' height='140' filter='url(%23n)'/%3E%3C/svg%3E");
-  }
-
-  .wrap { max-width: var(--wrap); margin: 0 auto; padding-left: var(--pad); padding-right: var(--pad); }
-
-  h1, h2, h3 { margin: 0; font-weight: 900; text-transform: uppercase; letter-spacing: -0.02em; line-height: 0.95; font-family: var(--display); }
-  p { margin: 0; }
+  img { max-width: 100%; display: block; }
   a { color: inherit; text-decoration: none; }
+  h1, h2, h3 { margin: 0; font-family: var(--head); font-weight: 600; text-transform: uppercase; line-height: 0.95; letter-spacing: 0.005em; }
+  p { margin: 0; }
+  .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--pad); }
+  .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
-  .eyebrow {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.22em;
-    text-transform: uppercase;
-    color: var(--muted);
+  .kicker {
+    display: inline-flex; align-items: center; gap: 12px;
+    font-family: var(--label); font-weight: 600; font-size: 13px;
+    letter-spacing: 0.22em; text-transform: uppercase; color: var(--text-2);
   }
+  .kicker::before { content: ""; width: 28px; height: 2px; background: var(--accent); }
 
-  .lede { color: var(--text-2); font-size: 17px; line-height: 1.65; max-width: 62ch; }
-
-  /* ---------------- buttons ---------------- */
+  /* buttons */
   .btn {
-    display: inline-flex;
-    align-items: center;
-    justify-content: center;
-    white-space: nowrap;
-    padding: 15px 30px;
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    border: 1px solid transparent;
-    border-radius: 0;
-    cursor: pointer;
-    transition: background-color .25s cubic-bezier(.16,1,.3,1), color .25s, border-color .25s, transform .12s;
+    display: inline-flex; align-items: center; justify-content: center; gap: 10px;
+    min-height: 52px; padding: 0 30px;
+    font-family: var(--label); font-weight: 600; font-size: 14px; letter-spacing: 0.16em; text-transform: uppercase;
+    border: 1px solid transparent; cursor: pointer; white-space: nowrap;
+    transition: background-color .3s var(--ease), color .3s var(--ease), border-color .3s var(--ease);
   }
-  .btn-primary { background: var(--white); color: #0A0B0D; }
-  .btn-primary:hover { background: var(--steel); color: #0A0B0D; }
-  .btn-ghost { background: rgba(10,11,13,0.35); color: var(--white); border-color: rgba(255,255,255,0.42); }
-  .btn-ghost:hover { border-color: var(--white); background: rgba(255,255,255,0.09); }
-  .btn:active { transform: translateY(1px); }
-  .btn-sm { padding: 11px 20px; font-size: 11px; }
+  .btn-primary { background: var(--accent); color: var(--accent-ink); }
+  .btn-primary:hover { background: var(--text); }
+  .btn-light { background: var(--text); color: var(--bg); }
+  .btn-light:hover { background: var(--accent); }
+  .btn-ghost { border-color: var(--line-2); color: var(--text); }
+  .btn-ghost:hover { border-color: var(--text); }
+  .btn-sm { min-height: 42px; padding: 0 20px; font-size: 13px; }
+  .arrow { width: 16px; height: 16px; transition: transform .3s var(--ease); }
+  .btn:hover .arrow, .link:hover .arrow { transform: translateX(4px); }
 
-  /* "Partners" opens a panel rather than navigating, so it has to be a
-     real <button> for keyboard and assistive-tech semantics. This strips
-     the native chrome so it can be styled by the same nav/menu/footer
-     rules as the anchors beside it - those rules target `> *` and land
-     after this one, so they win on source order. */
-  .link-btn {
-    appearance: none; -webkit-appearance: none;
-    background: none; border: none;
-    margin: 0; padding: 0;
-    font: inherit; color: inherit;
-    text-align: left;
-    cursor: pointer;
-  }
-
-  /* ---------------- nav ---------------- */
-  /* fixed, not sticky: taken out of flow so the hero plate starts at
-     the very top of the viewport and the sky runs behind the bar,
-     rather than the bar reserving 68px of dark above the photograph.
-     motion.js already offsets in-page anchors by 68px, so nothing
-     lands underneath it. */
+  /* nav */
   header {
-    position: fixed; top: 0; left: 0; right: 0; z-index: 50;
-    height: 68px;
-    background: rgba(10,11,13,0.82);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--line-soft);
-    transition: transform .35s cubic-bezier(.4,0,.2,1);
+    position: fixed; inset: 0 0 auto; z-index: 50; height: 72px;
+    transition: background-color .35s var(--ease), border-color .35s var(--ease);
+    border-bottom: 1px solid transparent;
   }
-  /* Over the hero the bar carries no panel of its own - the sky is the
-     background. The legibility that the panel used to provide comes
-     from a scrim that is deliberately TALLER than the bar (150px), so
-     it decays into the photograph instead of ending on a visible edge
-     at y=68. Set from JS via the same atTop flag that drives
-     .nav-hidden, so there is one source of truth for "we are at the
-     top of the page". */
-  header.nav-over-hero {
-    background: transparent;
-    backdrop-filter: none;
-    -webkit-backdrop-filter: none;
-    border-bottom-color: transparent;
+  header.solid { background: rgba(10,11,13,0.9); backdrop-filter: blur(14px); -webkit-backdrop-filter: blur(14px); border-bottom-color: var(--line); }
+  .nav { height: 72px; display: flex; align-items: center; justify-content: space-between; gap: 24px; }
+  .nav-logo img { height: 40px; width: auto; }
+  .nav-links { display: flex; gap: 36px; }
+  .nav-links a {
+    font-family: var(--label); font-weight: 500; font-size: 14px; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--text-2); transition: color .2s;
   }
-  header.nav-over-hero::before {
-    content: "";
-    position: absolute;
-    left: 0; right: 0; top: 0;
-    height: 150px;
-    z-index: -1;
-    pointer-events: none;
-    background: linear-gradient(to bottom,
-      rgba(10,11,13,0.86) 0%,
-      rgba(10,11,13,0.58) 45%,
-      rgba(10,11,13,0) 100%);
-  }
-  /* Visible at rest, hides once the user scrolls into the hero, comes
-     back once the ladder is reached (see the IntersectionObserver pair
-     near the bottom of the file). */
-  header.nav-hidden { transform: translateY(-100%); }
-  /* Grid, not space-between. space-between only centres the middle group
-     when the two outer groups happen to be the same width, and they are
-     not: the monogram is ~31px against ~149px of toggle + CTA, which
-     dragged the links ~59px left of centre. Equal 1fr rails either side
-     of an auto centre column make the links centred on the bar itself,
-     whatever the logo and the CTA end up measuring.
-     justify-self keeps both outer items at their natural width, so the
-     logo's click target stays the size of the logo instead of stretching
-     across a third of the header. */
-  .nav {
-    height: 68px;
-    display: grid;
-    grid-template-columns: 1fr auto 1fr;
-    align-items: center;
-    gap: 28px;
-  }
-  .nav > .wordmark { justify-self: start; }
-  .nav > .nav-right { justify-self: end; }
-  /* The blackletter E monogram, not type. Sized by HEIGHT only (width
-     follows from the intrinsic 549x715) so the mark is never squashed
-     and stays optically centred in the 68px bar. flex-shrink is off so
-     the nav collapses the links/CTA before it ever touches the logo. */
-  .wordmark {
-    display: inline-flex;
-    align-items: center;
-    flex: 0 0 auto;
-  }
-  .wordmark img {
-    height: 40px;
-    width: auto;
-    display: block;
-  }
-  .nav-links { display: flex; gap: 30px; align-items: center; }
-  .nav-links > * {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.15em;
-    text-transform: uppercase;
-    color: var(--text-2);
-    white-space: nowrap;
-    transition: color .2s;
-  }
-  .nav-links > *:hover { color: var(--white); }
+  .nav-links a:hover { color: var(--text); }
+  .nav-right { display: flex; align-items: center; gap: 12px; }
+  .menu-btn { display: none; width: 44px; height: 44px; background: none; border: 0; cursor: pointer; padding: 0; flex-direction: column; justify-content: center; align-items: center; gap: 6px; }
+  .menu-btn span { width: 22px; height: 2px; background: var(--text); transition: transform .3s var(--ease), opacity .2s; }
+  .menu-btn[aria-expanded="true"] span:nth-child(1) { transform: translateY(8px) rotate(45deg); }
+  .menu-btn[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
+  .menu-btn[aria-expanded="true"] span:nth-child(3) { transform: translateY(-8px) rotate(-45deg); }
+  .mobile-menu { display: none; position: absolute; top: 72px; left: 0; right: 0; background: rgba(10,11,13,0.98); border-bottom: 1px solid var(--line); padding: 8px var(--pad) 20px; }
+  .mobile-menu.open { display: block; }
+  .mobile-menu a { display: block; padding: 16px 0; border-bottom: 1px solid var(--line); font-family: var(--label); font-size: 18px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .mobile-menu a:last-child { border-bottom: 0; }
 
-  .nav-right { display: flex; align-items: center; gap: 16px; }
-
-  /* Hamburger: hidden by default, shown only under the 860px
-     collapse (see media query below), where it replaces .nav-links
-     with a dropdown panel. Bars morph into an X on open, driven by
-     the button's own aria-expanded state rather than a JS-toggled
-     class, so it can't drift out of sync with assistive tech. */
-  .menu-toggle {
-    display: none;
-    width: 36px; height: 36px;
-    padding: 0;
-    border: none;
-    background: transparent;
-    cursor: pointer;
-    flex-direction: column;
-    align-items: center;
-    justify-content: center;
-    gap: 5px;
-  }
-  .menu-toggle span {
-    display: block;
-    width: 21px; height: 2px;
-    background: var(--white);
-    transition: transform .25s cubic-bezier(.16,1,.3,1), opacity .2s;
-  }
-  .menu-toggle[aria-expanded="true"] span:nth-child(1) { transform: translateY(7px) rotate(45deg); }
-  .menu-toggle[aria-expanded="true"] span:nth-child(2) { opacity: 0; }
-  .menu-toggle[aria-expanded="true"] span:nth-child(3) { transform: translateY(-7px) rotate(-45deg); }
-
-  .mobile-menu {
-    display: none;
-    position: absolute;
-    top: 100%; left: 0; right: 0;
-    flex-direction: column;
-    background: rgba(10,11,13,0.97);
-    backdrop-filter: blur(14px);
-    -webkit-backdrop-filter: blur(14px);
-    border-bottom: 1px solid var(--line-soft);
-    padding: 4px var(--pad) 10px;
-  }
-  .mobile-menu.open { display: flex; }
-  .mobile-menu > * {
-    padding: 16px 0;
-    font-family: var(--mono);
-    font-size: 12.5px;
-    letter-spacing: 0.16em;
-    text-transform: uppercase;
-    color: var(--text-2);
-    border-bottom: 1px solid var(--line-soft);
-  }
-  .mobile-menu > *:last-child { border-bottom: none; }
-  .mobile-menu > *:active { color: var(--white); }
-
-  /* ---------------- hero ---------------- */
-  /* Two independent layers rather than one flattened photo:
-     .hero-art is a text-free background plate, safe to crop however
-     cover wants at any viewport. .hero-wordmark is a real, separate
-     element inside it, sized as a percentage of .hero-art's own
-     height, so the letters are structurally never cropped and stay
-     proportionate to the photo at every viewport. The CTA is real
-     HTML below both, blended into the page with a gradient so the
-     seam disappears regardless of the plate's exact bottom pixel
-     value. */
-  .hero {
-    position: relative;
-    /* No top gap. The header is fixed (out of flow), so the plate is
-       meant to start at y=0 and carry the sky up behind the bar - a
-       margin here would reintroduce the dark strip the fixed header
-       was changed to remove. */
-    margin-top: 0;
-  }
-  .hero-art {
-    position: relative; width: 100%; overflow: hidden; line-height: 0; background: var(--bg);
-    aspect-ratio: 2400 / 1055;
-    min-height: 200px;
-    max-height: 560px;
-  }
-  /* Own class rather than the `.hero-art img` tag selector: a tag
-     selector would out-specificity .hero-wordmark's single class and
-     silently win the object-fit/sizing properties on it once the
-     wordmark moved inside .hero-art (below). */
-  .hero-bg-img { width: 100%; height: 100%; object-fit: cover; object-position: center; display: block; }
-  /* Fade zone stops well clear of the wordmark (bottom edge at 34%,
-     see .hero-wordmark below), so extending it doesn't touch the mark
-     - purely a longer, more gradual melt of the dune into the page
-     background. Nothing is cropped or resized to make room for this. */
-  .hero-art::after {
-    content: "";
-    position: absolute; left: 0; right: 0; bottom: 0; height: 48%;
-    background: linear-gradient(to bottom, rgba(10,11,13,0) 0%, rgba(10,11,13,0.55) 60%, var(--bg) 96%);
-    pointer-events: none;
-  }
-  /* Sized and positioned as a percentage of .hero-art's own height
-     (measured against hero-bg.jpg: clear sky ends around 38% down,
-     dune is solid by ~49%), not viewport width. That is the actual
-     fix for "fit together" - .hero-art's height is itself clamped
-     between a 200px floor and a 560px ceiling, so anything sized off
-     viewport width alone drifts out of proportion with the photo the
-     moment either clamp is active. Percentage-of-height tracks
-     whatever .hero-art's real height is, always. Centered via
-     left/right/margin on a replaced element rather than a transform,
-     which matters more than ever now that motion.js animates this mark:
-     GSAP owns the transform property here (intro scale, then parallax
-     yPercent), so any centering that relied on translate would be
-     overwritten the moment the first tween ran. */
-  .hero-wordmark {
-    position: absolute;
-    /* The 4% is the original offset against the plate; the +68px is the
-       fixed header's height. The plate now starts at y=0 (behind the
-       bar), so without that term the mark would sit underneath the nav
-       links. Written as calc rather than a single tuned number so the
-       two things it is made of stay legible: art-relative breathing
-       room, plus nav clearance. */
-    top: calc(4% + 68px);
-    left: 0; right: 0; margin: 0 auto;
-    height: 30%; width: auto;
-    z-index: 2;
-    pointer-events: none;
-  }
-  /* Tagline under the wordmark. Engraved Roman caps (Cinzel) with wide
-     tracking, so it reads as a subtitle to the mark rather than
-     competing with it - the direction picked from the tagline
-     comparison earlier. Sits in normal flow between the plate and the
-     CTAs, not absolutely positioned, so it stays put at any width. */
-  .hero-tagline {
-    /* Negative top pull: .hero-art's bottom ~48% is the fade-to-page
-       gradient, which is visually empty, so a positive margin here
-       reads as a large gap. Pulling up sits the line closer to the
-       wordmark. Bottom margin keeps clearance from the CTA row, which
-       the pull would otherwise close to zero.
-       position+z-index are required, not decorative: the pull moves
-       this line back over .hero-art, and a static element would be
-       painted over by the plate's own <img>. */
-    position: relative;
-    z-index: 3;
-    margin: clamp(-56px, -5vw, -24px) auto 26px;
-    text-align: center;
-    font-family: "Cinzel", Georgia, "Times New Roman", serif;
-    font-weight: 500;
-    font-size: clamp(13px, 1.9vw, 22px);
-    letter-spacing: 0.34em;
-    text-indent: 0.34em;   /* offsets trailing letter-space so it stays optically centered */
-    text-transform: uppercase;
-    color: #DFE3E8;
-    line-height: 1.3;
-  }
-  /* Buttons sit close under the plate now that the plate itself is
-     short, rather than needing a big gap to feel separated from a
-     tall image. */
-  .hero-cta-wrap {
-    margin-top: -2px;
-    padding: 0 0 64px;
-    display: flex;
-    justify-content: center;
-    gap: 14px;
-    flex-wrap: wrap;
-  }
-  .sr-only {
-    position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px;
-    overflow: hidden; clip: rect(0,0,0,0); white-space: nowrap; border: 0;
-  }
-
-  /* ---------------- section frame ---------------- */
-  section { position: relative; }
-  .sec { padding: var(--sec-pad) 0; border-top: 1px solid var(--line-soft); }
-  .sec-head { max-width: 68ch; }
-  .sec-head h2 { font-size: clamp(30px, 4.6vw, 58px); }
-  .sec-head .lede { margin-top: 22px; }
-
-  /* ---------------- ladder ---------------- */
-  /* Background fades lighter from EL to JP, top to bottom, so the
-     climb reads visually as well as in the copy. The glow lives on
-     the full-bleed section (not a padded inner panel), and eases
-     back down to the page background before the section ends, so
-     there are no hard box edges anywhere, only a soft rise and fall. */
-  #ladder {
-    background: linear-gradient(180deg,
-      var(--bg) 0%,
-      #10151A 20%,
-      #171E25 42%,
-      #1E262F 62%,
-      #232C36 80%,
-      #141A20 93%,
-      var(--bg) 100%);
-  }
-  .ladder {
-    position: relative;   /* positioning context for .ladder-line */
-    margin-top: 76px;
-    display: flex;
-    flex-direction: column;
-  }
-  /* The stringer the rungs hang off. A real element rather than a
-     pseudo-element because GSAP can only tween real nodes, and this is
-     scrubbed: scaleY runs 0 -> 1 from the top down as the climb advances.
-     Sits at the left edge, which is where rung-1 (EL) starts before the
-     rungs step rightward toward JP. */
-  .ladder-line {
-    position: absolute;
-    top: 0; bottom: 0;
-    /* Pulled out of the content column. At left: 0 it lands on exactly the
-       same x as rung-1's "EL", because that rung has no indent - the rail
-       would be drawn straight through the letterform. .wrap's padding is
-       24px from 600px up, so -14px still leaves 10px of clearance from the
-       viewport edge at the tightest desktop width. */
-    left: -14px;
-    width: 1px;
-    background: linear-gradient(180deg, rgba(157,182,206,0.15), var(--steel));
-    transform-origin: 50% 0%;
-    pointer-events: none;
-  }
-  @media (max-width: 767px) { .ladder-line { display: none; } }
-  .rung {
-    display: grid;
-    grid-template-columns: 168px 1fr;
-    gap: 40px;
-    align-items: baseline;
-    padding: 40px 0;
-    border-top: 1px solid var(--line-soft);
-  }
-  .rung:last-child { border-bottom: 1px solid var(--line-soft); }
-  .rung-1 { margin-left: 0; }
-  .rung-2 { margin-left: 5%; }
-  .rung-3 { margin-left: 10%; }
-  .rung-4 { margin-left: 15%; }
-  .rung-code {
-    font-family: var(--display);
-    font-weight: 900;
-    font-size: clamp(26px, 3.4vw, 44px);
-    letter-spacing: -0.01em;
-    line-height: 1;
-    color: var(--white);
-  }
-  .rung-4 .rung-code { color: var(--steel); }
-  .rung-name {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
-    margin-top: 14px;
-  }
-  .rung-body { font-size: 17px; line-height: 1.6; color: var(--text-2); max-width: 56ch; }
-  .ladder-note {
-    margin-top: 40px;
-    font-size: 15px;
-    color: var(--muted);
-    max-width: 60ch;
-    border-left: 2px solid var(--steel);
-    padding-left: 20px;
-    line-height: 1.65;
-  }
-
-  /* ---------------- traits (2x2) ---------------- */
-  .traits { margin-top: 72px; display: grid; grid-template-columns: 1fr 1fr; gap: 56px 72px; }
-  .trait h3 { font-size: 21px; letter-spacing: -0.005em; line-height: 1.15; }
-  .trait p { margin-top: 14px; color: var(--text-2); font-size: 16px; max-width: 44ch; }
-
-
-  /* ---------------- divisions ---------------- */
-  /* All three campaigns carry the same status now, so the grid is
-     even rather than featuring one card the way it did when only
-     Fiber was live. */
-  .divs { margin-top: 76px; display: grid; grid-template-columns: 1fr 1fr 1fr; gap: 20px; }
-  .div-card {
-    border: 1px solid var(--line);
-    padding: 40px 34px;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    min-height: 320px;
-    background: var(--bg-2);
-  }
-  .div-live {
+  /* hero */
+  /* The static gradient is the no-WebGL / no-JS fallback and also the ground the
+     canvas composites over. Stacking: canvas (0) < scrim (::after, 0, later in
+     order) < content (1). */
+  .hero { position: relative; min-height: 100svh; display: flex; flex-direction: column; justify-content: flex-end; overflow: hidden; background: var(--bg); }
+  /* Stars: three layers of white dots drifting upward, drawn on a small 2D canvas. Fades in
+     once the first frame is drawn. The hero itself stays plain black either way. */
+  .hero-stars { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: 0; opacity: 0; transition: opacity 1.4s var(--ease); }
+  .hero-stars.on { opacity: 1; }
+  /* Legibility: a soft dark pool behind the copy block, so the lede and buttons stay clean
+     wherever a star drifts behind them. */
+  .hero::after {
+    content: ""; position: absolute; inset: 0; z-index: 0; pointer-events: none;
     background:
-      radial-gradient(115% 100% at 12% 0%, rgba(157,182,206,0.16) 0%, rgba(157,182,206,0) 62%),
-      var(--bg-3);
-    border-color: rgba(157,182,206,0.34);
+      radial-gradient(ellipse 55% 34% at 50% 66%, rgba(10,11,13,0.5), rgba(10,11,13,0) 72%);
   }
-  .div-status {
-    font-family: var(--mono);
-    font-size: 10.5px;
-    letter-spacing: 0.2em;
-    text-transform: uppercase;
-    color: var(--muted);
+  .hero-inner, .hero-foot { z-index: 1; }
+  /* margin-block:auto centres the block in the space above .hero-foot. It
+     used to sit at the bottom of the hero because the photo filled the
+     sky above it; with no plate that reads as a dead void over the copy. */
+  .hero-inner { position: relative; margin-block: auto; padding-top: 120px; padding-bottom: clamp(48px, 8vh, 88px); display: flex; flex-direction: column; align-items: center; text-align: center; }
+  /* The wordmark art is dark ink, drawn to sit on the pale sky. On the page's
+     near-black ground it disappears, so it is inverted to light ink here.
+     invert() keeps the alpha channel, so the dust and torn edges survive. */
+  .hero-mark { width: min(820px, 88vw); height: auto; margin-bottom: clamp(20px, 4vh, 44px); filter: invert(1); }
+  .hero-tag { font-family: var(--label); font-weight: 500; font-size: clamp(15px, 1.6vw, 19px); letter-spacing: 0.42em; text-indent: 0.42em; text-transform: uppercase; color: var(--text); }
+  .hero-lede { text-shadow: 0 1px 14px rgba(10,11,13,0.9), 0 0 2px rgba(10,11,13,0.6); margin-top: 18px; max-width: 46ch; color: var(--text-2); font-size: clamp(16px, 1.4vw, 18px); }
+  .hero-cta { margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
+  .hero-foot {
+    position: relative; border-top: 1px solid var(--line);
+    display: grid; grid-template-columns: repeat(3, 1fr);
   }
-  .div-live .div-status { color: var(--steel); }
-  .div-card h3 { margin-top: 22px; font-size: clamp(22px, 2.4vw, 33px); }
-  .div-card p { margin-top: 18px; color: var(--text-2); font-size: 15.5px; max-width: 34ch; }
+  .hero-foot div { padding: 20px var(--pad); border-left: 1px solid var(--line); font-family: var(--label); font-size: 14px; font-weight: 600; letter-spacing: 0.16em; text-transform: uppercase; color: var(--text-2); display: flex; align-items: center; gap: 10px; justify-content: center; }
+  .hero-foot div:first-child { border-left: 0; }
+  .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none; }
 
-  /* ---------------- portal split ---------------- */
-  .portal-grid { margin-top: 0; display: grid; grid-template-columns: 1.05fr 1fr; gap: 76px; align-items: center; }
-  .portal-media { position: relative; }
-  .portal-media img { width: 100%; height: 100%; max-height: 560px; object-fit: cover; display: block; filter: grayscale(0.35) contrast(1.06); }
-  .portal-list { margin-top: 40px; display: flex; flex-direction: column; }
-  .portal-item { padding: 24px 0; border-top: 1px solid var(--line-soft); display: flex; align-items: center; gap: 18px; }
-  .portal-num { flex: 0 0 auto; width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 50%; display: grid; place-items: center; font-family: var(--mono); font-size: 13px; letter-spacing: 0.04em; color: var(--text-2); }
-  .portal-item:last-child { border-bottom: 1px solid var(--line-soft); }
-  .portal-item h3 { font-size: 18px; }
-  .portal-item p { margin-top: 9px; color: var(--text-2); font-size: 15.5px; max-width: 46ch; }
+  /* sections */
+  .sec { padding: var(--sec) 0; }
+  .sec-head { display: grid; grid-template-columns: 1fr auto; align-items: end; gap: 24px 40px; }
+  .sec-head h2 { font-size: clamp(44px, 7vw, 96px); margin-top: 18px; }
+  .sec-head .aside { color: var(--text-2); max-width: 36ch; font-size: 16px; }
 
-  /* ---------------- rep access ---------------- */
-  /* A quiet utility band for reps who already work here, not a second
-     recruiting CTA - Book Interview below is this page's one conversion
-     goal, so this deliberately reads smaller (a shorter padding than
-     --sec-pad, a sub-heading size, the same ghost button as every other
-     secondary action) rather than competing with it. */
-  .rep-access { padding: clamp(40px, 6vw, 64px) 0; }
-  .rep-access-inner {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    gap: 32px;
-    flex-wrap: wrap;
+  /* ladder */
+  #ladder { background: var(--bg); }
+  .ladder { margin-top: clamp(48px, 7vw, 88px); display: grid; grid-template-columns: repeat(4, 1fr); gap: 16px; align-items: end; }
+  .rung {
+    position: relative; background: var(--bg-2); border: 1px solid var(--line);
+    padding: 28px 26px 30px; display: flex; flex-direction: column;
+    transition: border-color .3s var(--ease), background-color .3s var(--ease);
   }
-  .rep-access-copy h3 { font-size: clamp(22px, 2.4vw, 30px); margin-top: 10px; }
-  .rep-access-copy .lede { margin-top: 10px; font-size: 15px; }
+  .rung:hover { border-color: var(--line-2); background: var(--bg-3); }
+  .rung:nth-child(1) { min-height: 360px; }
+  .rung:nth-child(2) { min-height: 420px; }
+  .rung:nth-child(3) { min-height: 480px; }
+  .rung:nth-child(4) { min-height: 540px; border-color: rgba(217,98,43,0.55); background: linear-gradient(180deg, rgba(217,98,43,0.10), rgba(217,98,43,0) 55%), var(--bg-2); }
+  .rung-step { font-family: var(--label); font-size: 13px; font-weight: 600; letter-spacing: 0.2em; color: var(--muted); text-transform: uppercase; }
+  .rung-code { margin-top: auto; font-family: var(--head); font-weight: 700; font-size: clamp(56px, 6vw, 84px); line-height: 0.9; }
+  .rung:nth-child(4) .rung-code { color: var(--accent); }
+  .rung-name { margin-top: 10px; font-family: var(--label); font-weight: 600; font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-2); }
+  .rung-line { margin-top: 20px; padding-top: 18px; border-top: 1px solid var(--line); font-size: 17px; color: var(--text); line-height: 1.45; }
+  .rung ul { list-style: none; margin: 14px 0 0; padding: 0; display: grid; gap: 7px; }
+  .rung li { font-size: 14.5px; color: var(--text-2); padding-left: 16px; position: relative; line-height: 1.45; }
+  .rung li::before { content: ""; position: absolute; left: 0; top: 0.62em; width: 6px; height: 1px; background: var(--muted); }
+  .ladder-axis { margin-top: 22px; display: flex; align-items: center; gap: 14px; color: var(--muted); font-family: var(--label); font-size: 13px; letter-spacing: 0.2em; text-transform: uppercase; }
+  .ladder-axis span.bar { flex: 1; height: 1px; background: linear-gradient(90deg, var(--line-2), var(--accent)); }
 
-  /* ---------------- closing ---------------- */
-  .closing { padding: calc(var(--sec-pad) * 1.12) 0 var(--sec-pad); border-top: 1px solid var(--line-soft); text-align: center; background: var(--bg-2); }
-  .closing h2 { font-size: clamp(32px, 5.6vw, 72px); max-width: 18ch; margin: 0 auto; }
-  .closing .lede { margin: 26px auto 0; text-align: center; }
-  .closing-cta { margin-top: 40px; display: flex; gap: 14px; justify-content: center; flex-wrap: wrap; }
-  .closing-mail { margin-top: 34px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.14em; color: var(--muted); }
-  .closing-mail a { color: var(--steel); border-bottom: 1px solid rgba(157,182,206,0.4); padding-bottom: 2px; }
-
-  /* ---------------- partners ---------------- */
-  /* Logos are supplied at wildly different intrinsic sizes (208x35 up
-     to 1591x858), so cells are a fixed height and each logo is
-     constrained by max-height + object-fit: contain. That normalizes
-     them optically without distorting any one mark. */
-  .partner-cell {
-    display: flex; align-items: center; justify-content: center;
-    padding: 44px 30px; min-height: 184px;
-    position: relative; text-decoration: none;
-    background-color: var(--bg-2);
-    background-image: radial-gradient(115% 100% at 12% 0%, rgba(157,182,206,0.16), transparent 62%);
-    border: 1px solid var(--line);
-    transition: background-color .25s cubic-bezier(.16,1,.3,1), border-color .25s cubic-bezier(.16,1,.3,1);
+  /* divisions */
+  /* isolation + z-index:-1 on the canvas: above the section's cream, behind all content. */
+  #divisions { background: var(--text); color: var(--bg); position: relative; overflow: hidden; isolation: isolate; }
+  .divisions-mesh { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: -1; }
+  #divisions .kicker { color: #4A4843; }
+  #divisions .sec-head .aside { color: #4A4843; }
+  .divs { margin-top: clamp(48px, 7vw, 80px); border-top: 2px solid var(--bg); }
+  .div-row {
+    display: grid; grid-template-columns: 90px 1.1fr 1.3fr auto; gap: 32px; align-items: center;
+    padding: 38px 0; border-bottom: 1px solid rgba(10,11,13,0.18);
+    transition: background-color .3s var(--ease);
   }
-  .partner-cell:hover { background-color: var(--bg-3); border-color: rgba(157,182,206,0.45); }
-  /* Desaturated at rest so the wall of logos reads as one monochrome band
-     rather than a row of competing brand palettes (T-Mobile magenta is the
-     loudest offender), and so hovering is an actual reveal instead of a
-     background tint. */
-  .partner-cell img {
-    max-width: 100%; max-height: 72px; width: auto; height: auto; object-fit: contain;
-    filter: grayscale(1);
-    opacity: 0.55;
-    transition: filter .35s cubic-bezier(.16,1,.3,1), opacity .35s cubic-bezier(.16,1,.3,1);
-  }
-  .partner-cell:hover img { filter: grayscale(0); opacity: 1; }
-  .partner-visit {
-    position: absolute; top: 14px; right: 16px;
-    font-family: var(--mono); font-size: 10.5px;
-    letter-spacing: 0.16em; text-transform: uppercase;
-    color: var(--muted);
-    opacity: 0; transform: translateY(6px);
-    transition: color .25s cubic-bezier(.16,1,.3,1),
-                opacity .25s cubic-bezier(.16,1,.3,1),
-                transform .25s cubic-bezier(.16,1,.3,1);
-  }
-  .partner-cell:hover .partner-visit,
-  .partner-cell:focus-visible .partner-visit { color: var(--white); opacity: 1; transform: none; }
-  .partner-cta { flex-direction: column; align-items: flex-start; justify-content: center; gap: 12px; padding: 34px 26px; }
-  .partner-cta-kicker { font-size: 10.5px; letter-spacing: 0.22em; text-transform: uppercase; color: var(--white); font-weight: 700; }
-  .partner-cta-mail {
-    font-family: var(--mono); font-size: 13px; letter-spacing: 0.06em;
-    color: var(--text); overflow-wrap: anywhere;
-    transition: color .25s cubic-bezier(.16,1,.3,1);
-  }
-  .partner-cell:hover .partner-cta-mail { color: var(--steel); }
-  .partner-cta-note { font-size: 12px; line-height: 1.5; color: var(--muted); }
+  .div-num { font-family: var(--head); font-weight: 600; font-size: 22px; color: #6B6862; }
+  .div-row h3 { font-size: clamp(34px, 4.4vw, 58px); }
+  .div-row p { font-size: 17px; color: #34322E; max-width: 44ch; }
+  .div-status { margin-top: 12px; display: inline-flex; align-items: center; gap: 8px; font-family: var(--label); font-size: 13px; font-weight: 500; letter-spacing: 0.18em; text-transform: uppercase; color: #9A3D12; }
+  .div-row .btn { background: var(--bg); color: var(--text); }
+  .div-row .btn:hover { background: var(--accent); color: var(--accent-ink); }
 
-  /* ---------------- partners panel ---------------- */
-  /* The wall is an overlay, not a section. `hidden` is removed a frame
-     before `.open` is added so the element is laid out before it is
-     asked to transition - toggling both at once would skip the slide. */
-  .partners-backdrop {
-    position: fixed; inset: 0; z-index: 70;
-    background: rgba(10,11,13,0.72);
-    backdrop-filter: blur(6px);
-    -webkit-backdrop-filter: blur(6px);
-    opacity: 0;
-    transition: opacity .35s cubic-bezier(.16,1,.3,1);
+  /* movement */
+  #movement { background: var(--bg); }
+  .move-grid { display: grid; grid-template-columns: 0.9fr 1.1fr; gap: clamp(40px, 7vw, 110px); align-items: center; }
+  .move-mark { background: var(--bg-2); border: 1px solid var(--line); aspect-ratio: 4 / 5; display: flex; flex-direction: column; }
+  .move-art { flex: 1; min-height: 0; display: flex; align-items: center; justify-content: center; padding: 12%; }
+  .move-art img { width: 100%; height: 100%; object-fit: contain; }
+  /* Rotating globe. The monogram <img> stays in the markup as the fallback: it is only faded
+     out once the globe has actually loaded and drawn, so a failed fetch leaves the card intact. */
+  .move-art { position: relative; }
+  .move-globe { position: absolute; inset: 0; width: 100%; height: 100%; display: block; opacity: 0; transition: opacity .9s var(--ease); cursor: grab; touch-action: pan-y; }
+  .move-globe.dragging { cursor: grabbing; }
+  .move-art.has-globe .move-globe { opacity: 1; }
+  .move-art.has-globe img { opacity: 0; transition: opacity .9s var(--ease); }
+  .move-quote { margin: 0; padding: 20px 24px; border-top: 1px solid var(--line); font-family: var(--label); font-weight: 500; font-size: 15px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-2); display: block; text-align: center; }
+  /* inline, not a flex item: when the line wraps on a phone the dot stays attached to the first word
+     instead of being stranded at the card's left edge */
+  .move-quote .dot { display: inline-block; width: 6px; height: 6px; margin-right: 12px; vertical-align: 0.15em; }
+  .values { margin: 40px 0 0; padding: 0; list-style: none; counter-reset: v; border-top: 1px solid var(--line); }
+  .values li { counter-increment: v; display: flex; align-items: baseline; gap: 24px; padding: 22px 0; border-bottom: 1px solid var(--line); font-family: var(--head); font-weight: 600; font-size: clamp(24px, 2.8vw, 36px); text-transform: uppercase; line-height: 1.05; }
+  .values li::before { content: counter(v, decimal-leading-zero); font-size: 14px; font-weight: 500; letter-spacing: 0.1em; color: var(--accent); min-width: 28px; }
+  .move-lede { margin-top: 22px; color: var(--text-2); max-width: 46ch; }
+
+  /* portal strip */
+  .portal { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg-2); }
+  .portal-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 0; flex-wrap: wrap; }
+  .portal-copy { display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap; }
+  .portal-copy strong { font-family: var(--head); font-weight: 600; font-size: 20px; letter-spacing: 0.08em; text-transform: uppercase; }
+  .portal-copy span { color: var(--text-2); font-size: 15px; }
+
+  /* partners */
+  /* Infinite grid behind the ladder and partners sections (a port of the-infinite-grid component). Two copies of one grid:
+     a barely-there base layer, and a brighter layer revealed only inside a soft circle around the
+     cursor. Nothing here fills anything - it is thin lines on the page's own black, and the
+     component's coloured glow blobs are deliberately not included. */
+  #ladder, #partners { position: relative; isolation: isolate; overflow: hidden; }
+  /* Partners: an isometric plane of cells (a port of the background-boxes component). The canvas and
+     the edge fade both sit behind all content (negative z-index inside the section's own stacking
+     context). The fade is the component's vignette - a fill in the page's own black, masked so it is
+     clear in the middle and solid at the edges - so it dissolves the plane into the page. */
+  .partners-boxes { position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: -2; }
+  .partners-boxes-fade { position: absolute; inset: 0; z-index: -1; pointer-events: none; background: var(--bg);
+    -webkit-mask-image: radial-gradient(transparent, #fff); mask-image: radial-gradient(transparent, #fff); }
+  .gridbg { position: absolute; inset: 0; z-index: -1; pointer-events: none; }
+  .gb-base, .gb-hot { position: absolute; inset: 0; overflow: hidden; }
+  .gb-base { opacity: 0.05; }
+  .gb-hot { opacity: 0.4;
+    -webkit-mask-image: radial-gradient(300px circle at var(--mx, -999px) var(--my, -999px), #000, transparent);
+            mask-image: radial-gradient(300px circle at var(--mx, -999px) var(--my, -999px), #000, transparent); }
+  /* One tile is 40px, so sliding the layer exactly 40px is invisible: a seamless loop. It moves by
+     transform (compositor-only), from a layer that starts 40px off-screen so no edge is ever exposed. */
+  .gb-lines { position: absolute; top: -40px; left: -40px; right: 0; bottom: 0; will-change: transform;
+    background-image: linear-gradient(to right, var(--muted) 1px, transparent 1px), linear-gradient(to bottom, var(--muted) 1px, transparent 1px);
+    background-size: 40px 40px; animation: gbDrift 1.3333s linear infinite; }   /* 40px per 1.33s = the component's 0.5px/frame */
+  @keyframes gbDrift { from { transform: translate(0, 0); } to { transform: translate(40px, 40px); } }
+  .partners { margin-top: clamp(40px, 6vw, 72px); display: grid; grid-template-columns: repeat(4, 1fr); border-top: 1px solid var(--line); border-left: 1px solid var(--line); background: var(--bg); }
+  .partner { display: flex; align-items: center; justify-content: center; min-height: 150px; padding: 32px; border-right: 1px solid var(--line); border-bottom: 1px solid var(--line); transition: background-color .3s var(--ease); }
+  .partner:hover { background: var(--bg-2); }
+  .partner img { max-height: 58px; width: auto; filter: grayscale(1) brightness(1.6); opacity: .6; transition: filter .35s var(--ease), opacity .35s var(--ease); }
+  .partner:hover img, .partner:focus-visible img { filter: none; opacity: 1; }
+  .partner-cta { grid-column: span 2; flex-direction: column; align-items: flex-start; justify-content: center; gap: 8px; background: var(--bg-2); }
+  .partner-cta b { font-family: var(--head); font-weight: 600; font-size: 18px; letter-spacing: 0.06em; text-transform: uppercase; }
+  .partner-cta span { font-size: 15px; color: var(--accent); overflow-wrap: anywhere; }
+  .partner-cta:hover { background: var(--bg-3); }
+
+  /* closing */
+  /* isolation + z-index:-1 on the canvas puts the mesh above the section's own
+     black but behind every piece of content, with no z-index on the content. */
+  .closing { position: relative; isolation: isolate; padding: clamp(110px, 15vw, 200px) 0 clamp(80px, 10vw, 130px); text-align: center; overflow: hidden; border-top: 1px solid var(--line); }
+  /* The wave is transparent dots on the page's own black, but the sheet is cut off at the section's top
+     and bottom edges, so those are masked to nothing: without that there is a hard line of dots against
+     the section above and the footer below. */
+  .closing-wave {
+    position: absolute; inset: 0; width: 100%; height: 100%; display: block; pointer-events: none; z-index: -1;
+    -webkit-mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 78%, transparent 100%);
+            mask-image: linear-gradient(to bottom, transparent 0%, #000 22%, #000 78%, transparent 100%);
   }
-  .partners-backdrop.open { opacity: 1; }
-  .partners-backdrop[hidden] { display: none; }
+  .closing::before { content: ""; position: absolute; left: 50%; top: 0; width: 1px; height: 80px; background: linear-gradient(var(--accent), transparent); }
+  .closing h2 { font-size: clamp(56px, 11vw, 168px); line-height: 0.88; }
+  .closing .sub { margin-top: 22px; font-family: var(--label); font-weight: 500; font-size: clamp(15px, 1.6vw, 19px); letter-spacing: 0.34em; text-indent: 0.34em; text-transform: uppercase; color: var(--text-2); }
+  .closing .btn { margin-top: 40px; }
+  .closing .mail { margin-top: 26px; color: var(--muted); font-size: 15px; }
+  .closing .mail a { color: var(--text); border-bottom: 1px solid var(--line-2); padding-bottom: 2px; transition: border-color .2s; }
+  .closing .mail a:hover { border-color: var(--accent); }
+  /* "Now hiring in <state>" typewriter line under the closing email */
+  .hiring-line { margin-top: 22px; display: flex; flex-wrap: wrap; align-items: center; justify-content: center; gap: 6px 10px; font-family: var(--label); font-size: clamp(12px, 1.2vw, 14px); font-weight: 600; letter-spacing: 0.18em; text-transform: uppercase; color: var(--text-2); }
+  .hiring-line .dot { margin-right: 2px; }
+  /* no fixed slot: the whole line stays centred, so it re-centres as each word grows and shrinks */
+  .hh-state { display: inline-flex; align-items: center; color: var(--text); text-align: left; }
+  .hh-text { white-space: pre; }
+  .hh-caret { display: inline-block; width: 2px; height: 1.15em; margin-left: 3px; background: var(--accent); animation: hhBlink 1s steps(1, end) infinite; }
+  @keyframes hhBlink { 50% { opacity: 0; } }
 
-  .partners-panel {
-    position: fixed; top: 0; right: 0; z-index: 71;
-    width: min(460px, 100vw);
-    height: 100%;
-    display: flex; flex-direction: column;
-    background: var(--bg-2);
-    border-left: 1px solid var(--line);
-    overflow-y: auto;
-    overscroll-behavior: contain;
-    padding: 30px var(--pad) 40px;
-    transform: translateX(100%);
-    transition: transform .42s cubic-bezier(.16,1,.3,1);
+  /* footer: centred stack (logo, links, hatched divider, copyright) */
+  footer { border-top: 1px solid var(--line); padding: 56px 0 48px; overflow: hidden; }
+  .footer-top { display: flex; flex-direction: column; align-items: center; gap: 36px; margin-bottom: 48px; }
+  .footer-logo img { height: 40px; width: auto; }
+  .footer-nav { display: flex; flex-wrap: wrap; justify-content: center; gap: 12px 24px; }
+  .footer-nav a {
+    position: relative; isolation: isolate; padding: 8px 14px;
+    font-family: var(--label); font-size: 13px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase;
+    color: var(--text-2); transition: color .3s var(--ease), transform .3s var(--ease);
   }
-  .partners-panel.open { transform: translateX(0); }
-  .partners-panel[hidden] { display: none; }
-
-  .partners-panel-head {
-    display: flex; align-items: flex-start; justify-content: space-between;
-    gap: 20px;
-    padding-bottom: 26px;
-    border-bottom: 1px solid var(--line-soft);
+  /* the hover "pill": a fill that scales up from the centre, behind the label */
+  .footer-nav a::before {
+    content: ""; position: absolute; inset: 0; z-index: -1; background: var(--bg-3);
+    transform: scale(0); opacity: 0; transform-origin: center;
+    transition: transform .35s var(--ease), opacity .25s var(--ease);
   }
-  .partners-panel-title { margin-top: 14px; font-size: clamp(30px, 7vw, 40px); }
-
-  /* Static X, built from the same two-bar vocabulary as .menu-toggle so
-     the close affordance reads as part of the same system. */
-  .partners-close {
-    position: relative;
-    flex: 0 0 auto;
-    width: 44px; height: 44px;
-    padding: 0; border: none; background: transparent; cursor: pointer;
+  .footer-nav a:hover, .footer-nav a:focus-visible { color: var(--text); transform: scale(1.05); }
+  .footer-nav a:hover::before, .footer-nav a:focus-visible::before { transform: scale(1); opacity: 1; }
+  .footer-nav a:active { transform: scale(0.95); }
+  /* The strip carries its own 10% opacity, so the fade-in lives on the wrapper: a
+     .reveal on the strip itself would set its opacity to 1 and blow the hatching up. */
+  .footer-hatch {
+    width: 100%; height: 48px; color: var(--text); opacity: 0.1;
+    border-top: 1px solid var(--text); border-bottom: 1px solid var(--text);
+    background-image: repeating-linear-gradient(315deg, currentColor 0, currentColor 1px, transparent 0, transparent 50%);
+    background-size: 10px 10px; background-position-x: 0%;
   }
-  .partners-close span {
-    position: absolute; top: 50%; left: 50%;
-    display: block; width: 20px; height: 2px; margin: -1px 0 0 -10px;
-    background: var(--text-2);
-    transition: background-color .2s;
-  }
-  .partners-close span:nth-child(1) { transform: rotate(45deg); }
-  .partners-close span:nth-child(2) { transform: rotate(-45deg); }
-  .partners-close:hover span { background: var(--white); }
+  .footer-hatch-wrap.in .footer-hatch { animation: hatchSlide 20s linear forwards; }
+  @keyframes hatchSlide { to { background-position-x: 100%; } }
+  .footer-copy { margin-top: 32px; text-align: center; font-family: var(--label); font-size: 13px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
+  /* staggered entrance, in the component's order: logo, links, divider, copyright */
+  .footer-logo.reveal { transition-delay: .1s; }
+  .footer-nav.reveal { transition-delay: .2s; }
+  .footer-hatch-wrap.reveal { transition-delay: .5s; }
+  .footer-copy.reveal { transition-delay: .6s; }
 
-  /* One column: the panel is far too narrow for the page grid's four,
-     and the cells are shorter here than on the old full-width wall. */
-  .partners-panel-list { margin-top: 26px; display: grid; grid-template-columns: 1fr; gap: 14px; }
-  .partners-panel-list .partner-cell { min-height: 128px; padding: 30px 26px; }
-  .partners-panel-list .partner-cta { padding: 28px 26px; }
-
-  body.panel-open { overflow: hidden; }
-
-  /* ---------------- footer ---------------- */
-  footer { border-top: 1px solid var(--line-soft); padding: 56px 0 44px; }
-  .foot { display: flex; justify-content: space-between; align-items: center; gap: 32px; flex-wrap: wrap; }
-  .foot-links { display: flex; gap: 28px; flex-wrap: wrap; }
-  .foot-links > *, .foot-copy {
-    font-family: var(--mono);
-    font-size: 11px;
-    letter-spacing: 0.14em;
-    text-transform: uppercase;
-    color: var(--muted);
-  }
-  .foot-links > * { transition: color .2s; }
-  .foot-links > *:hover { color: var(--text); }
-
-  /* ---------------- design-import additions ---------------- */
-  .lede-motto { font-style: italic; color: var(--text-2); }
-  .lede-tagline { font-family: Georgia, "Times New Roman", serif; font-style: italic; letter-spacing: 0.01em; }
-  .rung-col { max-width: 56ch; }
-  .rung-detail {
-    margin-top: 12px;
-    font-family: var(--mono);
-    font-size: 12px;
-    letter-spacing: 0.12em;
-    text-transform: uppercase;
-    color: var(--muted);
-    line-height: 1.7;
-  }
-  /* The monogram is now a transparent mark rather than a photographed
-     plate, so the panel supplies the dark ground the old image had baked
-     in, and the artwork is contained inside it. Cover would crop the
-     letterform, which is the whole subject here. */
-  .portal-media-logo {
-    height: clamp(360px, 44vh, 520px);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    background: var(--bg);
-    padding: clamp(28px, 5%, 56px);
-  }
-  .portal-media-logo img {
-    width: 100%; height: 100%;
-    object-fit: contain;
-    filter: none;
-  }
-
-  /* ---------------- motion ---------------- */
-  /* Every reveal on this page is driven by GSAP from motion.js. Nothing
-     here sets a resting `opacity: 0`, deliberately: the start states are
-     applied from JS only once GSAP is confirmed present, so if the CDN is
-     blocked the markup below is already in its final, readable state.
-
-     The only thing CSS contributes is this short blindfold, scoped to the
-     `motion-pending` class the inline <head> script adds and both motion.js
-     and a 1.5s timeout remove. visibility (not display) so layout - and
-     therefore every ScrollTrigger measurement - is already correct. */
-  .motion-pending [data-reveal],
-  .motion-pending [data-split],
-  .motion-pending .hero-art,
-  .motion-pending .hero-tagline,
-  .motion-pending .hero-cta-wrap,
-  .motion-pending .rung { visibility: hidden; }
-
-  /* SplitText wraps each line in an overflow:hidden mask so lines rise out
-     of nothing. Descenders in the display face get clipped at exactly the
-     line box, so the mask is given a little vertical room to breathe. */
-  .split-line { padding-bottom: 0.08em; }
-
+  /* reveal */
+  .js .reveal { opacity: 0; transform: translateY(22px); transition: opacity .9s var(--ease), transform .9s var(--ease); }
+  .js .reveal.in { opacity: 1; transform: none; }
+  .js .ladder .rung.reveal:nth-child(2) { transition-delay: .08s; }
+  .js .ladder .rung.reveal:nth-child(3) { transition-delay: .16s; }
+  .js .ladder .rung.reveal:nth-child(4) { transition-delay: .24s; }
   @media (prefers-reduced-motion: reduce) {
-    /* motion.js bails out entirely under this query - it never builds a
-       timeline - so all that is left to do here is make sure the blindfold
-       can never apply and that the CSS-level transitions are quiet. */
-    .motion-pending [data-reveal],
-    .motion-pending [data-split],
-    .motion-pending .hero-art,
-    .motion-pending .hero-tagline,
-    .motion-pending .hero-cta-wrap,
-    .motion-pending .rung { visibility: visible; }
-    .partner-visit { opacity: 1; transform: none; }
-    .btn { transition: none; }
-    header { transition: none; }
-    .partner-cell img { transition: none; }
-    .partners-panel, .partners-backdrop { transition: none; }
-    * { scroll-behavior: auto !important; }
+    html { scroll-behavior: auto; }
+    .js .reveal { opacity: 1; transform: none; transition: none; }
+    .gb-lines { animation: none; }
+    .hh-caret { animation: none; }
+    * { transition-duration: 0s !important; }
+    .footer-hatch-wrap.in .footer-hatch { animation: none; }
   }
 
-  /* ---------------- responsive ---------------- */
+  /* responsive */
   @media (max-width: 1024px) {
-    .divs { grid-template-columns: 1fr 1fr; }
-    .portal-grid { grid-template-columns: 1fr; gap: 48px; }
+    .ladder { grid-template-columns: 1fr 1fr; }
+    .rung:nth-child(n) { min-height: 340px; }
+    .div-row { grid-template-columns: 60px 1fr auto; }
+    .div-row p { grid-column: 2 / 4; grid-row: 2; }
+    .partners { grid-template-columns: repeat(2, 1fr); }
   }
-
   @media (max-width: 860px) {
     .nav-links { display: none; }
-    .menu-toggle { display: flex; }
-    /* Two columns, because the centre one is gone. Leaving three here
-       would drop the toggle + CTA into the auto middle column and strand
-       it mid-bar - display:none removes the links as a grid item, it does
-       not hold their column open. */
-    .nav { gap: 14px; grid-template-columns: 1fr auto; }
-    .nav-right { gap: 10px; }
+    .menu-btn { display: flex; }
+    .move-grid { grid-template-columns: 1fr; }
+    .move-mark { aspect-ratio: auto; }
+    .move-art { height: 300px; padding: 32px; }
+    .sec-head { grid-template-columns: 1fr; }
   }
-
-  @media (max-width: 767px) {
-    .hero-cta-wrap { padding-bottom: 48px; }
-    .hero-cta-wrap .btn, .closing-cta .btn, .rep-access-btn { width: calc(100% - 36px); max-width: 340px; }
-    .closing-cta { flex-direction: column; }
-    .rep-access-inner { flex-direction: column; align-items: flex-start; }
-    .traits { grid-template-columns: 1fr; gap: 44px; }
-    .divs { grid-template-columns: 1fr; }
-    .div-card { min-height: 0; }
-    .rung { grid-template-columns: 1fr; gap: 18px; padding: 30px 0; }
-    .rung-1, .rung-2, .rung-3, .rung-4 { margin-left: 0; }
-    .foot { flex-direction: column; align-items: flex-start; gap: 22px; }
+  @media (max-width: 640px) {
+    body { font-size: 16px; }
+    .nav-right .btn { display: none; }
+    .hero-cta .btn { width: 100%; }
+    .hero-cta { width: 100%; max-width: 360px; }
+    .hero-foot { grid-template-columns: 1fr; }
+    .hero-foot div { border-left: 0; border-top: 1px solid var(--line); justify-content: flex-start; padding: 14px var(--pad); }
+    .hero-foot div:first-child { border-top: 0; }
+    .ladder { grid-template-columns: 1fr; }
+    .rung:nth-child(n) { min-height: 0; }
+    .rung-code { margin-top: 36px; }
+    .div-row { grid-template-columns: 1fr; gap: 14px; padding: 32px 0; }
+    .div-row p { grid-column: auto; grid-row: auto; }
+    .div-num { font-size: 16px; }
+    .div-row .btn { justify-self: start; }
+    .move-art { height: 240px; }
+    .partners { grid-template-columns: 1fr 1fr; }
+    .partner { min-height: 110px; padding: 22px; }
+    .partner img { max-height: 42px; }
+    .partner-cta { grid-column: 1 / -1; }
+    .closing .btn { width: 100%; max-width: 360px; }
+    .footer-nav { gap: 6px 12px; }
+    .footer-nav a { padding: 8px 10px; }
   }
-
-  /* Short viewports: landscape phones and small desktop windows.
-     aspect-ratio derives the hero's height purely from its width, so
-     on a wide-but-short viewport it doesn't know the height is tight.
-     max-height forces it to shrink here, at the cost of object-fit
-     cropping the sides slightly - the one case where this hero still
-     needs a height override. */
-  @media (max-height: 520px) and (orientation: landscape) {
-    .hero-art { max-height: 42dvh; }
-    /* .hero-wordmark DOES need an override here, now that its offset
-       carries a flat +68px of nav clearance. That term does not shrink
-       with the plate, so on a ~200px plate it eats a third of the box
-       and pushes the mark down into the bottom fade. Trading a little
-       mark height for the clearance keeps it off both the nav and the
-       gradient; every taller viewport is unaffected. */
-    .hero-wordmark { top: calc(2% + 68px); height: 22%; }
-    .hero-cta-wrap { padding-bottom: 32px; }
-    .sec { padding: 56px 0; }
-  }
-
-  /* Touch input, regardless of screen size. Width cannot tell you
-     whether someone is using a finger or a mouse: a 1024px tablet
-     and a 1024px laptop window are identical to a width query. This
-     enlarges tap targets to the ~44px minimum and drops hover-only
-     affordances that a finger can never trigger. */
   @media (pointer: coarse) {
-    .btn { padding: 17px 30px; }
-    .btn-sm { padding: 14px 20px; }
-    .nav-links > *, .foot-links > * { padding: 12px 0; }
-    .mobile-menu > * { padding: 18px 0; }
-    .menu-toggle { width: 44px; height: 44px; }
-    .btn-primary:hover { background: var(--white); color: #0A0B0D; }
-    .btn-ghost:hover { border-color: rgba(255,255,255,0.42); background: rgba(10,11,13,0.35); }
-    .btn-primary:active { background: var(--steel); }
-    .btn-ghost:active { border-color: var(--white); background: rgba(255,255,255,0.09); }
-    /* A finger cannot hover, so anything gated behind :hover has to be the
-       resting state here instead - otherwise touch users would only ever
-       see grey logos and never the "Visit" affordance. */
-    .partner-cell img { filter: grayscale(0); opacity: 1; }
-    .partner-visit { opacity: 1; transform: none; }
-  }
-
-  /* Narrow phones: the logo, the toggle, and a full-length CTA label
-     together exceed the content box once tap targets are at touch
-     size, pushing the button past the page padding. Shrink the mark
-     and tighten the CTA's tracking rather than truncating the label,
-     so the CTA keeps the same wording it has everywhere else. */
-  @media (max-width: 430px) {
-    .wordmark img { height: 32px; }
-    .nav-right .btn-sm { padding-left: 15px; padding-right: 15px; letter-spacing: 0.11em; }
+    .partner img { filter: none; opacity: 1; }
   }
 </style>
+<script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
 
-<div id="topSentinel" style="height:1px" aria-hidden="true"></div>
-<header>
+<header id="top-bar">
   <nav class="nav wrap" aria-label="Main">
-    <a href="#top" class="wordmark">
-      <img src="elevated-logo.webp" alt="Elevated" width="549" height="715" decoding="async">
-    </a>
+    <a href="#top" class="nav-logo" aria-label="Elevated home"><img src="elevated-logo.webp" alt="Elevated" width="549" height="715"></a>
     <div class="nav-links">
       <a href="#ladder">The Ladder</a>
       <a href="#divisions">Divisions</a>
-      <button type="button" class="link-btn" data-partners-trigger
-              aria-expanded="false" aria-controls="partnersPanel">Partners</button>
+      <a href="#partners">Partners</a>
     </div>
     <div class="nav-right">
-      <button class="menu-toggle" id="menuToggle" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu">
-        <span></span><span></span><span></span>
-      </button>
-      <a href="#join" class="btn btn-primary btn-sm">Join the Team</a>
+      <a href="apply.html" class="btn btn-primary btn-sm">Join the Team</a>
+      <button class="menu-btn" id="menuBtn" type="button" aria-expanded="false" aria-controls="mobileMenu" aria-label="Open menu"><span></span><span></span><span></span></button>
     </div>
   </nav>
   <div class="mobile-menu" id="mobileMenu">
     <a href="#ladder">The Ladder</a>
     <a href="#divisions">Divisions</a>
-    <button type="button" class="link-btn" data-partners-trigger
-            aria-expanded="false" aria-controls="partnersPanel">Partners</button>
+    <a href="#partners">Partners</a>
+    <a href="apply.html">Join the Team</a>
+    <a href="prototypes/portal/login.html">Rep Portal</a>
   </div>
 </header>
 
 <main id="top">
 
-  <!-- HERO: two independent layers, not one flattened photo. The
-       background plate is text-free, free to be cropped however cover
-       wants; the wordmark is a real, separate element inside it, sized
-       as a percentage of hero-art's own height so it always lands in
-       the plate's clear-sky band regardless of which height clamp is
-       active, and is structurally never cropped by object-fit math. -->
-  <section class="hero">
-    <h1 class="sr-only">Elevated Field Sales</h1>
-    <div class="hero-art">
-      <img class="hero-bg-img" src="hero-bg.jpg" alt="" width="2400" height="1055" fetchpriority="high" decoding="async">
-      <img class="hero-wordmark" src="wordmark-elevated.webp" alt="Elevated"
-           width="2000" height="476" decoding="async">
-    </div>
-    <p class="hero-tagline">Above all else</p>
-    <div class="hero-cta-wrap">
-      <a href="#join" class="btn btn-primary">Join the Team</a>
-    </div>
-  </section>
-
-  <!-- REP ACCESS: sign-in link for reps already on the team, not a
-       recruiting CTA - see .rep-access above for why it's styled small. -->
-  <section class="sec rep-access" id="rep-portal">
-    <div class="wrap rep-access-inner">
-      <div class="rep-access-copy">
-        <p class="eyebrow" data-reveal>Already with us</p>
-        <h3 data-split>Rep Portal</h3>
-        <p class="lede" data-split>Sign in to see your orders, pulled live from the weekly sales tracker.</p>
+  <!-- HERO -->
+  <section class="hero" aria-labelledby="heroTitle">
+    <canvas class="hero-stars" id="heroStars" aria-hidden="true"></canvas>
+    <div class="hero-inner wrap">
+      <h1 id="heroTitle" class="sr-only">Elevated — field sales</h1>
+      <img class="hero-mark" src="wordmark-elevated.webp" alt="Elevated" width="2000" height="476">
+      <p class="hero-tag">Above all else</p>
+      <p class="hero-lede">A field sales organization for people who want more. Learn the work, build a team, run a division of your own.</p>
+      <div class="hero-cta">
+        <a href="apply.html" class="btn btn-primary">Book Interview
+          <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+        <a href="prototypes/portal/login.html" class="btn btn-ghost">Rep Portal</a>
       </div>
-      <a href="prototypes/portal/login.html" class="btn btn-ghost rep-access-btn" data-reveal>Sign In</a>
+    </div>
+    <div class="hero-foot">
+      <div><span class="dot" aria-hidden="true"></span>Three divisions hiring</div>
+      <div>Four ranks to partner</div>
+      <div>Based in Tampa, Florida</div>
     </div>
   </section>
 
-  <!-- LADDER: ascending stepped rows -->
-  <section class="sec" id="ladder">
+  <!-- LADDER -->
+  <section class="sec" id="ladder" aria-labelledby="ladderTitle">
+    <div class="gridbg" aria-hidden="true">
+      <div class="gb-base"><div class="gb-lines"></div></div>
+      <div class="gb-hot"><div class="gb-lines"></div></div>
+    </div>
     <div class="wrap">
-      <div class="sec-head" id="growthHead">
-        <p class="eyebrow" data-reveal>The Ladder</p>
-        <h2 style="margin-top:20px" data-split>Your Growth</h2>
+      <div class="sec-head reveal">
+        <div>
+          <p class="kicker">The Ladder</p>
+          <h2 id="ladderTitle">Your growth</h2>
+        </div>
+        <p class="aside">Four ranks. Every step is earned through your own production and the team you build.</p>
       </div>
 
       <div class="ladder">
-        <span class="ladder-line" aria-hidden="true"></span>
-        <div class="rung rung-1">
-          <div>
-            <div class="rung-code">EL</div>
-            <div class="rung-name">Entry Level</div>
-          </div>
-          <div class="rung-col"><p class="rung-body">Learn, sell, grow.</p><p class="rung-detail">1-on-1 coaching &middot; Warm leads &middot; Production bonuses</p></div>
-        </div>
-        <div class="rung rung-2">
-          <div>
-            <div class="rung-code">STL</div>
-            <div class="rung-name">Sales Team Leader</div>
-          </div>
-          <div class="rung-col"><p class="rung-body">Build teams, duplicate systems, and scale.</p><p class="rung-detail">Create your own culture &middot; Scale opportunity &middot; Grow your business</p></div>
-        </div>
-        <div class="rung rung-3">
-          <div>
-            <div class="rung-code">STC</div>
-            <div class="rung-name">Sales Team Captain</div>
-          </div>
-          <div class="rung-col"><p class="rung-body">Overrides, commission bonuses, and exclusive travel events.</p></div>
-        </div>
-        <div class="rung rung-4">
-          <div>
-            <div class="rung-code">JP</div>
-            <div class="rung-name">Junior Partner</div>
-          </div>
-          <div class="rung-col"><p class="rung-body">Run multiple divisions of your own.</p><p class="rung-detail">Teams across multiple campaigns &middot; Access to the private network &middot; Build your own social brand</p></div>
-        </div>
+        <article class="rung reveal">
+          <p class="rung-step">Step 01</p>
+          <h3 class="rung-code">EL</h3>
+          <p class="rung-name">Entry Level</p>
+          <p class="rung-line">Learn, sell, grow.</p>
+          <ul><li>1-on-1 coaching</li><li>Warm leads</li><li>Production bonuses</li></ul>
+        </article>
+        <article class="rung reveal">
+          <p class="rung-step">Step 02</p>
+          <h3 class="rung-code">STL</h3>
+          <p class="rung-name">Sales Team Leader</p>
+          <p class="rung-line">Build teams, duplicate systems, and scale.</p>
+          <ul><li>Create your own culture</li><li>Scale opportunity</li><li>Grow your business</li></ul>
+        </article>
+        <article class="rung reveal">
+          <p class="rung-step">Step 03</p>
+          <h3 class="rung-code">STC</h3>
+          <p class="rung-name">Sales Team Captain</p>
+          <p class="rung-line">Overrides, commission bonuses, and exclusive travel events.</p>
+        </article>
+        <article class="rung reveal">
+          <p class="rung-step">Step 04</p>
+          <h3 class="rung-code">JP</h3>
+          <p class="rung-name">Junior Partner</p>
+          <p class="rung-line">Run multiple divisions of your own.</p>
+          <ul><li>Teams across multiple campaigns</li><li>Access to the private network</li><li>Build your own social brand</li></ul>
+        </article>
       </div>
-
-      <p class="ladder-note lede-motto" data-reveal>Not just a team. A lifestyle.</p>
+      <div class="ladder-axis reveal" aria-hidden="true"><span>Entry</span><span class="bar"></span><span>Partner</span></div>
     </div>
   </section>
 
-  <!-- DIVISIONS: honest status, asymmetric 3-cell grid -->
-  <section class="sec" id="divisions">
+  <!-- DIVISIONS -->
+  <section class="sec" id="divisions" aria-labelledby="divTitle">
+    <canvas class="divisions-mesh" id="divisionsMesh" aria-hidden="true"></canvas>
     <div class="wrap">
-      <div class="sec-head">
-        <p class="eyebrow" data-reveal>Divisions</p>
-        <h2 style="margin-top:20px" data-split>Campaigns</h2>
-        <p class="lede" data-split>Three campaigns, multiple routes to success.</p>
-      </div>
-      <div class="divs">
-        <div class="div-card div-live" data-reveal>
-          <div>
-            <p class="div-status">Live and hiring</p>
-            <h3>Fiber</h3>
-            <p>Fiber, solar, alarms, pest, autoglass &mdash; anything at the door.</p>
-          </div>
-          <a href="#join" class="btn btn-ghost btn-sm" style="align-self:flex-start; margin-top:28px">Join the Team</a>
-        </div>
-        <div class="div-card div-live" data-reveal>
-          <div>
-            <p class="div-status">Live and hiring</p>
-            <h3>Virtual High Ticket</h3>
-            <p>Closing high-ticket peptide packages, fully remote with residual income. B2C and B2B.</p>
-          </div>
-          <a href="#join" class="btn btn-ghost btn-sm" style="align-self:flex-start; margin-top:28px">Join the Team</a>
-        </div>
-        <div class="div-card div-live" data-reveal>
-          <div>
-            <p class="div-status">Live and hiring</p>
-            <h3>Life Insurance</h3>
-            <p>Remote sales for licensed producers. Active territories, taking reps now.</p>
-          </div>
-          <a href="#join" class="btn btn-ghost btn-sm" style="align-self:flex-start; margin-top:28px">Join the Team</a>
-        </div>
-      </div>
-    </div>
-  </section>
-
-  <!-- PORTAL: split media and text -->
-  <section class="sec">
-    <div class="wrap">
-      <div class="portal-grid">
-        <div class="portal-media portal-media-logo" data-reveal>
-          <img src="elevated-logo.webp" alt="The Elevated blackletter monogram"
-               width="549" height="715" loading="lazy" decoding="async">
-        </div>
+      <div class="sec-head reveal">
         <div>
-          <div class="sec-head">
-            <h2 data-split>Our movement</h2>
-            <p class="lede" data-split>Elevated Management runs on 5 core values. Not just a team, a family of growth in all aspects.</p>
-          </div>
-          <div class="portal-list">
-            <div class="portal-item" data-reveal>
-              <span class="portal-num">1</span>
-              <h3>Build faith</h3>
-            </div>
-            <div class="portal-item" data-reveal>
-              <span class="portal-num">2</span>
-              <h3>Get in the best physical shape</h3>
-            </div>
-            <div class="portal-item" data-reveal>
-              <span class="portal-num">3</span>
-              <h3>Make life-changing money</h3>
-            </div>
-            <div class="portal-item" data-reveal>
-              <span class="portal-num">4</span>
-              <h3>Impact the most people</h3>
-            </div>
-            <div class="portal-item" data-reveal>
-              <span class="portal-num">5</span>
-              <h3>Create opportunity</h3>
-            </div>
-          </div>
+          <p class="kicker">Divisions</p>
+          <h2 id="divTitle">Three ways in</h2>
         </div>
+        <p class="aside">Three live campaigns, each with its own route to the top. Pick the one that fits how you sell.</p>
+      </div>
+
+      <div class="divs">
+        <article class="div-row reveal">
+          <span class="div-num">01</span>
+          <div>
+            <h3>Fiber</h3>
+            <p class="div-status"><span class="dot" aria-hidden="true"></span>Live and hiring</p>
+          </div>
+          <p>Fiber, solar, alarms, pest, autoglass — anything at the door.</p>
+          <a href="apply.html" class="btn">Join the Team <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+        </article>
+        <article class="div-row reveal">
+          <span class="div-num">02</span>
+          <div>
+            <h3>Virtual High Ticket</h3>
+            <p class="div-status"><span class="dot" aria-hidden="true"></span>Live and hiring</p>
+          </div>
+          <p>Closing high-ticket peptide packages, fully remote with residual income. B2C and B2B.</p>
+          <a href="apply.html" class="btn">Join the Team <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+        </article>
+        <article class="div-row reveal">
+          <span class="div-num">03</span>
+          <div>
+            <h3>Life Insurance</h3>
+            <p class="div-status"><span class="dot" aria-hidden="true"></span>Live and hiring</p>
+          </div>
+          <p>Remote sales for licensed producers. Active territories, taking reps now.</p>
+          <a href="apply.html" class="btn">Join the Team <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- MOVEMENT -->
+  <section class="sec" id="movement" aria-labelledby="moveTitle">
+    <div class="wrap move-grid">
+      <div class="move-mark reveal">
+        <div class="move-art" id="movementGlobe"><img src="elevated-logo.webp" alt="The Elevated monogram" width="549" height="715" loading="lazy"><canvas class="move-globe" aria-hidden="true"></canvas></div>
+        <p class="move-quote"><span class="dot" aria-hidden="true"></span>Not just a team. A lifestyle.</p>
+      </div>
+      <div class="reveal">
+        <p class="kicker">Our Movement</p>
+        <h2 id="moveTitle" style="font-size: clamp(44px, 6vw, 80px); margin-top: 18px;">Five core values</h2>
+        <p class="move-lede">Elevated runs on five values. We hold each other to them on the job and off it.</p>
+        <ol class="values">
+          <li>Build faith</li>
+          <li>Get in the best physical shape</li>
+          <li>Make life-changing money</li>
+          <li>Impact the most people</li>
+          <li>Create opportunity</li>
+        </ol>
+      </div>
+    </div>
+  </section>
+
+  <!-- REP PORTAL -->
+  <section class="portal" aria-label="Rep portal">
+    <div class="wrap portal-inner">
+      <div class="portal-copy">
+        <strong>Rep Portal</strong>
+        <span>Already on the team? Sign in to see your orders from the weekly sales tracker.</span>
+      </div>
+      <a href="prototypes/portal/login.html" class="btn btn-ghost btn-sm">Sign In</a>
+    </div>
+  </section>
+
+  <!-- PARTNERS -->
+  <section class="sec" id="partners" aria-labelledby="partnersTitle">
+    <canvas class="partners-boxes" id="partnersBoxes" aria-hidden="true"></canvas>
+    <div class="partners-boxes-fade" aria-hidden="true"></div>
+    <div class="wrap">
+      <div class="sec-head reveal">
+        <div>
+          <p class="kicker">Partners</p>
+          <h2 id="partnersTitle">Who we work with</h2>
+        </div>
+        <p class="aside">The companies behind our campaigns.</p>
+      </div>
+      <div class="partners reveal">
+        <a class="partner" href="https://www.t-mobile.com/" target="_blank" rel="noopener"><img src="partner-tmobile.png" alt="T-Mobile" loading="lazy"></a>
+        <a class="partner" href="https://telehealth.micom.ai/" target="_blank" rel="noopener"><img src="partner-achilles.png" alt="Achilles Peptides" loading="lazy"></a>
+        <a class="partner" href="https://equityinsurancepartners.com/" target="_blank" rel="noopener"><img src="partner-equity-insurance.png" alt="Equity Insurance Partners" loading="lazy"></a>
+        <a class="partner" href="https://www.motorsportautoglass.com/" target="_blank" rel="noopener"><img src="partner-motorsport-autoglass.png" alt="Motorsport Autoglass" loading="lazy"></a>
+        <a class="partner" href="https://citrusglencapital.com/" target="_blank" rel="noopener"><img src="partner-citrus-glen.png" alt="Citrus Glen Capital" loading="lazy"></a>
+        <a class="partner" href="https://fatrat.ai/" target="_blank" rel="noopener"><img src="partner-fatrat.png" alt="FatRat" loading="lazy"></a>
+        <a class="partner partner-cta" href="mailto:partners@joinelevated.net">
+          <b>Working with us?</b>
+          <span>partners@joinelevated.net</span>
+        </a>
       </div>
     </div>
   </section>
 
   <!-- CLOSING -->
-  <section class="closing" id="join">
+  <section class="closing" id="join" aria-labelledby="joinTitle">
+    <canvas class="closing-wave" id="closingWave" aria-hidden="true"></canvas>
     <div class="wrap">
-      <h2 data-split>Become Elevated</h2>
-      <p class="lede lede-tagline" data-split>Join the movement.</p>
-      <div class="closing-cta" data-reveal>
-        <a href="apply.html" class="btn btn-primary">Book Interview</a>
-      </div>
-      <p class="closing-mail" data-reveal>Contact us at <a href="mailto:partners@joinelevated.net">partners@joinelevated.net</a>.</p>
+      <h2 id="joinTitle" class="reveal">Become<br>Elevated</h2>
+      <p class="sub reveal">Join the movement</p>
+      <a href="apply.html" class="btn btn-primary reveal">Book Interview <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
+      <p class="mail reveal">Questions? <a href="mailto:partners@joinelevated.net">partners@joinelevated.net</a></p>
+      <p class="hiring-line reveal">
+        <span class="sr-only">Now hiring in Florida, Arizona, South Carolina and Georgia, and more states.</span>
+        <span class="dot" aria-hidden="true"></span>
+        <span class="hh-lead" aria-hidden="true">Now hiring in</span>
+        <span class="hh-state" aria-hidden="true"><span class="hh-text">Florida, Arizona, South Carolina &amp; Georgia</span><i class="hh-caret"></i></span>
+      </p>
     </div>
   </section>
 </main>
 
 <footer>
-  <div class="foot wrap">
-    <div class="foot-links">
+  <div class="wrap footer-top">
+    <a href="#top" class="footer-logo reveal" aria-label="Elevated, back to top">
+      <img src="elevated-logo.webp" alt="" width="549" height="715" loading="lazy">
+    </a>
+    <nav class="footer-nav reveal" aria-label="Footer">
       <a href="#ladder">The Ladder</a>
       <a href="#divisions">Divisions</a>
-      <button type="button" class="link-btn" data-partners-trigger
-              aria-expanded="false" aria-controls="partnersPanel">Partners</button>
-      <a href="#join">Join the Team</a>
+      <a href="#partners">Partners</a>
+      <a href="apply.html">Join the Team</a>
       <a href="prototypes/portal/login.html">Rep Portal</a>
-    </div>
-    <p class="foot-copy">Elevated Management Group</p>
+    </nav>
   </div>
+
+  <div class="footer-hatch-wrap reveal" aria-hidden="true"><div class="footer-hatch"></div></div>
+
+  <p class="footer-copy reveal">&copy; <span id="yr">2026</span> Elevated Management Group</p>
 </footer>
 
-<!-- PARTNERS PANEL: the partner wall lives here rather than in the page
-     flow, opened by every "Partners" trigger in the nav, mobile menu and
-     footer. Kept outside <main> and after the footer so it sits above
-     everything without inheriting a stacking or transform context from a
-     pinned/animated section. -->
-<div class="partners-backdrop" id="partnersBackdrop" hidden></div>
-<aside class="partners-panel" id="partnersPanel"
-       role="dialog" aria-modal="true" aria-labelledby="partnersPanelTitle" hidden>
-  <div class="partners-panel-head">
-    <div>
-      <p class="eyebrow">Partners</p>
-      <h2 id="partnersPanelTitle" class="partners-panel-title">Our Partners</h2>
-    </div>
-    <button class="partners-close" id="partnersClose" type="button" aria-label="Close partners">
-      <span></span><span></span>
-    </button>
-  </div>
-  <div class="partners-panel-list">
-    <a class="partner-cell" href="https://telehealth.micom.ai/" target="_blank" rel="noopener">
-      <span class="partner-visit">Visit</span>
-      <img src="partner-achilles.png" alt="Achilles Peptides" width="131" height="140" style="max-height:80px" loading="lazy" decoding="async">
-    </a>
-    <a class="partner-cell" href="https://citrusglencapital.com/" target="_blank" rel="noopener">
-      <span class="partner-visit">Visit</span>
-      <img src="partner-citrus-glen.png" alt="Citrus Glen Capital" width="197" height="28" loading="lazy" decoding="async">
-    </a>
-    <a class="partner-cell" href="https://www.t-mobile.com/" target="_blank" rel="noopener">
-      <span class="partner-visit">Visit</span>
-      <img src="partner-tmobile.png" alt="T-Mobile" width="1000" height="500" style="max-height:64px" loading="lazy" decoding="async">
-    </a>
-    <a class="partner-cell" href="https://equityinsurancepartners.com/" target="_blank" rel="noopener">
-      <span class="partner-visit">Visit</span>
-      <img src="partner-equity-insurance.png" alt="Equity Insurance Partners" width="208" height="35" loading="lazy" decoding="async">
-    </a>
-    <a class="partner-cell" href="https://www.motorsportautoglass.com/" target="_blank" rel="noopener">
-      <span class="partner-visit">Visit</span>
-      <img src="partner-motorsport-autoglass.png" alt="Motorsport Autoglass" width="1591" height="858" style="max-height:68px" loading="lazy" decoding="async">
-    </a>
-    <a class="partner-cell" href="https://fatrat.ai/" target="_blank" rel="noopener">
-      <span class="partner-visit">Visit</span>
-      <img src="partner-fatrat.png" alt="FatRat" width="216" height="85" style="max-height:56px" loading="lazy" decoding="async">
-    </a>
-    <a class="partner-cell partner-cta" href="mailto:partners@joinelevated.net">
-      <span class="partner-cta-kicker">Interested in working with us?</span>
-      <span class="partner-cta-mail">partners@joinelevated.net</span>
-      <span class="partner-cta-note">Plain reply, one business day.</span>
-    </a>
-  </div>
-</aside>
+<script>
+  (function () {
+    var root = document.documentElement;
+    window.addEventListener('load', function () { root.classList.add('loaded'); });
+    document.getElementById('yr').textContent = new Date().getFullYear();
+
+    // solid nav once past the top
+    var header = document.getElementById('top-bar');
+    function onScroll() { header.classList.toggle('solid', window.scrollY > 40); }
+    onScroll();
+    window.addEventListener('scroll', onScroll, { passive: true });
+
+    // mobile menu
+    var btn = document.getElementById('menuBtn'), menu = document.getElementById('mobileMenu');
+    function setMenu(open) {
+      btn.setAttribute('aria-expanded', open ? 'true' : 'false');
+      btn.setAttribute('aria-label', open ? 'Close menu' : 'Open menu');
+      menu.classList.toggle('open', open);
+      if (open) header.classList.add('solid'); else onScroll();
+    }
+    btn.addEventListener('click', function () { setMenu(btn.getAttribute('aria-expanded') !== 'true'); });
+    menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
+    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+
+    // reveals
+    var els = document.querySelectorAll('.reveal');
+    if (!('IntersectionObserver' in window)) { els.forEach(function (el) { el.classList.add('in'); }); return; }
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
+    els.forEach(function (el) { io.observe(el); });
+    // safety: never leave content hidden
+    setTimeout(function () { els.forEach(function (el) { el.classList.add('in'); }); }, 4000);
+  })();
+</script>
 
 <script>
-  // Scroll reveals, the hero sequence, the ladder pin, the partner cascade
-  // and smooth in-page scrolling all live in motion.js now. They used to be
-  // an IntersectionObserver and a scrollBehavior override here; both were
-  // removed rather than kept alongside GSAP, because two systems writing
-  // opacity and transform to the same nodes fight each other, and CSS
-  // smooth scrolling in particular makes ScrollTrigger's pinned sections
-  // jump. What remains below is page state, not motion.
-
-  // Nav auto-hide. Visible at rest (scroll 0), hides the moment the
-  // user scrolls down, reappears once "Your Growth" has been scrolled
-  // past (not merely once the ladder section starts - the heading
-  // itself has to exit the top of the viewport). Symmetric: scrolling
-  // back up past that heading re-hides the nav.
-  //
-  // "Has fully exited above" needs boundingClientRect, not just
-  // isIntersecting - isIntersecting is false both before the element
-  // is reached (still below the viewport) and after it's scrolled
-  // past (above the viewport), and only the second case should count.
-  // IntersectionObserver only, no scroll listeners, matching the
-  // reveal observer above.
+  // Hero background: a starfield. Three layers of white dots (1px, 2px, 3px) drift upward,
+  // each layer slower than the last, and the whole field leans a little against the mouse.
+  // A port of the StarsBackground component with its numbers kept: 1000/400/200 stars per
+  // 4000x4000 area, 50s/100s/150s to travel 2000px, parallax factor 0.05. The original
+  // builds thousands of CSS box-shadows inside 2000px-tall layers; this draws the same
+  // field on one small canvas. Black ground throughout - the component's grey gradient
+  // is deliberately left out.
   (function () {
-    var header = document.querySelector("header");
-    var growthHead = document.getElementById("growthHead");
-    var sentinel = document.getElementById("topSentinel");
-    if (!header || !growthHead || !sentinel || !("IntersectionObserver" in window)) return;
+    var canvas = document.getElementById('heroStars');
+    if (!canvas) return;
+    var hero = canvas.parentElement;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var ctx = canvas.getContext('2d', { alpha: true });
+    if (!ctx) { canvas.remove(); return; }
 
-    // Seeded from the real scroll position, not assumed to be 0, so a
-    // reload part-way down the page (scroll restoration) does not paint
-    // a transparent bar over body content. sync() runs immediately so
-    // the correct state is set during parse - waiting for the observer's
-    // first async callback would flash the solid bar over the hero.
-    var atTop = window.scrollY < 4, pastGrowth = false;
+    var SPEED = 50, FACTOR = 0.05, PERIOD = 2000, MARGIN = 80;      // seconds, parallax, wrap height, off-screen bleed
+    var INK = '240,237,230';                                          // the page's off-white, in place of pure white
+    var LAYERS = [
+      { count: 1000, size: 1, secs: SPEED },
+      { count: 400,  size: 2, secs: SPEED * 2 },
+      { count: 200,  size: 3, secs: SPEED * 3 }
+    ];
+
+    var W = 0, H = 0, dpr = 1;
+    function layout() {
+      var r = hero.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = canvas.width = Math.max(1, Math.round(r.width * dpr));
+      H = canvas.height = Math.max(1, Math.round(r.height * dpr));
+      var cssW = r.width + MARGIN * 2;
+      // Same density as the component: `count` stars per 4000 x 4000 px. Positions are
+      // regenerated on resize, which is rare, so the density always matches the width.
+      LAYERS.forEach(function (L) {
+        var n = Math.max(1, Math.round(L.count * (cssW * PERIOD) / (4000 * 4000)));
+        L.stars = [];
+        for (var i = 0; i < n; i++) L.stars.push([Math.random() * cssW - MARGIN, Math.random() * PERIOD]);
+      });
+    }
+
+    var px = 0, py = 0, tx = 0, ty = 0;   // parallax offset (CSS px), current and target
+    var t = 0;                            // seconds of drift
+
+    function draw() {
+      ctx.clearRect(0, 0, W, H);
+      ctx.fillStyle = 'rgb(' + INK + ')';
+      var cssH = H / dpr;
+      LAYERS.forEach(function (L) {
+        var travel = (t * PERIOD / L.secs) % PERIOD;        // px scrolled upward so far, wrapping every 2000px
+        var d = L.size * dpr, r = d / 2;
+        for (var i = 0; i < L.stars.length; i++) {
+          var s = L.stars[i];
+          var y = (((s[1] - travel) % PERIOD) + PERIOD) % PERIOD + py;
+          if (y < -4 || y > cssH + 4) continue;
+          var x = (s[0] + px) * dpr;
+          if (L.size === 1) { ctx.fillRect(Math.round(x), Math.round(y * dpr), d, d); }
+          else { ctx.beginPath(); ctx.arc(x, y * dpr, r, 0, 6.2832); ctx.fill(); }
+        }
+      });
+    }
+
+    var shown = false;
+    function paint() { draw(); if (!shown) { shown = true; canvas.classList.add('on'); } }
+
+    layout();
+    if ('ResizeObserver' in window) new ResizeObserver(function () { layout(); if (reduce) paint(); }).observe(hero);
+    else window.addEventListener('resize', function () { layout(); if (reduce) paint(); });
+
+    if (reduce) { paint(); return; }   // a still sky: no drift, no parallax
+
+    // Parallax: the field leans away from the cursor, eased (the original uses a spring).
+    hero.addEventListener('pointermove', function (e) {
+      tx = -(e.clientX - window.innerWidth / 2) * FACTOR;
+      ty = -(e.clientY - window.innerHeight / 2) * FACTOR;
+    }, { passive: true });
+
+    var raf = 0, last = 0, onScreen = true;
+    function frame(now) {
+      raf = requestAnimationFrame(frame);
+      var dt = last ? Math.min((now - last) / 1000, 0.1) : 0;   // dt-accumulated: pausing never makes the sky jump
+      last = now;
+      t += dt;
+      var k = 1 - Math.exp(-dt * 4);
+      px += (tx - px) * k; py += (ty - py) * k;
+      paint();
+    }
     function sync() {
-      header.classList.toggle("nav-hidden", !pastGrowth && !atTop);
-      header.classList.toggle("nav-over-hero", atTop);
+      var run = onScreen && !document.hidden;
+      if (run && !raf) { last = 0; raf = requestAnimationFrame(frame); }
+      else if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
     }
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { onScreen = e[0].isIntersecting; sync(); }).observe(hero);
+    document.addEventListener('visibilitychange', sync);
     sync();
-
-    new IntersectionObserver(function (entries) {
-      atTop = entries[0].isIntersecting;
-      sync();
-    }, { threshold: 0 }).observe(sentinel);
-
-    new IntersectionObserver(function (entries) {
-      var e = entries[0];
-      pastGrowth = !e.isIntersecting && e.boundingClientRect.top < 0;
-      sync();
-    }, { threshold: 0 }).observe(growthHead);
   })();
+</script>
 
-  // Mobile menu toggle. State lives on the button's aria-expanded
-  // attribute (not a separate JS flag), so the icon, the panel, and
-  // assistive tech all read from the same source of truth.
+<script>
+  // "Become Elevated" background: a sheet of 40,000 dots rippling in waves, seen from above at an
+  // angle (a port of the ParticleWave component). Three.js there only wraps the scene; the motion
+  // is one small vertex shader, which runs here unchanged in plain WebGL - so no library to
+  // download. The camera (75 degrees, at 0,6,5, looking at the origin) and the 200 x 200 grid at
+  // 0.3 spacing are the component's. Dots are the page's off-white at half opacity on transparent,
+  // so the section's own black shows through. Its own block, so nothing above can short-circuit it.
   (function () {
-    var btn = document.getElementById("menuToggle");
-    var menu = document.getElementById("mobileMenu");
-    if (!btn || !menu) return;
+    var canvas = document.getElementById('closingWave');
+    if (!canvas) return;
+    var section = canvas.parentElement;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    var gl = canvas.getContext('webgl', { antialias: true, alpha: true, premultipliedAlpha: true, powerPreference: 'low-power' });
+    if (!gl) { canvas.remove(); return; }   // the section's plain black remains
 
-    function isOpen() { return btn.getAttribute("aria-expanded") === "true"; }
-    function close() {
-      btn.setAttribute("aria-expanded", "false");
-      menu.classList.remove("open");
+    var VERT = [
+      'precision highp float;',
+      'attribute vec2 a;',                                       // x, z of the dot on the flat sheet (y starts at 0)
+      'uniform float uTime; uniform mat4 uView; uniform mat4 uProj; uniform float uPx;',
+      'void main(){',
+      '  vec3 p = vec3(a.x, 0.0, a.y);',
+      '  float s = 1.0;',
+      // the component's shader, line for line
+      '  p.y += (sin(p.x + uTime) * 0.5) + (cos(p.y + uTime) * 0.1) * 2.0;',
+      '  p.x += (sin(p.y + uTime) * 0.5);',
+      '  s += (sin(p.x + uTime) * 0.5) + (cos(p.y + uTime) * 0.1) * 2.0;',
+      '  vec4 mv = uView * vec4(p, 1.0);',
+      '  gl_PointSize = s * 15.0 * (1.0 / -mv.z) * uPx;',        // uPx keeps the dot size the same on retina screens
+      '  gl_Position = uProj * mv;',
+      '}'
+    ].join('\n');
+    var FRAG = [
+      'precision mediump float;',
+      'uniform vec3 uColor;',
+      'void main(){ gl_FragColor = vec4(uColor * 0.5, 0.5); }'    // 50% alpha, premultiplied for the canvas
+    ].join('\n');
+
+    function compile(type, src) {
+      var sh = gl.createShader(type);
+      gl.shaderSource(sh, src); gl.compileShader(sh);
+      return gl.getShaderParameter(sh, gl.COMPILE_STATUS) ? sh : null;
     }
-    function open() {
-      btn.setAttribute("aria-expanded", "true");
-      menu.classList.add("open");
+    var vs = compile(gl.VERTEX_SHADER, VERT), fs = compile(gl.FRAGMENT_SHADER, FRAG);
+    var prog = vs && fs ? gl.createProgram() : null;
+    if (prog) { gl.attachShader(prog, vs); gl.attachShader(prog, fs); gl.linkProgram(prog); }
+    if (!prog || !gl.getProgramParameter(prog, gl.LINK_STATUS)) { canvas.remove(); return; }
+    gl.useProgram(prog);
+
+    // the 200 x 200 sheet, 0.3 apart, centred on the origin
+    var NX = 200, NZ = 200, GAP = 0.3, pos = new Float32Array(NX * NZ * 2), k = 0;
+    for (var ix = 0; ix < NX; ix++) for (var iz = 0; iz < NZ; iz++) {
+      pos[k++] = ix * GAP - (NX * GAP) / 2;
+      pos[k++] = iz * GAP - (NX * GAP) / 2;
+    }
+    var buf = gl.createBuffer();
+    gl.bindBuffer(gl.ARRAY_BUFFER, buf);
+    gl.bufferData(gl.ARRAY_BUFFER, pos, gl.STATIC_DRAW);
+    var loc = gl.getAttribLocation(prog, 'a');
+    gl.enableVertexAttribArray(loc);
+    gl.vertexAttribPointer(loc, 2, gl.FLOAT, false, 0, 0);
+
+    var uTime = gl.getUniformLocation(prog, 'uTime'), uView = gl.getUniformLocation(prog, 'uView'),
+        uProj = gl.getUniformLocation(prog, 'uProj'), uPx = gl.getUniformLocation(prog, 'uPx');
+    gl.uniform3f(gl.getUniformLocation(prog, 'uColor'), 240 / 255, 237 / 255, 230 / 255);   // the page's off-white
+    gl.enable(gl.BLEND);
+    gl.blendFunc(gl.ONE, gl.ONE_MINUS_SRC_ALPHA);           // premultiplied "over"
+    gl.clearColor(0, 0, 0, 0);                               // transparent: the page's black shows through
+
+    // camera: at (0,6,5) looking at the origin, y up  ->  a view matrix, column-major
+    (function () {
+      var e = [0, 6, 5], f = [0 - e[0], 0 - e[1], 0 - e[2]], fl = Math.hypot(f[0], f[1], f[2]);
+      f = f.map(function (v) { return v / fl; });
+      var r = [f[1] * 0 - f[2] * 1, f[2] * 0 - f[0] * 0, f[0] * 1 - f[1] * 0];                 // f x up(0,1,0)
+      var rl = Math.hypot(r[0], r[1], r[2]); r = r.map(function (v) { return v / rl; });
+      var u = [r[1] * f[2] - r[2] * f[1], r[2] * f[0] - r[0] * f[2], r[0] * f[1] - r[1] * f[0]];   // r x f
+      var d = function (a, b) { return a[0] * b[0] + a[1] * b[1] + a[2] * b[2]; };
+      gl.uniformMatrix4fv(uView, false, new Float32Array([
+        r[0], u[0], -f[0], 0,   r[1], u[1], -f[1], 0,   r[2], u[2], -f[2], 0,   -d(r, e), -d(u, e), d(f, e), 1]));
+    })();
+
+    function resize() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 2);
+      var r = section.getBoundingClientRect();
+      var w = Math.max(1, Math.round(r.width * dpr)), h = Math.max(1, Math.round(r.height * dpr));
+      if (canvas.width !== w || canvas.height !== h) { canvas.width = w; canvas.height = h; gl.viewport(0, 0, w, h); }
+      var fv = 1 / Math.tan(75 * Math.PI / 360), n = 0.01, fr = 1000, asp = w / h;   // 75 degree vertical field of view
+      gl.uniformMatrix4fv(uProj, false, new Float32Array([
+        fv / asp, 0, 0, 0,   0, fv, 0, 0,   0, 0, (fr + n) / (n - fr), -1,   0, 0, (2 * fr * n) / (n - fr), 0]));
+      gl.uniform1f(uPx, dpr);
     }
 
-    btn.addEventListener("click", function () {
-      isOpen() ? close() : open();
-    });
-    menu.addEventListener("click", function (e) {
-      // The Partners entry is a <button>, not an <a>, and hands off to the
-      // partners panel - the drawer still has to get out of its way.
-      if (e.target.tagName === "A" || e.target.closest("[data-partners-trigger]")) close();
-    });
-    document.addEventListener("keydown", function (e) {
-      if (e.key === "Escape" && isOpen()) close();
-    });
-    document.addEventListener("click", function (e) {
-      if (!isOpen() || menu.contains(e.target) || btn.contains(e.target)) return;
-      close();
-    });
-    window.addEventListener("resize", function () {
-      if (window.innerWidth > 860 && isOpen()) close();
-    });
+    var WAVE_SPEED = 1.2;                                     // radians of wave phase per second (the component's own: 3)
+    var time = 0;
+    function draw() {
+      gl.clear(gl.COLOR_BUFFER_BIT);
+      gl.uniform1f(uTime, time);
+      gl.drawArrays(gl.POINTS, 0, NX * NZ);
+    }
+
+    resize();
+    if ('ResizeObserver' in window) new ResizeObserver(function () { resize(); if (reduce) draw(); }).observe(section);
+    else window.addEventListener('resize', function () { resize(); if (reduce) draw(); });
+
+    if (reduce) { time = 6; draw(); return; }               // one still frame, no ripple
+
+    var raf = 0, last = 0, onScreen = false;
+    function frame(now) {
+      raf = requestAnimationFrame(frame);
+      var dt = last ? Math.min((now - last) / 1000, 0.1) : 0; // dt-accumulated: pausing never makes the sheet jump
+      last = now;
+      time += dt * WAVE_SPEED;                                // the component adds 0.05 a frame = 3 a second; toned down to 1.2
+      draw();
+    }
+    function sync() {
+      var run = onScreen && !document.hidden;
+      if (run && !raf) { last = 0; raf = requestAnimationFrame(frame); }
+      else if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
+    }
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { onScreen = e[0].isIntersecting; sync(); }).observe(section);
+    else { onScreen = true; sync(); }
+    document.addEventListener('visibilitychange', sync);
+    canvas.addEventListener('webglcontextlost', function (e) { e.preventDefault(); if (raf) cancelAnimationFrame(raf); raf = 0; onScreen = false; });
   })();
+</script>
 
-  // Partners panel. Opened from the nav, the mobile drawer and the footer,
-  // all of which carry [data-partners-trigger]; the one that was clicked is
-  // remembered so focus can be handed back to it on close.
+<script>
+  // Divisions background: a port of AetherRibbonMesh, in plain Canvas 2D so the site
+  // stays build-free. Two layers of superposed sine ribbons that bend toward the
+  // cursor, with a click ripple and a burst of particles. Re-scoped from the
+  // original's full-window canvas to this section, and re-tinted for cream: ink
+  // ribbons warming to the section's burnt orange in the middle, orange accents.
   (function () {
-    var panel = document.getElementById("partnersPanel");
-    var backdrop = document.getElementById("partnersBackdrop");
-    var closeBtn = document.getElementById("partnersClose");
-    var triggers = document.querySelectorAll("[data-partners-trigger]");
-    if (!panel || !backdrop || !closeBtn || !triggers.length) return;
+    var canvas = document.getElementById('divisionsMesh');
+    if (!canvas) return;
+    var section = canvas.parentElement;
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+    // Transparent canvas (not a per-frame fill): the section's own cream shows through.
+    var ctx = canvas.getContext('2d');
+    if (!ctx) { canvas.remove(); return; }
 
-    var FOCUSABLE = 'a[href], button:not([disabled])';
-    var opener = null;
+    var INK = '10,11,13', BURNT = '154,61,18', ACCENT = '217,98,43';
+    // The original draws at full strength on a blank page. These sit behind text on
+    // a working section, so everything is scaled down to keep the copy readable.
+    var STRENGTH = 0.5;
 
-    function isOpen() { return panel.classList.contains("open"); }
+    var width = 0, height = 0, bounds = canvas.getBoundingClientRect();
+    var mouse = { x: 0, y: 0, tx: 0, ty: 0 };
+    var particles = [];
+    var ripple = { radius: 0, max: 400, speed: 14 };
 
-    function open(trigger) {
-      opener = trigger;
-      panel.hidden = false;
-      backdrop.hidden = false;
-      document.body.classList.add("panel-open");
-      // The element has to be laid out at translateX(100%) before it is asked
-      // to transition off it, or the browser coalesces both into one style
-      // pass and the slide is skipped. Reading offsetWidth forces that layout
-      // synchronously - rAF would also work but is throttled to a standstill
-      // in background tabs, which would strand the panel mid-open.
-      void panel.offsetWidth;
-      panel.classList.add("open");
-      backdrop.classList.add("open");
-      for (var i = 0; i < triggers.length; i++) triggers[i].setAttribute("aria-expanded", "true");
-      closeBtn.focus();
+    function resize() {
+      var dpr = Math.min(window.devicePixelRatio || 1, 1.5);
+      bounds = canvas.getBoundingClientRect();
+      width = bounds.width; height = bounds.height;
+      canvas.width = Math.max(1, Math.round(width * dpr));
+      canvas.height = Math.max(1, Math.round(height * dpr));
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);   // resetting canvas.width cleared the old transform
     }
 
-    function close() {
-      panel.classList.remove("open");
-      backdrop.classList.remove("open");
-      document.body.classList.remove("panel-open");
-      for (var i = 0; i < triggers.length; i++) triggers[i].setAttribute("aria-expanded", "false");
-      if (opener) { opener.focus(); opener = null; }
-      // Wait out the slide before hiding, so it animates on the way out too.
-      window.setTimeout(function () {
-        if (isOpen()) return;
-        panel.hidden = true;
-        backdrop.hidden = true;
-      }, 420);
-    }
-
-    for (var i = 0; i < triggers.length; i++) {
-      (function (trigger) {
-        trigger.addEventListener("click", function () {
-          isOpen() ? close() : open(trigger);
-        });
-      })(triggers[i]);
-    }
-
-    closeBtn.addEventListener("click", close);
-    backdrop.addEventListener("click", close);
-
-    // Partner links open in a new tab, so the panel can stay put for those.
-    // The mailto CTA navigates this one away - close behind it.
-    panel.addEventListener("click", function (e) {
-      var link = e.target.closest("a");
-      if (link && !link.target) close();
-    });
-
-    document.addEventListener("keydown", function (e) {
-      if (!isOpen()) return;
-      if (e.key === "Escape") { close(); return; }
-      if (e.key !== "Tab") return;
-
-      var items = panel.querySelectorAll(FOCUSABLE);
-      if (!items.length) return;
-      var first = items[0], last = items[items.length - 1];
-      if (e.shiftKey && document.activeElement === first) {
-        e.preventDefault(); last.focus();
-      } else if (!e.shiftKey && document.activeElement === last) {
-        e.preventDefault(); first.focus();
+    function spawn(x, y) {
+      for (var i = 0; i < 30; i++) {
+        var life = 80 + Math.random() * 60;
+        particles.push({ x: x, y: y, vx: (Math.random() - 0.5) * 2, vy: (Math.random() - 0.5) * 2,
+          life: life, max: life, size: 1 + Math.random() * 2 });
       }
+    }
+
+    function noise(x, t, o) { return (Math.sin(x * 0.0012 + t * 0.25 + o) + Math.cos(x * 0.0028 - t * 0.4 + o * 2)) / 2; }
+
+    var LAYERS = [
+      { count: 16, step: 4, offsetMod: 0,   freq: 0.0035, amp: 55, speed: 1.1, primary: true },
+      { count: 10, step: 6, offsetMod: 1.2, freq: 0.0075, amp: 30, speed: 0.7, primary: false }
+    ];
+
+    var time = 0;
+    function draw() {
+      ctx.clearRect(0, 0, width, height);
+
+      for (var i = particles.length - 1; i >= 0; i--) {
+        var p = particles[i];
+        p.x += p.vx; p.y += p.vy; p.life -= 1; p.vx *= 0.98; p.vy *= 0.98;
+        if (p.life <= 0) { particles.splice(i, 1); continue; }
+        ctx.globalAlpha = (p.life / p.max) * 0.85;
+        ctx.fillStyle = 'rgb(' + ACCENT + ')';
+        ctx.beginPath(); ctx.arc(p.x, p.y, p.size, 0, Math.PI * 2); ctx.fill();
+      }
+      ctx.globalAlpha = 1;
+
+      if (ripple.radius < ripple.max) ripple.radius += ripple.speed;
+
+      LAYERS.forEach(function (layer) {
+        ctx.globalCompositeOperation = layer.primary ? 'source-over' : 'multiply';
+        var g = ctx.createLinearGradient(0, 0, width, 0);
+        g.addColorStop(0,   'rgba(' + INK + ',' + (layer.primary ? 0.12 : 0.03) + ')');
+        g.addColorStop(0.5, 'rgba(' + BURNT + ',' + (layer.primary ? 0.75 : 0.3) + ')');
+        g.addColorStop(1,   'rgba(' + INK + ',' + (layer.primary ? 0.12 : 0.03) + ')');
+
+        for (var r = 0; r < layer.count; r++) {
+          var prog = r / layer.count;
+          var yOffset = height * 0.22 + r * (height * 0.032) + layer.offsetMod * 35;
+          var baseAlpha = (1 - prog * 0.75) * 0.8 * STRENGTH;
+          var rippleDistort = ripple.radius < ripple.max
+            ? Math.sin((time * 2 + prog * Math.PI) * 2) * ((ripple.max / Math.max(ripple.radius, 1)) * 2.5) : 0;
+
+          ctx.beginPath();
+          for (var x = 0; x <= width + layer.step; x += layer.step) {
+            var env = Math.sin((x / width) * Math.PI);
+            var nFreq = 1 + noise(x, time, prog) * 0.18;
+            var nAmp = 1 + noise(x * 2, -time, prog * 0.5) * 0.15;
+            var wave1 = Math.sin(x * (layer.freq * nFreq) + time * layer.speed + r * 0.18) * (layer.amp * env * nAmp);
+            var wave2 = Math.cos(x * 0.008 - time * 0.7 + r * 0.1) * (20 * env);
+            var wave3 = Math.sin(x * 0.018 + time * 1.4) * (8 * env);
+
+            var distX = Math.abs(x - (width / 2 + mouse.x));
+            var mRadius = layer.primary ? 380 : 220;
+            var mFactor = Math.exp(-Math.pow(distX / mRadius, 2));
+            var mDisp = Math.sin(x * 0.015 + time * 2.6) * (mFactor * (layer.primary ? 50 : 25) * env);
+            var rFactor = Math.exp(-Math.pow(Math.abs(distX - ripple.radius) / (25 + rippleDistort), 2));
+            var rDisp = rFactor * rippleDistort * (1.8 - prog);
+
+            var y = yOffset + wave1 + wave2 + wave3 + mDisp + rDisp + mouse.y * (prog * 0.1);
+            if (x === 0) ctx.moveTo(x, y); else ctx.lineTo(x, y);
+
+            if (layer.primary && x % 48 === 0) {   // small accent nodes
+              ctx.globalAlpha = 0.45 * STRENGTH * 2;
+              ctx.fillStyle = 'rgb(' + ACCENT + ')';
+              ctx.fillRect(x - 1, y - 1, 2, 2);
+            }
+          }
+          ctx.globalAlpha = baseAlpha;
+          ctx.strokeStyle = g;
+          ctx.lineWidth = (layer.primary ? 1.4 : 0.8) + (1 - prog) * 0.5;
+          ctx.stroke();
+        }
+      });
+      ctx.globalAlpha = 1;
+      ctx.globalCompositeOperation = 'source-over';
+    }
+
+    resize();
+    if ('ResizeObserver' in window) new ResizeObserver(function () { resize(); if (reduce) { time = 9; draw(); } }).observe(canvas);
+    else window.addEventListener('resize', resize);
+
+    if (reduce) { time = 9; draw(); return; }   // one still frame; no loop, no pointer response
+
+    var raf = 0, last = 0, onScreen = true;
+    function frame(now) {
+      raf = 0;
+      var dt = last ? Math.min((now - last) / 1000, 0.1) : 0;
+      last = now; time += dt * 0.85;
+      var k = 1 - Math.exp(-9 * dt);
+      mouse.x += (mouse.tx - mouse.x) * k; mouse.y += (mouse.ty - mouse.y) * k;
+      draw();
+      raf = requestAnimationFrame(frame);
+    }
+    function sync() {
+      var run = onScreen && !document.hidden;
+      if (run && !raf) { last = 0; raf = requestAnimationFrame(frame); }
+      else if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
+    }
+
+    function inside(e) { return e.clientX >= bounds.left && e.clientX <= bounds.right && e.clientY >= bounds.top && e.clientY <= bounds.bottom; }
+    // Section-relative: the original measured from the window centre.
+    window.addEventListener('pointermove', function (e) {
+      bounds = canvas.getBoundingClientRect();
+      if (inside(e)) { mouse.tx = e.clientX - bounds.left - width / 2; mouse.ty = e.clientY - bounds.top - height / 2; }
+      else { mouse.tx = 0; mouse.ty = 0; }
+    }, { passive: true });
+    window.addEventListener('pointerdown', function (e) {
+      bounds = canvas.getBoundingClientRect();
+      if (!inside(e)) return;
+      ripple.radius = 0;
+      spawn(e.clientX - bounds.left, e.clientY - bounds.top);
+    }, { passive: true });
+    document.documentElement.addEventListener('pointerleave', function () { mouse.tx = 0; mouse.ty = 0; });
+
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { onScreen = e[0].isIntersecting; sync(); }).observe(canvas);
+    document.addEventListener('visibilitychange', sync);
+    sync();
+  })();
+</script>
+
+<script>
+  // Footer reveal. The page-wide reveal observer trims 8% off the bottom of the
+  // viewport, and at maximum scroll the copyright line sits inside that trimmed
+  // strip - it would never intersect and would only appear via the 4s safety net.
+  // This observer uses the true viewport edge. Both add the same `.in` class, so
+  // whichever fires first wins and nothing double-runs.
+  (function () {
+    var els = document.querySelectorAll('footer .reveal');
+    if (!els.length || !('IntersectionObserver' in window)) return;
+    var io = new IntersectionObserver(function (entries) {
+      entries.forEach(function (en) { if (en.isIntersecting) { en.target.classList.add('in'); io.unobserve(en.target); } });
+    }, { threshold: 0.01 });
+    els.forEach(function (el) { io.observe(el); });
+  })();
+</script>
+<script>
+  // "Our movement" globe: a rotating, dotted wireframe Earth (a port of the RotatingEarth
+  // component). The original needs d3 and downloads its map from raw.githubusercontent.com on
+  // every visit. Neither is a good dependency for a live site, so: the land outlines are packed
+  // into globe-land.json on this site (55 KB, ~19 KB gzipped), and the orthographic projection -
+  // which is all of d3 this uses - is a few lines of trigonometry below. Two things from the
+  // original are deliberately left out: scroll-wheel zoom (it traps the page scroll) and the
+  // hint chip. Drag still rotates, and touch keeps vertical scrolling.
+  (function () {
+    var art = document.getElementById('movementGlobe');
+    if (!art) return;
+    var canvas = art.querySelector('.move-globe');
+    var ctx = canvas.getContext('2d');
+    if (!ctx) return;                                    // the monogram stays
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var D2R = Math.PI / 180, TAU = Math.PI * 2;
+    var SPIN = 30;                                       // degrees per second (the original: 0.5 per frame at 60fps)
+    var STEP = 1.28;                                     // dot spacing in degrees (the original: 16 * 0.08)
+    var INK = '240,237,230';                             // the page's off-white, in place of pure white
+
+    var polys = [], land = [], dots = null, grat = [];   // raw polygons; outline polylines; dot vectors; graticule polylines
+    var ready = false;
+
+    // ----- geometry -----
+    function vec(lng, lat, out, i) {                     // lng/lat in degrees -> unit vector (x toward the viewer at 0,0)
+      var la = lat * D2R, lo = lng * D2R, c = Math.cos(la);
+      out[i] = c * Math.cos(lo); out[i + 1] = c * Math.sin(lo); out[i + 2] = Math.sin(la);
+    }
+    function polyline(flat) {                            // [lng,lat,...] -> Float32Array of vectors
+      var n = flat.length / 2, v = new Float32Array(n * 3);
+      for (var i = 0; i < n; i++) vec(flat[i * 2], flat[i * 2 + 1], v, i * 3);
+      return v;
+    }
+    function inRing(x, y, r) {                           // even-odd point-in-polygon on a flat ring
+      var inside = false, n = r.length / 2;
+      for (var i = 0, j = n - 1; i < n; j = i++) {
+        var xi = r[i * 2], yi = r[i * 2 + 1], xj = r[j * 2], yj = r[j * 2 + 1];
+        if ((yi > y) !== (yj > y) && x < ((xj - xi) * (y - yi)) / (yj - yi) + xi) inside = !inside;
+      }
+      return inside;
+    }
+    function buildDots() {
+      var out = [];
+      polys.forEach(function (poly) {
+        var outer = poly[0], minX = 1e9, maxX = -1e9, minY = 1e9, maxY = -1e9, i;
+        for (i = 0; i < outer.length; i += 2) {
+          if (outer[i] < minX) minX = outer[i]; if (outer[i] > maxX) maxX = outer[i];
+          if (outer[i + 1] < minY) minY = outer[i + 1]; if (outer[i + 1] > maxY) maxY = outer[i + 1];
+        }
+        // a global grid (multiples of STEP), so neighbouring land masses line up like one sheet
+        for (var lng = Math.ceil(minX / STEP) * STEP; lng <= maxX; lng += STEP) {
+          for (var lat = Math.ceil(minY / STEP) * STEP; lat <= maxY; lat += STEP) {
+            if (!inRing(lng, lat, outer)) continue;
+            var hole = false;
+            for (var h = 1; h < poly.length; h++) if (inRing(lng, lat, poly[h])) { hole = true; break; }
+            if (!hole) out.push(lng, lat);
+          }
+        }
+      });
+      var v = new Float32Array((out.length / 2) * 3);
+      for (var k = 0; k < out.length / 2; k++) vec(out[k * 2], out[k * 2 + 1], v, k * 3);
+      return v;
+    }
+    function buildGraticule() {                          // meridians and parallels every 10 degrees, like d3.geoGraticule
+      var lines = [], lo, la, pts;
+      for (lo = -180; lo < 180; lo += 10) {
+        var lim = (lo % 90 === 0) ? 90 : 80;
+        pts = []; for (la = -lim; la <= lim; la += 3) pts.push(lo, la);
+        lines.push(polyline(pts));
+      }
+      for (la = -80; la <= 80; la += 10) {
+        pts = []; for (lo = -180; lo <= 180; lo += 3) pts.push(lo, la);
+        lines.push(polyline(pts));
+      }
+      return lines;
+    }
+
+    // ----- view state -----
+    var rot = [0, 0];                                    // [yaw, tilt] in degrees, as the original's projection.rotate
+    var autoRotate = !reduce;
+    var W = 0, H = 0, R = 0, dpr = 1;
+
+    function layout() {
+      var r = art.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = r.width; H = r.height;
+      canvas.width = Math.max(1, Math.round(W * dpr)); canvas.height = Math.max(1, Math.round(H * dpr));
+      R = Math.min(W, H) / 2.5;                          // the original's radius rule
+      ctx.setTransform(dpr, 0, 0, dpr, 0, 0);
+    }
+
+    var sx = null;   // scratch: projected x/y for the dots
+    function draw() {
+      if (!ready) return;
+      var cx = W / 2, cy = H / 2;
+      var cl = Math.cos(rot[0] * D2R), sl = Math.sin(rot[0] * D2R), cp = Math.cos(rot[1] * D2R), sp = Math.sin(rot[1] * D2R);
+      ctx.clearRect(0, 0, W, H);
+
+      // the globe: page-black disc with a bright rim
+      ctx.beginPath(); ctx.arc(cx, cy, R, 0, TAU);
+      ctx.fillStyle = '#0A0B0D'; ctx.fill();
+      ctx.strokeStyle = 'rgb(' + INK + ')'; ctx.lineWidth = 2; ctx.stroke();
+
+      // rotate a unit vector: yaw about the polar axis, then tilt (d3's rotate([yaw, tilt]))
+      function trace(list, alpha) {
+        ctx.beginPath();
+        for (var a = 0; a < list.length; a++) {
+          var v = list[a], pen = false;
+          for (var i = 0; i < v.length; i += 3) {
+            var x = v[i] * cl - v[i + 1] * sl, y = v[i] * sl + v[i + 1] * cl, z = v[i + 2];
+            var xt = x * cp - z * sp, zt = z * cp + x * sp;
+            if (xt <= 0) { pen = false; continue; }      // far side of the globe: lift the pen
+            var px = cx + R * y, py = cy - R * zt;
+            if (pen) ctx.lineTo(px, py); else { ctx.moveTo(px, py); pen = true; }
+          }
+        }
+        ctx.strokeStyle = 'rgba(' + INK + ',' + alpha + ')'; ctx.lineWidth = 1; ctx.stroke();
+      }
+      trace(grat, 0.25);                                 // graticule
+      trace(land, 1);                                    // land outlines
+
+      // halftone dots: one path, one fill
+      ctx.beginPath();
+      for (var i = 0; i < dots.length; i += 3) {
+        var x = dots[i] * cl - dots[i + 1] * sl, y = dots[i] * sl + dots[i + 1] * cl, z = dots[i + 2];
+        var xt = x * cp - z * sp;
+        if (xt <= 0) continue;
+        var px = cx + R * y, py = cy - R * (z * cp + x * sp);
+        ctx.moveTo(px + 1.2, py); ctx.arc(px, py, 1.2, 0, TAU);
+      }
+      ctx.fillStyle = 'rgba(' + INK + ',0.6)'; ctx.fill();   // the original's #999 on black, in the page's off-white
+    }
+
+    // ----- loop -----
+    var raf = 0, last = 0, onScreen = false, dragging = false;
+    function frame(now) {
+      raf = requestAnimationFrame(frame);
+      var dt = last ? Math.min((now - last) / 1000, 0.1) : 0;
+      last = now;
+      if (autoRotate && !dragging) rot[0] += SPIN * dt;   // dt-based: same speed on a 120Hz screen
+      draw();
+    }
+    function sync() {
+      var run = ready && onScreen && !document.hidden && !reduce;
+      if (run && !raf) { last = 0; raf = requestAnimationFrame(frame); }
+      else if (!run && raf) { cancelAnimationFrame(raf); raf = 0; }
+    }
+
+    // ----- drag to rotate (pointer events: mouse, pen and touch; vertical touch still scrolls the page) -----
+    var startX = 0, startY = 0, startRot = [0, 0];
+    canvas.addEventListener('pointerdown', function (e) {
+      if (!ready) return;
+      dragging = true; canvas.classList.add('dragging');
+      startX = e.clientX; startY = e.clientY; startRot = [rot[0], rot[1]];
+      try { canvas.setPointerCapture(e.pointerId); } catch (err) {}
     });
+    canvas.addEventListener('pointermove', function (e) {
+      if (!dragging) return;
+      rot[0] = startRot[0] + (e.clientX - startX) * 0.5;
+      rot[1] = Math.max(-90, Math.min(90, startRot[1] - (e.clientY - startY) * 0.5));
+      if (reduce) draw();                                // no loop under reduced motion, so draw on demand
+    });
+    function endDrag() { if (!dragging) return; dragging = false; canvas.classList.remove('dragging'); }
+    canvas.addEventListener('pointerup', endDrag);
+    canvas.addEventListener('pointercancel', endDrag);
+
+    // ----- load: only when the card is about to scroll into view -----
+    var started = false;
+    function start() {
+      if (started) return; started = true;
+      fetch('globe-land.json').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(function (data) {
+        polys = data.p;
+        polys.forEach(function (poly) { poly.forEach(function (ring) { land.push(polyline(ring)); }); });
+        grat = buildGraticule();
+        dots = buildDots();
+        layout();
+        ready = true;
+        draw();
+        art.classList.add('has-globe');                  // only now does the fallback image fade out
+        var img = art.querySelector('img'); if (img) img.setAttribute('aria-hidden', 'true');
+        sync();
+      }).catch(function () { /* the monogram stays */ });
+    }
+
+    if ('ResizeObserver' in window) new ResizeObserver(function () { if (ready) { layout(); draw(); } }).observe(art);
+    if ('IntersectionObserver' in window) {
+      new IntersectionObserver(function (e) {
+        if (e[0].isIntersecting) start();
+        onScreen = e[0].isIntersecting; sync();
+      }, { rootMargin: '600px 0px' }).observe(art);
+    } else { onScreen = true; start(); }
+    document.addEventListener('visibilitychange', sync);
+  })();
+</script>
+<script>
+  // "Now hiring in ..." typewriter. Types a state, holds it, deletes it, moves on - the same
+  // loop as the TypewriterTitle component, without React or motion. Florida, Arizona, South
+  // Carolina and Georgia come first and keep coming back; everything else is drawn at random.
+  (function () {
+    var line = document.querySelector('.hiring-line');
+    if (!line) return;
+    var box = line.querySelector('.hh-state'), text = line.querySelector('.hh-text');
+    if (!box || !text) return;
+    // Reduced motion (or no JS at all): the static sentence in the markup stays as it is.
+    if (window.matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+
+    var CORE = ['Florida', 'Arizona', 'South Carolina', 'Georgia'];
+    // One-word states only. (South Carolina is in CORE because it was asked for by name.)
+    var OTHERS = ['Alabama', 'Alaska', 'Arkansas', 'California', 'Colorado', 'Connecticut', 'Delaware', 'Hawaii', 'Idaho',
+      'Illinois', 'Indiana', 'Iowa', 'Kansas', 'Kentucky', 'Louisiana', 'Maine', 'Maryland', 'Massachusetts', 'Michigan',
+      'Minnesota', 'Mississippi', 'Missouri', 'Montana', 'Nebraska', 'Nevada', 'Ohio', 'Oklahoma', 'Oregon',
+      'Pennsylvania', 'Tennessee', 'Texas', 'Utah', 'Vermont', 'Virginia', 'Washington', 'Wisconsin', 'Wyoming'];
+    var ALL = CORE.concat(OTHERS);
+
+    var TYPE_MS = 55, DELETE_MS = 30, HOLD_MS = 1800, GAP_MS = 260, START_MS = 800, CORE_ODDS = 0.3, NO_REPEAT = 6;
+
+    var served = 0, recent = [];
+    function next() {
+      var pick;
+      if (served < CORE.length) pick = CORE[served];          // the four you named, in order, to open
+      else {
+        var pool = (Math.random() < CORE_ODDS ? CORE : OTHERS).filter(function (n) { return recent.indexOf(n) === -1; });
+        if (!pool.length) pool = ALL.filter(function (n) { return recent.indexOf(n) === -1; });
+        pick = pool[Math.floor(Math.random() * pool.length)];
+      }
+      served++;
+      recent.push(pick); if (recent.length > NO_REPEAT) recent.shift();
+      return pick;
+    }
+
+    // Natural typing rhythm, as in the component: an occasional hesitation, an occasional burst.
+    function keyDelay() {
+      var r = Math.random();
+      if (r < 0.1) return TYPE_MS * 2;
+      if (r > 0.9) return TYPE_MS * 0.5;
+      return TYPE_MS * (0.6 + Math.random() * 0.8);
+    }
+
+    var word = '', n = 0, deleting = false, timer = 0, running = false;
+    function tick() {
+      timer = 0;
+      if (!running) return;
+      if (!deleting) {
+        if (!word) { word = next(); n = 0; }
+        if (n < word.length) { n++; text.textContent = word.slice(0, n); timer = setTimeout(tick, keyDelay()); }
+        else { deleting = true; timer = setTimeout(tick, HOLD_MS); }
+      } else if (n > 0) {
+        n--; text.textContent = word.slice(0, n); timer = setTimeout(tick, DELETE_MS);
+      } else { deleting = false; word = ''; timer = setTimeout(tick, GAP_MS); }
+    }
+    // Only runs while it can be seen: no timers ticking for a hero that is scrolled away.
+    var onScreen = true;
+    function sync() {
+      var run = onScreen && !document.hidden;
+      if (run && !running) { running = true; if (!timer) timer = setTimeout(tick, START_MS); }
+      else if (!run && running) { running = false; clearTimeout(timer); timer = 0; }
+    }
+    if ('IntersectionObserver' in window) new IntersectionObserver(function (e) { onScreen = e[0].isIntersecting; sync(); }).observe(line);
+    document.addEventListener('visibilitychange', sync);
+
+    text.textContent = '';                                      // hand over from the static sentence
+    sync();
+  })();
+</script>
+<script>
+  // Infinite grid: the cursor spotlight. The drift itself is pure CSS; this only tells each bright
+  // layer where the pointer is (relative to its own section), like the component's mouseX/mouseY.
+  (function () {
+    Array.prototype.forEach.call(document.querySelectorAll('.gridbg'), function (bg) {
+      var section = bg.parentElement, hot = bg.querySelector('.gb-hot');
+      if (!section || !hot) return;
+      var raf = 0, x = -999, y = -999;
+      function apply() { raf = 0; hot.style.setProperty('--mx', x + 'px'); hot.style.setProperty('--my', y + 'px'); }
+      function queue() { if (!raf) raf = requestAnimationFrame(apply); }
+      section.addEventListener('pointermove', function (e) {
+        var r = section.getBoundingClientRect();
+        x = Math.round(e.clientX - r.left); y = Math.round(e.clientY - r.top);
+        queue();
+      }, { passive: true });
+      // Pointer leaves: park the spotlight off-screen rather than leaving it stuck at the edge.
+      section.addEventListener('pointerleave', function () { x = -999; y = -999; queue(); });
+    });
+  })();
+</script>
+<script>
+  // Partners background: an isometric plane of cells, with "+" marks at every other intersection.
+  // Any cell the cursor crosses flashes a colour and fades out over two seconds, leaving a trail. A
+  // port of the BackgroundBoxes component. The original renders 150 x 100 = 15,000 animated divs;
+  // this draws the same plane on one canvas, and only redraws while a cell is fading - at rest it
+  // is a still image and costs nothing. Its flash colours are the site's, not the original's
+  // pastel rainbow, and at half strength, to stay with the black.
+  (function () {
+    var canvas = document.getElementById('partnersBoxes');
+    if (!canvas) return;
+    var section = canvas.parentElement;
+    var ctx = canvas.getContext('2d');
+    if (!ctx) { canvas.remove(); return; }
+    var reduce = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+    var CW = 64, CH = 32;                                         // one cell, in plane units (the component's w-16 h-8)
+    var SKX = Math.tan(-48 * Math.PI / 180), SKY = Math.tan(14 * Math.PI / 180), SC = 0.675;   // its transform, verbatim
+    var AX = 40 * CW, AY = 30 * CH;                               // the plane point held at the middle of the section
+    var LINE = 'rgba(240,237,230,0.14)';                          // slate-700 on slate-900, re-cut for black
+    var COLORS = [[217, 98, 43], [240, 237, 230], [154, 61, 18], [167, 173, 182]];
+    var PEAK = 0.5, FADE = reduce ? 0 : 2000;                     // flash strength, ms to fade (the component's 2s)
+
+    var W = 0, H = 0, dpr = 1, M = null, inv = null;
+    function layout() {
+      var r = section.getBoundingClientRect();
+      dpr = Math.min(window.devicePixelRatio || 1, 2);
+      W = r.width; H = r.height;
+      canvas.width = Math.max(1, Math.round(W * dpr)); canvas.height = Math.max(1, Math.round(H * dpr));
+      // same order as the CSS transform list: skewX, skewY, scale - about the section's centre
+      M = new DOMMatrix().translateSelf(W / 2, H / 2)
+        .multiplySelf(new DOMMatrix([1, 0, SKX, 1, 0, 0]))
+        .multiplySelf(new DOMMatrix([1, SKY, 0, 1, 0, 0]))
+        .scaleSelf(SC).translateSelf(-AX, -AY);
+      inv = M.inverse();
+    }
+
+    var active = {};                                              // "i,j" -> { i, j, c, left }  (left = when the cursor left it)
+    var hover = null, raf = 0;
+
+    function draw(now) {
+      ctx.setTransform(1, 0, 0, 1, 0, 0);
+      ctx.clearRect(0, 0, canvas.width, canvas.height);
+      ctx.setTransform(M.a * dpr, M.b * dpr, M.c * dpr, M.d * dpr, M.e * dpr, M.f * dpr);
+
+      // which part of the plane is on screen: map the section's corners back into plane space
+      var xs = [], ys = [];
+      [[0, 0], [W, 0], [0, H], [W, H]].forEach(function (c) { var p = inv.transformPoint(new DOMPoint(c[0], c[1])); xs.push(p.x); ys.push(p.y); });
+      var minX = Math.min.apply(null, xs), maxX = Math.max.apply(null, xs), minY = Math.min.apply(null, ys), maxY = Math.max.apply(null, ys);
+      var i0 = Math.floor(minX / CW), i1 = Math.ceil(maxX / CW), j0 = Math.floor(minY / CH), j1 = Math.ceil(maxY / CH), i, j;
+
+      // flashing cells first, under the lines
+      for (var k in active) {
+        var a = active[k], al = PEAK;
+        if (a.left !== null) al = FADE ? PEAK * (1 - (now - a.left) / FADE) : 0;
+        if (al <= 0.004) { delete active[k]; continue; }
+        ctx.fillStyle = 'rgba(' + a.c[0] + ',' + a.c[1] + ',' + a.c[2] + ',' + al.toFixed(3) + ')';
+        ctx.fillRect(a.i * CW, a.j * CH, CW, CH);
+      }
+
+      ctx.strokeStyle = LINE; ctx.lineWidth = 1.4;                // ~1px once the plane's scale is applied
+      ctx.beginPath();
+      for (i = i0; i <= i1; i++) { ctx.moveTo(i * CW, minY); ctx.lineTo(i * CW, maxY); }
+      for (j = j0; j <= j1; j++) { ctx.moveTo(minX, j * CH); ctx.lineTo(maxX, j * CH); }
+      // the "+" marks: every other column and row, centred just inside each intersection
+      for (i = i0 + (i0 % 2 ? 1 : 0); i <= i1; i += 2) for (j = j0 + (j0 % 2 ? 1 : 0); j <= j1; j += 2) {
+        var cx = i * CW - 2, cy = j * CH - 2;
+        ctx.moveTo(cx - 6, cy); ctx.lineTo(cx + 6, cy); ctx.moveTo(cx, cy - 6); ctx.lineTo(cx, cy + 6);
+      }
+      ctx.stroke();
+    }
+
+    function frame(now) {
+      draw(now);
+      raf = Object.keys(active).length ? requestAnimationFrame(frame) : 0;   // idle: stop, no loop at rest
+    }
+    function kick() { if (!raf) raf = requestAnimationFrame(frame); }
+
+    function cellAt(e) {
+      var r = section.getBoundingClientRect();
+      var p = inv.transformPoint(new DOMPoint(e.clientX - r.left, e.clientY - r.top));
+      return { i: Math.floor(p.x / CW), j: Math.floor(p.y / CH) };
+    }
+    section.addEventListener('pointermove', function (e) {
+      if (!inv) return;
+      var c = cellAt(e), key = c.i + ',' + c.j;
+      if (hover === key) return;
+      var now = performance.now();
+      if (hover && active[hover]) active[hover].left = now;       // the old cell starts fading
+      hover = key;
+      active[key] = { i: c.i, j: c.j, c: COLORS[Math.floor(Math.random() * COLORS.length)], left: null };
+      kick();
+    }, { passive: true });
+    section.addEventListener('pointerleave', function () {
+      if (hover && active[hover]) active[hover].left = performance.now();
+      hover = null; kick();
+    });
+
+    layout(); draw(0);                                            // the resting plane
+    if ('ResizeObserver' in window) new ResizeObserver(function () { layout(); draw(performance.now()); }).observe(section);
   })();
 </script>
 </body>
