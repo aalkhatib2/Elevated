@@ -130,10 +130,10 @@
      used to sit at the bottom of the hero because the photo filled the
      sky above it; with no plate that reads as a dead void over the copy. */
   .hero-inner { position: relative; margin-block: auto; padding-top: 120px; padding-bottom: clamp(48px, 8vh, 88px); display: flex; flex-direction: column; align-items: center; text-align: center; }
-  /* The wordmark art is dark ink, drawn to sit on the pale sky. On the page's
-     near-black ground it disappears, so it is inverted to light ink here.
-     invert() keeps the alpha channel, so the dust and torn edges survive. */
-  .hero-mark { width: min(820px, 88vw); height: auto; margin-bottom: clamp(20px, 4vh, 44px); filter: invert(1); }
+  /* Cinzel Bold outlined to paths, already in light ink, so no invert.
+     The art is cropped tight to the letters (the old smoky one carried
+     ~20% padding), hence 680px to keep the letters at the same size. */
+  .hero-mark { width: min(680px, 84vw); height: auto; margin-bottom: clamp(20px, 4vh, 44px); }
   .hero-tag { font-family: var(--label); font-weight: 500; font-size: clamp(15px, 1.6vw, 19px); letter-spacing: 0.42em; text-indent: 0.42em; text-transform: uppercase; color: var(--text); }
   .hero-lede { text-shadow: 0 1px 14px rgba(10,11,13,0.9), 0 0 2px rgba(10,11,13,0.6); margin-top: 18px; max-width: 46ch; color: var(--text-2); font-size: clamp(16px, 1.4vw, 18px); }
   .hero-cta { margin-top: 32px; display: flex; gap: 12px; flex-wrap: wrap; justify-content: center; }
@@ -414,7 +414,7 @@
     <canvas class="hero-stars" id="heroStars" aria-hidden="true"></canvas>
     <div class="hero-inner wrap">
       <h1 id="heroTitle" class="sr-only">Elevated — field sales</h1>
-      <img class="hero-mark" src="wordmark-elevated.webp" alt="Elevated" width="2000" height="476">
+      <img class="hero-mark" src="brand/wordmark-elevated-light.svg" alt="Elevated" width="5424" height="799">
       <p class="hero-tag">Above all else</p>
       <p class="hero-lede">A field sales organization for people who want more. Learn the work, build a team, run a division of your own.</p>
       <div class="hero-cta">

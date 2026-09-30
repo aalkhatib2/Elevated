@@ -11,7 +11,8 @@ shared motion script and the image assets.
 - `apply.html` — the interview booking funnel, 4 questions + confirmation
 - `motion.js` — the shared motion engine for both pages (see below)
 - `hero-bg.jpg` — hero plate: dawn dunes, deliberately text-free
-- `wordmark-elevated.webp` — the wordmark, a separate layer over the plate
+- `brand/wordmark-elevated-{light,dark}.{svg,webp,png}` — the Cinzel Bold wordmark, outlined to paths; the hero uses the light SVG
+- `wordmark-elevated.webp` — the previous blackletter wordmark, no longer referenced
 - `elevated-logo.webp` — the blackletter monogram (core-values section)
 - `partner-*.png` — partner logos for the Partners grid
 - `mockups/` — design exploration variants (local only, not deployed)
