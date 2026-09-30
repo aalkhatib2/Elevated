@@ -218,7 +218,9 @@
 
   /* portal strip */
   .portal { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: var(--bg-2); }
-  .portal-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding: 28px 0; flex-wrap: wrap; }
+  /* padding-block, not the `padding: 28px 0` shorthand: this element is also .wrap, and the shorthand
+     (declared later, same specificity) zeroed .wrap's side gutter, pushing the text to the screen edge. */
+  .portal-inner { display: flex; align-items: center; justify-content: space-between; gap: 24px; padding-block: 28px; flex-wrap: wrap; }
   .portal-copy { display: flex; align-items: baseline; gap: 20px; flex-wrap: wrap; }
   .portal-copy strong { font-family: var(--head); font-weight: 600; font-size: 20px; letter-spacing: 0.08em; text-transform: uppercase; }
   .portal-copy span { color: var(--text-2); font-size: 15px; }
