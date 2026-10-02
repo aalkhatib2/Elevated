@@ -38,21 +38,28 @@ const CACHE_TTL_MS = 60 * 1000;
 // copies, and any instance can cold-start at any time.
 let cache = null; // { expiresAt, orders }
 
+// The portal only ever reads. Writes (the Discord sales bot) go through
+// sheets-write.js with WRITE_SCOPE, so orders.js/team.js never hold a token
+// that can edit the sheet.
+export const READ_SCOPE = 'https://www.googleapis.com/auth/spreadsheets.readonly';
+export const WRITE_SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
+
 // Access tokens last an hour; re-minting one per request would add a second
 // round trip to every page load for no reason.
-let tokenCache = null; // { token, expiresAt }
+const tokenCache = new Map(); // scope -> { token, expiresAt }
 
 // Signs a JWT with the service account's key and trades it for an access
 // token. Hand-rolled rather than pulling in googleapis: one sign, one POST,
 // against a stable documented endpoint — the dependency would be far larger
 // than the code it replaces.
-async function getServiceAccountToken() {
+export async function getServiceAccountToken(scope = READ_SCOPE) {
   const email = process.env.GOOGLE_SERVICE_ACCOUNT_EMAIL;
   const rawKey = process.env.GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY;
   if (!email || !rawKey) return null; // not configured — caller falls back to the API key
 
   // 30s of slack so a token can't expire mid-flight.
-  if (tokenCache && tokenCache.expiresAt > Date.now() + 30_000) return tokenCache.token;
+  const cached = tokenCache.get(scope);
+  if (cached && cached.expiresAt > Date.now() + 30_000) return cached.token;
 
   // Env vars can't carry real newlines, so the PEM is stored with literal \n.
   const privateKey = rawKey.replace(/\\n/g, '\n');
@@ -63,7 +70,7 @@ async function getServiceAccountToken() {
     encode({ alg: 'RS256', typ: 'JWT' }),
     encode({
       iss: email,
-      scope: 'https://www.googleapis.com/auth/spreadsheets.readonly',
+      scope,
       aud: 'https://oauth2.googleapis.com/token',
       iat: now,
       exp: now + 3600,
@@ -87,11 +94,11 @@ async function getServiceAccountToken() {
   }
 
   const data = await res.json();
-  tokenCache = {
+  tokenCache.set(scope, {
     token: data.access_token,
     expiresAt: Date.now() + (data.expires_in || 3600) * 1000,
-  };
-  return tokenCache.token;
+  });
+  return data.access_token;
 }
 
 async function sheetsFetch(path, params = {}) {
@@ -132,7 +139,7 @@ async function listWeeklyTabs() {
 
   const weekly = [];
   for (const title of titles) {
-    if (/^summary$/i.test(title)) continue;
+    if (/^(summary|bot)$/i.test(title)) continue;
     if (WEEKLY_TAB_RE.test(title)) weekly.push(title);
     else console.warn(`[sheets] skipping tab with an unrecognized name: "${title}"`);
   }
