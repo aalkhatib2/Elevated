@@ -4,7 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Commission — Elevated Portal</title>
-<link rel="stylesheet" href="../elevated.css">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="portal.css">
 </head>
 <body>
@@ -12,10 +15,10 @@
 <div class="app">
 
   <aside class="rail">
-    <div class="rail-brand">
-      <div class="rail-mark">E</div>
-      <div class="n">Elevated</div>
-    </div>
+    <a class="rail-brand" href="overview.html">
+      <img src="../../brand/wordmark-elevated-light.svg" alt="Elevated" width="5424" height="799">
+      <span class="rail-sub">Agent Portal</span>
+    </a>
     <div class="rail-id">
       <div class="rail-who"><span class="dot"></span><span data-field="fullName">Marcus Deland</span></div>
       <span class="rail-badge">Rep</span>
@@ -35,11 +38,6 @@
     </nav>
     <div class="rail-foot">
       <a href="#">Help</a>
-      <div class="theme-seg">
-        <button type="button" aria-pressed="false" title="Light">&#9788;</button>
-        <button type="button" aria-pressed="false" title="Dark">&#9790;</button>
-        <button type="button" aria-pressed="true" title="System">&#9635;</button>
-      </div>
       <a href="login.html" data-signout>Sign out</a>
     </div>
   </aside>
@@ -58,14 +56,14 @@
           <button type="button" aria-pressed="false">Last Week</button>
           <button type="button" aria-pressed="false">This Week</button>
         </div>
-        <button class="chip" type="button"><span style="width:7px;height:7px;background:currentColor;display:inline-block"></span>Data Filters</button>
+        <button class="chip" type="button"><span class="sq"></span>Data Filters</button>
       </div>
     </div>
 
     <div class="pad">
 
       <div class="kpis">
-        <article class="kpi" data-accent="steel">
+        <article class="kpi" data-accent="info">
           <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Total deals</span><span class="chev"></span></button>
           <div class="kpi-v">124</div>
           <div class="kpi-fold">
@@ -75,15 +73,15 @@
         </article>
         <article class="kpi" data-accent="pos">
           <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Gross commission</span><span class="chev"></span></button>
-          <div class="kpi-v">Add figure</div>
+          <div class="kpi-v is-pending">Add figure</div>
           <div class="kpi-fold">
             <p class="kpi-sub">Before any deduction</p>
             <p class="kpi-note">The total your deals earned at the published rate card, before withholdings, housing, or any other deduction comes off.</p>
           </div>
         </article>
-        <article class="kpi" data-accent="steel">
+        <article class="kpi" data-accent="info">
           <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Total payable</span><span class="chev"></span></button>
-          <div class="kpi-v">Add figure</div>
+          <div class="kpi-v is-pending">Add figure</div>
           <div class="kpi-fold">
             <p class="kpi-sub">Gross, minus deductions, plus credits</p>
             <p class="kpi-flag" data-tone="pos">This is what actually hits your account</p>
@@ -153,7 +151,7 @@
                   <td class="td-r"><span class="figure-pill">Add figure</span></td>
                   <td class="td-mono td-r">&mdash;</td><td class="td-mono td-r">&mdash;</td>
                   <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td><span class="pill" data-tone="steel">Projected</span></td>
+                  <td><span class="pill" data-tone="info">Projected</span></td>
                 </tr>
               </tbody>
             </table>
@@ -287,8 +285,8 @@
 </div>
 
 <div class="fabs">
-  <button class="fab" type="button" title="Reminders and what is new">3<span class="badge"></span></button>
-  <button class="fab primary" type="button" title="Ask Ridge, your assistant">&#9670;</button>
+  <button class="fab" type="button" title="Reminders and what is new" aria-label="3 reminders">3<span class="badge"></span></button>
+  <button class="fab primary" type="button" title="Ask Ridge, your assistant" aria-label="Ask Ridge, your assistant"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 2 16 9 9 16 2 9Z"/></svg></button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>

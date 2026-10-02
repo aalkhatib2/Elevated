@@ -4,7 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Overview — Elevated Portal</title>
-<link rel="stylesheet" href="../elevated.css">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="portal.css">
 </head>
 <body>
@@ -13,10 +16,10 @@
 
   <!-- ============ SIDEBAR ============ -->
   <aside class="rail">
-    <div class="rail-brand">
-      <div class="rail-mark">E</div>
-      <div class="n">Elevated</div>
-    </div>
+    <a class="rail-brand" href="overview.html">
+      <img src="../../brand/wordmark-elevated-light.svg" alt="Elevated" width="5424" height="799">
+      <span class="rail-sub">Agent Portal</span>
+    </a>
 
     <div class="rail-id">
       <div class="rail-who"><span class="dot"></span><span data-field="fullName">Marcus Deland</span></div>
@@ -40,11 +43,6 @@
 
     <div class="rail-foot">
       <a href="#">Help</a>
-      <div class="theme-seg">
-        <button type="button" aria-pressed="false" title="Light">&#9788;</button>
-        <button type="button" aria-pressed="false" title="Dark">&#9790;</button>
-        <button type="button" aria-pressed="true" title="System">&#9635;</button>
-      </div>
       <a href="login.html" data-signout>Sign out</a>
     </div>
   </aside>
@@ -64,7 +62,7 @@
           <button type="button" aria-pressed="false">Last Week</button>
           <button type="button" aria-pressed="false">This Week</button>
         </div>
-        <button class="chip" type="button"><span style="width:7px;height:7px;background:currentColor;display:inline-block"></span>Data Filters</button>
+        <button class="chip" type="button"><span class="sq"></span>Data Filters</button>
       </div>
     </div>
 
@@ -76,8 +74,9 @@
            other; the markup below is just the resting state before the live
            order count lands. -->
       <section class="road">
+        <div class="road-paths" data-paths="28" aria-hidden="true"></div>
         <div class="road-top">
-          <span class="road-eyebrow"><span class="sq"></span>Road to Elevated</span>
+          <span class="kicker">Road to Elevated</span>
           <span class="road-year">2026</span>
         </div>
 
@@ -129,7 +128,7 @@
       <div class="kpis">
         <article class="kpi" data-accent="pos">
           <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Cleared this period</span><span class="chev"></span></button>
-          <div class="kpi-v">Add figure</div>
+          <div class="kpi-v is-pending">Add figure</div>
           <div class="kpi-fold">
             <p class="kpi-sub">19 installs &middot; deposited Aug 15</p>
             <p class="kpi-note">Commission that has finished its clearance window and been paid out to you. Once a line clears it cannot be reversed.</p>
@@ -138,7 +137,7 @@
         </article>
         <article class="kpi" data-accent="warn">
           <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Pending clearance</span><span class="chev"></span></button>
-          <div class="kpi-v">Add figure</div>
+          <div class="kpi-v is-pending">Add figure</div>
           <div class="kpi-fold">
             <p class="kpi-sub">6 installs awaiting &middot; oldest 11 days</p>
             <p class="kpi-flag" data-tone="warn">Reversible until it clears</p>
@@ -158,7 +157,7 @@
         <div class="d">Live from the Fiber Sales sheet &middot; based on order date</div>
       </div>
       <div class="kpis">
-        <article class="kpi" data-accent="steel">
+        <article class="kpi" data-accent="info">
           <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Total orders</span><span class="chev"></span></button>
           <div class="kpi-v" data-ov="orders">&mdash;</div>
           <div class="kpi-fold">
@@ -176,7 +175,7 @@
             <a class="kpi-link" href="orders.html">View orders</a>
           </div>
         </article>
-        <article class="kpi" data-accent="steel">
+        <article class="kpi" data-accent="info">
           <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">2-gig orders</span><span class="chev"></span></button>
           <div class="kpi-v" data-ov="twoGig">&mdash;</div>
           <div class="kpi-fold">
@@ -192,13 +191,14 @@
 </div>
 
 <div class="fabs">
-  <button class="fab" type="button" title="Reminders and what is new">3<span class="badge"></span></button>
-  <button class="fab primary" type="button" title="Ask Ridge, your assistant">&#9670;</button>
+  <button class="fab" type="button" title="Reminders and what is new" aria-label="3 reminders">3<span class="badge"></span></button>
+  <button class="fab primary" type="button" title="Ask Ridge, your assistant" aria-label="Ask Ridge, your assistant"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 2 16 9 9 16 2 9Z"/></svg></button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
 <script src="portal-auth.js"></script>
+<script src="brand-paths.js"></script>
 <script src="portal.js"></script>
 <script src="overview.js"></script>
 

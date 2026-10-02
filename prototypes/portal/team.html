@@ -4,7 +4,10 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>My Team — Elevated Portal</title>
-<link rel="stylesheet" href="../elevated.css">
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
 <link rel="stylesheet" href="portal.css">
 </head>
 <body>
@@ -12,10 +15,10 @@
 <div class="app">
 
   <aside class="rail">
-    <div class="rail-brand">
-      <div class="rail-mark">E</div>
-      <div class="n">Elevated</div>
-    </div>
+    <a class="rail-brand" href="overview.html">
+      <img src="../../brand/wordmark-elevated-light.svg" alt="Elevated" width="5424" height="799">
+      <span class="rail-sub">Agent Portal</span>
+    </a>
     <div class="rail-id">
       <div class="rail-who"><span class="dot"></span><span data-field="fullName">Marcus Deland</span></div>
       <span class="rail-badge">Rep</span>
@@ -35,11 +38,6 @@
     </nav>
     <div class="rail-foot">
       <a href="#">Help</a>
-      <div class="theme-seg">
-        <button type="button" aria-pressed="false" title="Light">&#9788;</button>
-        <button type="button" aria-pressed="false" title="Dark">&#9790;</button>
-        <button type="button" aria-pressed="true" title="System">&#9635;</button>
-      </div>
       <a href="login.html" data-signout>Sign out</a>
     </div>
   </aside>
@@ -58,14 +56,14 @@
           <button type="button" aria-pressed="false">Last Week</button>
           <button type="button" aria-pressed="false">This Week</button>
         </div>
-        <button class="chip" type="button"><span style="width:7px;height:7px;background:currentColor;display:inline-block"></span>Data Filters</button>
+        <button class="chip" type="button"><span class="sq"></span>Data Filters</button>
       </div>
     </div>
 
     <div class="pad">
 
       <div class="kpis">
-        <article class="kpi" data-accent="steel">
+        <article class="kpi" data-accent="info">
           <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Reps under you</span><span class="chev"></span></button>
           <div class="kpi-v" data-team="repsUnderYou">&mdash;</div>
           <div class="kpi-fold">
@@ -83,7 +81,7 @@
         </article>
         <article class="kpi" data-accent="warn">
           <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Override earned</span><span class="chev"></span></button>
-          <div class="kpi-v">Add figure</div>
+          <div class="kpi-v is-pending">Add figure</div>
           <div class="kpi-fold">
             <p class="kpi-sub">Waiting on a commission column in the Fiber Sales sheet</p>
             <p class="kpi-note">Same as your own commission &mdash; this goes live the moment the sheet has a real dollar figure to read.</p>
@@ -110,12 +108,12 @@
                 <tr><th>Rep</th><th>Rung</th><th class="td-r">Installs, all time</th><th>Status</th></tr>
               </thead>
               <tbody data-team-body="downline">
-                <tr><td colspan="4" style="padding:40px 16px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase">Loading your team&hellip;</td></tr>
+                <tr><td colspan="4" class="tbl-msg">Loading your team&hellip;</td></tr>
               </tbody>
             </table>
           </div>
         </div>
-        <a class="btn btn-primary" href="../apply.html" style="margin-top:24px">Send Your Recruiting Link</a>
+        <a class="btn btn-primary" href="../../apply.html" style="margin-top:24px">Send Your Recruiting Link <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
       </section>
 
       <!-- ============ LEADERBOARD ============ -->
@@ -136,7 +134,7 @@
                 <tr><th>Rank</th><th>Rep</th><th>Rung</th><th class="td-r">Production</th><th class="td-r">Revenue</th></tr>
               </thead>
               <tbody data-team-body="leaderboard">
-                <tr><td colspan="5" style="padding:40px 16px;text-align:center;color:var(--muted);font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase">Loading standings&hellip;</td></tr>
+                <tr><td colspan="5" class="tbl-msg">Loading standings&hellip;</td></tr>
               </tbody>
             </table>
           </div>
@@ -148,8 +146,8 @@
 </div>
 
 <div class="fabs">
-  <button class="fab" type="button" title="Reminders and what is new">3<span class="badge"></span></button>
-  <button class="fab primary" type="button" title="Ask Ridge, your assistant">&#9670;</button>
+  <button class="fab" type="button" title="Reminders and what is new" aria-label="3 reminders">3<span class="badge"></span></button>
+  <button class="fab primary" type="button" title="Ask Ridge, your assistant" aria-label="Ask Ridge, your assistant"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 2 16 9 9 16 2 9Z"/></svg></button>
 </div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>

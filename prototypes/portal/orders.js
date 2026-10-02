@@ -68,10 +68,7 @@
   }
 
   function renderLoading() {
-    tbody.innerHTML =
-      '<tr><td colspan="6" style="padding:40px 16px;text-align:center;color:var(--muted);' +
-      'font-family:var(--mono);font-size:12px;letter-spacing:.08em;text-transform:uppercase">' +
-      'Loading your orders&hellip;</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="6" class="tbl-msg">Loading your orders&hellip;</td></tr>';
   }
 
   function renderError() {
@@ -121,7 +118,7 @@
 
   function statusPill(status) {
     if (!status) return '<span class="pill" data-tone="mute">Not tracked yet</span>';
-    var toneMap = { active: 'pos', pending: 'steel', cancelled: 'warn', churned: 'neg' };
+    var toneMap = { active: 'pos', pending: 'info', cancelled: 'warn', churned: 'neg' };
     var tone = toneMap[String(status).toLowerCase()] || 'mute';
     return '<span class="pill" data-tone="' + tone + '">' + escapeHtml(status) + '</span>';
   }

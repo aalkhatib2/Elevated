@@ -170,7 +170,7 @@
 
 <main class="login">
   <aside class="aside" aria-hidden="true">
-    <div class="paths" id="paths"></div>
+    <div class="paths" data-paths></div>
 
     <a class="brand rise" href="../../index.html" tabindex="-1">
       <img src="../../brand/wordmark-elevated-light.svg" alt="" width="5424" height="799">
@@ -221,43 +221,8 @@
   </div>
 </main>
 
+<script src="brand-paths.js"></script>
 <script>
-(function () {
-  var host = document.getElementById('paths');
-  var NS = 'http://www.w3.org/2000/svg';
-
-  function jitter(i) {
-    var v = Math.sin(i + 1) * 10000;
-    return v - Math.floor(v);
-  }
-
-  function layer(position) {
-    var svg = document.createElementNS(NS, 'svg');
-    svg.setAttribute('viewBox', '0 0 696 316');
-    for (var i = 0; i < 36; i++) {
-      var o = i * 5 * position;
-      var d = 'M-' + (380 - o) + ' -' + (189 + i * 6) +
-        'C-' + (380 - o) + ' -' + (189 + i * 6) + ' -' + (312 - o) + ' ' + (216 - i * 6) + ' ' + (152 - o) + ' ' + (343 - i * 6) +
-        'C' + (616 - o) + ' ' + (470 - i * 6) + ' ' + (684 - o) + ' ' + (875 - i * 6) + ' ' + (684 - o) + ' ' + (875 - i * 6);
-      var p = document.createElementNS(NS, 'path');
-      p.setAttribute('d', d);
-      p.setAttribute('pathLength', '1');
-      p.setAttribute('stroke-width', (0.5 + i * 0.03).toFixed(2));
-      p.setAttribute('stroke-opacity', Math.min(1, 0.1 + i * 0.03).toFixed(2));
-      p.style.setProperty('--d', (20 + jitter(i) * 10).toFixed(1) + 's');
-      p.style.animationDelay = (-jitter(i + 36) * 20).toFixed(1) + 's';
-      svg.appendChild(p);
-    }
-    return svg;
-  }
-
-  if (getComputedStyle(host.parentNode).display !== 'none') {
-    host.appendChild(layer(1));
-    host.appendChild(layer(-1));
-    requestAnimationFrame(function () { host.classList.add('on'); });
-  }
-})();
-
 (function () {
   var form = document.getElementById('loginForm');
   var errorEl = document.getElementById('loginError');

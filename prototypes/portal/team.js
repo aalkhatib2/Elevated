@@ -61,7 +61,7 @@
 
     downlineBody.innerHTML = rows.map(function (r) {
       var sub = 'Recruited ' + formatMonthYear(r.recruitedAt) + (r.market ? ' &middot; ' + escapeHtml(r.market) : '');
-      var tone = r.status === 'Producing' ? 'pos' : 'steel';
+      var tone = r.status === 'Producing' ? 'pos' : 'info';
       return (
         '<tr>' +
           '<td><span class="td-strong">' + escapeHtml(r.fullName) + '</span><span class="td-sub">' + sub + '</span></td>' +
@@ -86,11 +86,10 @@
     }
 
     leaderboardBody.innerHTML = rows.map(function (r, i) {
-      var rankColor = r.isYou ? 'var(--steel)' : 'var(--muted)';
       var sub = r.isYou ? 'You' : '';
       return (
         '<tr>' +
-          '<td style="font-family:var(--display);font-weight:900;font-size:20px;color:' + rankColor + '">' + String(i + 1).padStart(2, '0') + '</td>' +
+          '<td class="td-rank' + (r.isYou ? ' you' : '') + '">' + String(i + 1).padStart(2, '0') + '</td>' +
           '<td>' + (r.isYou ? '<span class="td-strong">' : '') + escapeHtml(r.fullName) + (r.isYou ? '</span>' : '') +
             (sub ? '<span class="td-sub">' + sub + '</span>' : '') + '</td>' +
           '<td class="td-mono">EL</td>' +
