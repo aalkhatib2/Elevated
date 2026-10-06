@@ -48,6 +48,29 @@ export const WRITE_SCOPE = 'https://www.googleapis.com/auth/spreadsheets';
 // round trip to every page load for no reason.
 const tokenCache = new Map(); // scope -> { token, expiresAt }
 
+// Accepts the key the way people actually paste it: with literal "\n" escapes
+// (the JSON file's own form), with real newlines, wrapped in the quotes and
+// trailing comma that come along when a JSON line is copied whole, or as the
+// entire service-account JSON. Anything else fails with a message that says
+// what to re-copy — Node's own "DECODER routines::unsupported" says nothing.
+export function normalizePrivateKey(raw) {
+  let key = String(raw || '').trim();
+  if (key.startsWith('{')) {
+    try {
+      key = String(JSON.parse(key).private_key || '');
+    } catch {
+      /* fall through to the PEM check below */
+    }
+  }
+  key = key.replace(/,\s*$/, '').replace(/^["']+|["']+$/g, '').replace(/\\n/g, '\n').trim();
+  if (!/-----BEGIN [A-Z ]*PRIVATE KEY-----/.test(key) || !/-----END [A-Z ]*PRIVATE KEY-----/.test(key)) {
+    throw new Error(
+      'GOOGLE_SERVICE_ACCOUNT_PRIVATE_KEY is not a PEM private key: it should start with -----BEGIN PRIVATE KEY----- and end with -----END PRIVATE KEY-----. Re-copy the "private_key" value from the service account JSON file.'
+    );
+  }
+  return key;
+}
+
 // Signs a JWT with the service account's key and trades it for an access
 // token. Hand-rolled rather than pulling in googleapis: one sign, one POST,
 // against a stable documented endpoint — the dependency would be far larger
@@ -61,8 +84,7 @@ export async function getServiceAccountToken(scope = READ_SCOPE) {
   const cached = tokenCache.get(scope);
   if (cached && cached.expiresAt > Date.now() + 30_000) return cached.token;
 
-  // Env vars can't carry real newlines, so the PEM is stored with literal \n.
-  const privateKey = rawKey.replace(/\\n/g, '\n');
+  const privateKey = normalizePrivateKey(rawKey);
   const now = Math.floor(Date.now() / 1000);
 
   const encode = (obj) => Buffer.from(JSON.stringify(obj)).toString('base64url');
