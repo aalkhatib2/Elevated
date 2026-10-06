@@ -12,7 +12,7 @@ export default async function handler(req, res) {
 
   try {
     const rows = await sql`
-      select full_name, rep_code, team, division, market
+      select full_name, rep_code, team, division, market, role
       from reps
       where id = ${session.repId}
       limit 1
@@ -28,6 +28,7 @@ export default async function handler(req, res) {
         team: rep.team,
         division: rep.division,
         market: rep.market,
+        role: rep.role,
       },
     });
   } catch (err) {

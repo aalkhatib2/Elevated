@@ -321,6 +321,11 @@ async function loadAllOrders(knownFullNames = []) {
   return orders;
 }
 
+// Every order on every weekly tab — payroll needs the whole team's, not one rep's.
+export async function getAllOrders(knownFullNames = []) {
+  return loadAllOrders(knownFullNames);
+}
+
 export async function getOrdersForRep(fullName, knownFullNames = []) {
   const all = await loadAllOrders(knownFullNames);
   const target = normalizeName(fullName);

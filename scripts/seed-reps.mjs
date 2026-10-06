@@ -33,7 +33,7 @@ const DEFAULT_PASSWORD = '000000';
 // rep onto the team, for My Team's downline and leaderboard. Leave unset for
 // anyone whose recruiter isn't known.
 const ROSTER = [
-  { full_name: 'Adam Alkhatib', username: 'AAlkhatib', rep_code: '4688257', market: 'Salt Lake City', active: true },
+  { full_name: 'Adam Alkhatib', username: 'AAlkhatib', rep_code: '4688257', market: 'Salt Lake City', role: 'owner', active: true },
   { full_name: 'Alejandro Benitez', username: 'ABenitez', active: false },
   { full_name: 'Christian Dick', username: 'Christian', active: true, recruited_by: 'AAlkhatib' },
   { full_name: 'Holden Mott', username: 'HMott', active: false },
@@ -67,13 +67,14 @@ async function main() {
     const passwordHash = await hashPassword(password);
 
     await sql`
-      insert into reps (full_name, username, password_hash, rep_code, market)
-      values (${person.full_name}, ${person.username}, ${passwordHash}, ${person.rep_code || null}, ${person.market || null})
+      insert into reps (full_name, username, password_hash, rep_code, market, role)
+      values (${person.full_name}, ${person.username}, ${passwordHash}, ${person.rep_code || null}, ${person.market || null}, ${person.role || 'rep'})
       on conflict (full_name) do update
         set username = excluded.username,
             password_hash = excluded.password_hash,
             rep_code = excluded.rep_code,
-            market = excluded.market
+            market = excluded.market,
+            role = excluded.role
     `;
 
     results.push({ name: person.full_name, username: person.username, password });

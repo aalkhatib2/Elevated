@@ -98,6 +98,19 @@ a spreadsheet the team already keeps.
 - **Scope**: only Orders is wired. Overview/Commission/Team stay mockups until
   their underlying data (commission $, team hierarchy, milestones) exists
   somewhere real.
+- **Payroll** (`payroll.html`, `api/payroll.js`, `api/_lib/payroll.js`): a
+  Motorsport-style weekly statement — a Mon–Sun week, one block per rep, one
+  line per order, rep total, shop total. An order is paid in the week of its
+  **install date**; sold-not-installed orders are listed as pending and roll
+  forward; an order cancelled after its week was paid becomes a negative
+  chargeback in the next open week. Open weeks are computed live from the
+  sheet; the owner's **Close week** freezes them into `pay_periods` /
+  `payroll_lines` (see `scripts/schema.sql`) so later rate or sheet edits
+  can't rewrite what was paid. Reps see only their own statement; the owner
+  (`role = 'owner'`, set in `scripts/seed-reps.mjs`) sees everyone, plus CSV
+  export. Status words are read from the sheet's Status column (installed /
+  active / completed vs cancelled / churned; a row with an install date and
+  no status counts as installed). Tests: `npm test`.
 - **Env vars** (`vercel env add`): `GOOGLE_SHEETS_API_KEY`, `GOOGLE_SHEET_ID`,
   `DATABASE_URL` (from the Neon Marketplace integration), `SESSION_SECRET`.
 - **Local dev**: `npm i -g vercel`, `vercel link`, `vercel env pull .env.development.local`,
