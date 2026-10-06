@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Orders — Elevated Portal</title>
+<title>Payroll — Elevated Portal</title>
 <link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
@@ -32,9 +32,9 @@
     <button class="rail-search" type="button">Quick search<span class="kbd">Ctrl K</span></button>
     <nav class="rail-nav">
       <a href="overview.html"><span class="sq"></span>Overview</a>
-      <a href="orders.html" aria-current="page"><span class="sq"></span>Orders</a>
+      <a href="orders.html"><span class="sq"></span>Orders</a>
       <a href="commission.html"><span class="sq"></span>Commission</a>
-      <a href="payroll.html"><span class="sq"></span>Payroll</a>
+      <a href="payroll.html" aria-current="page"><span class="sq"></span>Payroll</a>
       <a href="team.html"><span class="sq"></span>My Team</a>
     </nav>
     <div class="rail-foot">
@@ -47,62 +47,37 @@
 
     <div class="topbar">
       <div>
-        <h1>Orders</h1>
-        <div class="sub">All time &middot; Everything below respects this range</div>
+        <h1>Payroll</h1>
+        <div class="sub" data-pay-range>Weekly statement &middot; paid on install date</div>
       </div>
       <div class="topbar-right">
-        <div class="seg">
-          <button type="button" aria-pressed="true" data-orders-range="all">All Time</button>
-          <button type="button" aria-pressed="false" data-orders-range="last-month">Last Month</button>
-          <button type="button" aria-pressed="false" data-orders-range="last-week">Last Week</button>
-          <button type="button" aria-pressed="false" data-orders-range="this-week">This Week</button>
+        <div class="seg" data-pay-nav>
+          <button type="button" data-pay-prev aria-label="Previous week">&larr; Prev</button>
+          <button type="button" data-pay-this aria-pressed="false">This week</button>
+          <button type="button" data-pay-next aria-label="Next week">Next &rarr;</button>
         </div>
-        <button class="chip" type="button"><span class="sq"></span>Data Filters</button>
+        <button class="chip" type="button" data-pay-print>Print / Save PDF</button>
+        <button class="chip" type="button" data-pay-csv data-owner-only hidden>Export CSV</button>
+        <button class="chip" type="button" data-pay-close data-owner-only hidden>Close week</button>
       </div>
     </div>
 
     <div class="pad">
 
-      <div class="ptabs" role="tablist">
-        <button type="button" role="tab" aria-selected="true"  data-pane="timeline">Timeline</button>
-        <button type="button" role="tab" aria-selected="false" data-pane="mobile">Mobile</button>
-      </div>
+      <div class="kpis" data-pay-kpis style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))"></div>
 
-      <!-- ============ TIMELINE ============ -->
-      <section class="ppane on" data-pane="timeline" style="margin-top:20px">
-        <div class="tbl-wrap">
-          <div class="tbl-tools">
-            <input class="tbl-search" type="search" placeholder="Search client, order #" data-orders-search>
-            <button class="chip" type="button">Export CSV</button>
-            <span class="tbl-count" data-orders-count>&hellip;</span>
-          </div>
+      <div data-pay-msg class="tbl-msg" role="status" style="margin-top:16px"></div>
+
+      <div data-pay-reps style="margin-top:20px"></div>
+
+      <section data-pay-pending-wrap hidden style="margin-top:28px">
+        <div class="sec-label">Pending &mdash; sold, not installed yet. Not paid; rolls forward.</div>
+        <div class="tbl-wrap" style="margin-top:12px">
           <div class="tbl-scroll">
-            <table class="tbl" style="min-width:700px">
-              <thead>
-                <tr>
-                  <th>#</th>
-                  <th>Order Date <span class="sort">&darr;</span></th>
-                  <th>Order #</th>
-                  <th>Client Name</th>
-                  <th>Gigs</th>
-                  <th>Status</th>
-                </tr>
-              </thead>
-              <tbody data-orders-body>
-                <tr><td colspan="6" class="tbl-msg">Loading your orders&hellip;</td></tr>
-              </tbody>
+            <table class="tbl" style="min-width:560px">
+              <thead><tr><th>Rep</th><th>Order #</th><th>Client</th><th>Gigs</th><th>Sold</th></tr></thead>
+              <tbody data-pay-pending></tbody>
             </table>
-          </div>
-        </div>
-      </section>
-
-      <!-- ============ MOBILE ============ -->
-      <section class="ppane" data-pane="mobile" style="margin-top:20px">
-        <div class="tbl-wrap">
-          <div class="empty">
-            <div class="box"><i></i></div>
-            <h3>Mobile isn't live yet</h3>
-            <p>Mobile sales open in December 2026. This tab starts showing real orders once the program launches.</p>
           </div>
         </div>
       </section>
@@ -110,6 +85,19 @@
     </div>
   </div>
 </div>
+
+<style>
+  [hidden] { display: none !important; }
+  .pay-rep { margin-top: 20px; }
+  .pay-rep h3 { font: 600 15px var(--font-display, inherit); letter-spacing: .04em; text-transform: uppercase; margin: 0 0 8px; }
+  .pay-total td { font-weight: 700; border-top: 1px solid currentColor; }
+  .pay-neg { color: #e5484d; }
+  @media print {
+    .rail, .fabs, .topbar-right, .ptabs { display: none !important; }
+    .app { display: block; }
+    body { background: #fff; color: #000; }
+  }
+</style>
 
 <div class="fabs">
   <button class="fab" type="button" title="Reminders and what is new" aria-label="3 reminders">3<span class="badge"></span></button>
@@ -120,7 +108,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
 <script src="portal-auth.js"></script>
 <script src="portal.js"></script>
-<script src="orders.js"></script>
+<script src="payroll.js"></script>
 
 </body>
 </html>

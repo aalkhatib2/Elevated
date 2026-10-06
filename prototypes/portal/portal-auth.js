@@ -12,6 +12,9 @@
     .then(function (data) {
       if (!data || !data.authenticated) throw new Error('unauthenticated');
       applyRep(data.rep);
+      if (data.rep.role === 'owner') {
+        document.querySelectorAll('[data-owner-only]').forEach(function (el) { el.hidden = false; });
+      }
     })
     .catch(function () {
       var next = encodeURIComponent(location.pathname + location.search);
