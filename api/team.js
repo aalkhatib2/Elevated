@@ -1,5 +1,5 @@
-import { readSessionFromRequest } from './_lib/session.js';
 import { sql } from './_lib/db.js';
+import { getSessionRep } from './_lib/auth.js';
 import { getOrderCountsByRep } from './_lib/sheets.js';
 
 export default async function handler(req, res) {
@@ -8,15 +8,8 @@ export default async function handler(req, res) {
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const session = readSessionFromRequest(req);
-  if (!session) return res.status(401).json({ error: 'Not signed in' });
-
   try {
-    const meRows = await sql`
-      select id, full_name, rep_code, team, division, market
-      from reps where id = ${session.repId} limit 1
-    `;
-    const me = meRows[0];
+    const me = await getSessionRep(req);
     if (!me) return res.status(401).json({ error: 'Not signed in' });
 
     // Everyone, for the leaderboard and to find my own downline among them.

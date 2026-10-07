@@ -271,7 +271,9 @@
         if (!result.ok || !result.data.ok) {
           throw new Error((result.data && result.data.error) || 'Sign in failed');
         }
-        location.href = nextUrl();
+        location.href = result.data.mustChangePassword
+          ? 'account.html?setup=1&next=' + encodeURIComponent(nextUrl())
+          : nextUrl();
       })
       .catch(function (err) {
         errorEl.textContent = err.message || 'Sign in failed';

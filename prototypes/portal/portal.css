@@ -362,6 +362,36 @@ table.tbl tbody tr:last-child td { border-bottom: none; }
 .bt-title { font-family: var(--head); font-weight: 600; font-size: 34px; line-height: 0.95; text-transform: uppercase; }
 .bt-copy { margin-top: 10px; font-size: 15px; color: var(--text-2); max-width: 52ch; }
 
+/* ---------------- account ---------------- */
+.rail-foot a[aria-current="page"] { color: var(--text); }
+
+.setup-note { max-width: 640px; margin-bottom: 20px; padding: 26px 28px; background: var(--bg-2); border: 1px solid var(--accent-line); }
+.setup-note h2 { margin-top: 16px; font-size: 34px; }
+.setup-note p:last-child { margin-top: 12px; font-size: 15px; color: var(--text-2); max-width: 52ch; }
+
+.acct-card { max-width: 640px; background: var(--bg-2); border: 1px solid var(--line); }
+.acct-head { padding: 24px 28px 22px; border-bottom: 1px solid var(--line); }
+.acct-head h2 { font-size: 26px; }
+.acct-head p { margin-top: 10px; font-size: 14px; color: var(--muted); }
+.acct-form { display: grid; gap: 18px; padding: 26px 28px 28px; }
+.field { display: grid; gap: 8px; }
+.field span { font-family: var(--label); font-weight: 600; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-2); }
+.field input {
+  width: 100%; height: 50px; padding: 0 16px;
+  background: var(--bg); color: var(--text); border: 1px solid var(--line-2); border-radius: 0;
+  font-family: var(--body); font-size: 16px; transition: border-color .2s, background-color .2s;
+}
+.field input:hover { border-color: var(--line-3); }
+.field input:focus-visible { outline: 1px solid var(--accent); outline-offset: -2px; border-color: var(--accent); background: var(--bg-3); }
+.field-hint { margin-top: -6px; font-size: 13px; color: var(--muted); }
+.form-msg { display: flex; align-items: baseline; gap: 10px; font-size: 14px; color: var(--text); }
+.form-msg::before { content: ""; flex: none; width: 7px; height: 7px; transform: translateY(-1px); }
+.form-msg[data-tone="error"]::before { border-radius: 50%; background: var(--accent); }
+.form-msg[data-tone="ok"]::before { background: var(--text); }
+.form-msg[hidden] { display: none; }
+.acct-form .btn { justify-self: start; margin-top: 4px; }
+.acct-form .btn:disabled { cursor: progress; background: var(--text); }
+
 /* ---------------- responsive ---------------- */
 @media (max-width: 1180px) {
   .kpis { grid-template-columns: repeat(2, 1fr); }
@@ -400,7 +430,8 @@ table.tbl tbody tr:last-child td { border-bottom: none; }
   .road-mark .q { margin-top: 0; }
   .kpi-v { font-size: 44px; }
   .build-team { padding: 24px 20px; }
-  .build-team .btn { width: 100%; }
+  .build-team .btn, .acct-form .btn { width: 100%; justify-self: stretch; }
+  .acct-head, .acct-form, .setup-note { padding-left: 20px; padding-right: 20px; }
   .bt-title { font-size: 28px; }
 }
 

@@ -60,3 +60,13 @@ create table if not exists payroll_lines (
 );
 
 create index if not exists payroll_lines_period_idx on payroll_lines (period_start);
+
+-- Password lifecycle. must_change_password is set whenever an admin issues a
+-- password (seed script create/reset) and cleared when the rep picks their
+-- own. Sessions signed before password_changed_at are rejected, so a reset or
+-- a change signs out every other device. failed_logins/locked_until lock an
+-- account for 15 minutes after 5 wrong passwords in a row.
+alter table reps add column if not exists must_change_password boolean not null default false;
+alter table reps add column if not exists password_changed_at  timestamptz;
+alter table reps add column if not exists failed_logins        integer not null default 0;
+alter table reps add column if not exists locked_until         timestamptz;
