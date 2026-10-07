@@ -1,8 +1,9 @@
 /* Elevated portal — Commission, from real orders only.
-   Everything here is derived from /api/orders: the rep's own rows in the
-   Fiber Sales sheet, each priced at the rate card the API sends (or the
-   sheet's own figure, once it has one). Paydays, deductions and chargebacks
-   are not tracked anywhere yet, so nothing on this page pretends they are. */
+   Every deal the rep has written, priced at the rate card /api/orders sends
+   (or the sheet's own figure, once it has one). Each order's stage comes
+   from the API using Payroll's classifier, so the two pages always agree;
+   cancelled orders are listed but never counted. What actually gets paid
+   each week, and any chargebacks, live on the Payroll page. */
 (function () {
 
   var weeksBody = document.querySelector('[data-cm-body="weeks"]');
@@ -65,14 +66,6 @@
   }
   function pad(n) { return String(n).padStart(2, '0'); }
 
-  // Installed when the sheet says so or the install date has passed; a future
-  // install date means it's booked; anything else is sold and waiting.
-  function stageOf(o) {
-    if (String(o.status || '').toLowerCase() === 'installed') return 'installed';
-    if (o.installDate) return o.installDate <= todayISO() ? 'installed' : 'scheduled';
-    return 'sold';
-  }
-
   // Same cutoffs as the Orders page, so the two never disagree on a range.
   function rangeCutoff(range) {
     var now = new Date();
@@ -88,15 +81,20 @@
     var cutoff = rangeCutoff(state.range);
     state.inRange = state.all
       .filter(function (o) { return !cutoff || o.date >= cutoff; })
-      .map(function (o) { return Object.assign({}, o, { stage: stageOf(o) }); })
       .sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
     renderKpis();
     renderWeeks();
     renderLines();
   }
 
+  // Cancelled orders never pay, so they never add to an estimate.
   function sum(rows) {
-    return rows.reduce(function (t, o) { return t + (o.repCommission || 0); }, 0);
+    return rows.reduce(function (t, o) {
+      return o.stage === 'cancelled' ? t : t + (o.repCommission || 0);
+    }, 0);
+  }
+  function stageCount(rows, stage) {
+    return rows.filter(function (o) { return o.stage === stage; }).length;
   }
 
   /* ---------------- render ---------------- */
@@ -110,7 +108,8 @@
     set('estimated', money.format(sum(rows)));
     set('installed', money.format(sum(installed)));
     set('installedCount', installed.length);
-    set('waitingCount', rows.length - installed.length);
+    set('waitingCount', stageCount(rows, 'pending'));
+    set('cancelledCount', stageCount(rows, 'cancelled'));
     if (state.rates) {
       set('rateCard', Object.keys(state.rates).sort().map(function (g) {
         return money.format(state.rates[g]) + ' per ' + g + '-gig';
@@ -187,7 +186,9 @@
           '<td class="td-mono">' + (o.gigs != null ? o.gigs + ' gig' : '—') + '</td>' +
           '<td class="td-mono">' + (o.installDate ? formatDate(o.installDate) : '—') + '</td>' +
           '<td>' + stagePill(o.stage) + '</td>' +
-          '<td class="td-r">' + (o.repCommission != null
+          '<td class="td-r">' + (o.stage === 'cancelled'
+            ? '<span class="td-sub" style="margin:0">Not counted</span>'
+            : o.repCommission != null
             ? '<span class="td-mono td-strong">' + money.format(o.repCommission) + '</span>' + (o.pricedFrom === 'sheet' ? '<span class="td-sub">from sheet</span>' : '')
             : '<span class="figure-pill" title="No # of Gigs on this row in the sheet">Needs gigs</span>') +
           '</td>' +
@@ -198,8 +199,8 @@
 
   function stagePill(stage) {
     if (stage === 'installed') return '<span class="pill" data-tone="pos">Installed</span>';
-    if (stage === 'scheduled') return '<span class="pill" data-tone="info">Install booked</span>';
-    return '<span class="pill" data-tone="mute">Sold</span>';
+    if (stage === 'cancelled') return '<span class="pill" data-tone="neg">Cancelled</span>';
+    return '<span class="pill" data-tone="info">Waiting on install</span>';
   }
 
   function emptyRow(cols, title, text) {

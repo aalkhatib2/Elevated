@@ -70,8 +70,8 @@
           <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Deals</span><span class="chev"></span></button>
           <div class="kpi-v" data-cm="deals">&mdash;</div>
           <div class="kpi-fold">
-            <p class="kpi-sub"><span data-cm="oneGig">&mdash;</span> at 1 gig &middot; <span data-cm="twoGig">&mdash;</span> at 2 gig</p>
-            <p class="kpi-note">Every order logged under your name in the Fiber Sales sheet for this range, counted by order date.</p>
+            <p class="kpi-sub"><span data-cm="oneGig">&mdash;</span> at 1 gig &middot; <span data-cm="twoGig">&mdash;</span> at 2 gig &middot; <span data-cm="cancelledCount">&mdash;</span> cancelled</p>
+            <p class="kpi-note">Every order logged under your name in the Fiber Sales sheet for this range, counted by order date. Cancelled orders are listed but not counted toward commission.</p>
           </div>
         </article>
         <article class="kpi" data-accent="pos">
@@ -80,7 +80,8 @@
           <div class="kpi-fold">
             <p class="kpi-sub">At the standard rate: <span data-cm="rateCard">&mdash;</span></p>
             <p class="kpi-flag" data-tone="warn">An estimate, not a pay stub</p>
-            <p class="kpi-note">What your deals add up to at the standard rate. Your actual pay can differ once deductions, chargebacks and any rate changes are applied.</p>
+            <p class="kpi-note">What your deals add up to at the standard rate, leaving out cancelled orders. What you're actually paid each week is on Payroll.</p>
+            <a class="kpi-link" href="payroll.html">View payroll</a>
           </div>
         </article>
         <article class="kpi" data-accent="pos">
@@ -88,7 +89,7 @@
           <div class="kpi-v" data-cm="installed">&mdash;</div>
           <div class="kpi-fold">
             <p class="kpi-sub"><span data-cm="installedCount">&mdash;</span> installed &middot; <span data-cm="waitingCount">&mdash;</span> waiting on install</p>
-            <p class="kpi-note">The part of your estimate on orders the sheet marks as installed, or whose install date has passed.</p>
+            <p class="kpi-note">The part of your estimate on installed orders: the sheet marks them installed, or they have an install date and no status. Same rule Payroll uses &mdash; an order pays in the week it installs.</p>
           </div>
         </article>
       </div>
@@ -154,8 +155,9 @@
       </section>
 
       <div class="sec-label">
-        <div class="t">Not tracked yet</div>
-        <div class="d">Paydays, deductions, credits and chargebacks aren't recorded anywhere the portal can read yet. They'll show up here once they are &mdash; until then, the figures above are your deals at the standard rate and nothing more.</div>
+        <div class="t">What you get paid</div>
+        <div class="d">This page is every deal you've written. Your weekly statement &mdash; what pays this week by install date, what's still pending, and any chargebacks &mdash; is on Payroll. Deductions and credits aren't tracked yet.</div>
+        <a class="kpi-link" href="payroll.html">Open payroll</a>
       </div>
 
     </div>

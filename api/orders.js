@@ -1,6 +1,7 @@
 import { sql } from './_lib/db.js';
 import { getSessionRep } from './_lib/auth.js';
 import { getOrdersForRep, RATES } from './_lib/sheets.js';
+import { classifyOrder } from './_lib/payroll.js';
 
 // Office pay and office margin are deliberately left out: what the office
 // collects from the carrier is owners-only, and anything in this payload is
@@ -57,6 +58,9 @@ export default async function handler(req, res) {
         status: o.status,
         week: o.week,
         installDate: o.installDate,
+        // Payroll's own rule, so Commission and Payroll never disagree on
+        // whether an order is installed, pending or cancelled.
+        stage: classifyOrder(o),
         repCommission: o.repCommission,
         pricedFrom: o.pricedFrom,
       })),
