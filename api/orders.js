@@ -1,6 +1,6 @@
 import { sql } from './_lib/db.js';
 import { getSessionRep } from './_lib/auth.js';
-import { getOrdersForRep } from './_lib/sheets.js';
+import { getOrdersForRep, RATES } from './_lib/sheets.js';
 
 // Office pay and office margin are deliberately left out: what the office
 // collects from the carrier is owners-only, and anything in this payload is
@@ -46,6 +46,9 @@ export default async function handler(req, res) {
         asOf: new Date().toISOString(),
       },
       totals,
+      // The rep's own rate card, so the page can say what an estimate is
+      // based on without hard-coding numbers that could drift from RATES.
+      commissionRates: RATES.repCommission,
       orders: orders.map((o) => ({
         date: o.date,
         orderId: o.orderId,

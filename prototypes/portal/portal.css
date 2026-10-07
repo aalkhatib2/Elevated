@@ -299,6 +299,11 @@ table.tbl td { padding: 16px 18px; border-bottom: 1px solid var(--line); font-si
 table.tbl tbody tr { transition: background-color .15s; }
 table.tbl tbody tr:hover { background: rgba(240,237,230,0.025); }
 table.tbl tbody tr:last-child td { border-bottom: none; }
+table.tbl tr.tr-total td {
+  border-top: 1px solid var(--line-2); background: var(--bg-3);
+  font-family: var(--label); font-weight: 600; font-size: 13px; letter-spacing: 0.08em; text-transform: uppercase;
+  color: var(--text); font-variant-numeric: tabular-nums;
+}
 .td-num  { font-family: var(--label); font-weight: 600; font-size: 12px; letter-spacing: 0.06em; color: var(--muted); font-variant-numeric: tabular-nums; }
 .td-mono { font-size: 14px; color: var(--text-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
 .td-strong { color: var(--text); font-weight: 600; }

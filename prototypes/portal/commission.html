@@ -52,234 +52,111 @@
       </div>
       <div class="topbar-right">
         <div class="seg">
-          <button type="button" aria-pressed="true">All Time</button>
-          <button type="button" aria-pressed="false">Last Month</button>
-          <button type="button" aria-pressed="false">Last Week</button>
-          <button type="button" aria-pressed="false">This Week</button>
+          <button type="button" aria-pressed="true" data-cm-range="all">All Time</button>
+          <button type="button" aria-pressed="false" data-cm-range="last-month">Last Month</button>
+          <button type="button" aria-pressed="false" data-cm-range="last-week">Last Week</button>
+          <button type="button" aria-pressed="false" data-cm-range="this-week">This Week</button>
         </div>
-        <button class="chip" type="button"><span class="sq"></span>Data Filters</button>
       </div>
     </div>
 
     <div class="pad">
 
+      <!-- Every figure below is computed in commission.js from /api/orders.
+           Until the sheet carries real dollar amounts, commission is an
+           estimate at the rate card the API sends with the orders. -->
       <div class="kpis">
         <article class="kpi" data-accent="info">
-          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Total deals</span><span class="chev"></span></button>
-          <div class="kpi-v">124</div>
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Deals</span><span class="chev"></span></button>
+          <div class="kpi-v" data-cm="deals">&mdash;</div>
           <div class="kpi-fold">
-            <p class="kpi-sub">Across 9 paydays since March</p>
-            <p class="kpi-note">Every install that has produced a commission line, whether it has paid, is pending, or was later reversed.</p>
+            <p class="kpi-sub"><span data-cm="oneGig">&mdash;</span> at 1 gig &middot; <span data-cm="twoGig">&mdash;</span> at 2 gig</p>
+            <p class="kpi-note">Every order logged under your name in the Fiber Sales sheet for this range, counted by order date.</p>
           </div>
         </article>
         <article class="kpi" data-accent="pos">
-          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Gross commission</span><span class="chev"></span></button>
-          <div class="kpi-v is-pending">Add figure</div>
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Estimated commission</span><span class="chev"></span></button>
+          <div class="kpi-v" data-cm="estimated">&mdash;</div>
           <div class="kpi-fold">
-            <p class="kpi-sub">Before any deduction</p>
-            <p class="kpi-note">The total your deals earned at the published rate card, before withholdings, housing, or any other deduction comes off.</p>
+            <p class="kpi-sub">At the standard rate: <span data-cm="rateCard">&mdash;</span></p>
+            <p class="kpi-flag" data-tone="warn">An estimate, not a pay stub</p>
+            <p class="kpi-note">What your deals add up to at the standard rate. Your actual pay can differ once deductions, chargebacks and any rate changes are applied.</p>
           </div>
         </article>
-        <article class="kpi" data-accent="info">
-          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Total payable</span><span class="chev"></span></button>
-          <div class="kpi-v is-pending">Add figure</div>
+        <article class="kpi" data-accent="pos">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">On installed orders</span><span class="chev"></span></button>
+          <div class="kpi-v" data-cm="installed">&mdash;</div>
           <div class="kpi-fold">
-            <p class="kpi-sub">Gross, minus deductions, plus credits</p>
-            <p class="kpi-flag" data-tone="pos">This is what actually hits your account</p>
-            <p class="kpi-note">If this number and your own count disagree, open the payday row below &mdash; every line is itemized down to the install.</p>
+            <p class="kpi-sub"><span data-cm="installedCount">&mdash;</span> installed &middot; <span data-cm="waitingCount">&mdash;</span> waiting on install</p>
+            <p class="kpi-note">The part of your estimate on orders the sheet marks as installed, or whose install date has passed.</p>
           </div>
         </article>
       </div>
 
       <div class="ptabs" role="tablist" style="margin-top:36px">
-        <button type="button" role="tab" aria-selected="true"  data-pane="payroll">Payroll Summary</button>
-        <button type="button" role="tab" aria-selected="false" data-pane="details">Commission Details</button>
-        <button type="button" role="tab" aria-selected="false" data-pane="adjust">Adjustments</button>
+        <button type="button" role="tab" aria-selected="true"  data-pane="weeks">By Week</button>
+        <button type="button" role="tab" aria-selected="false" data-pane="lines">Every Order</button>
       </div>
 
-      <!-- ============ PAYROLL SUMMARY ============ -->
-      <section class="ppane on" data-pane="payroll" style="margin-top:20px">
+      <!-- ============ BY WEEK ============ -->
+      <section class="ppane on" data-pane="weeks" style="margin-top:20px">
         <div class="tbl-wrap">
           <div class="tbl-tools">
-            <input class="tbl-search" type="search" placeholder="Search paydays">
-            <button class="chip" type="button">Export CSV</button>
-            <span class="tbl-count">9 paydays</span>
+            <span class="tbl-count" data-cm-count="weeks">&hellip;</span>
           </div>
           <div class="tbl-scroll">
-            <table class="tbl">
+            <table class="tbl" style="min-width:720px">
               <thead>
                 <tr>
-                  <th>Payday <span class="sort">&darr;</span></th>
+                  <th>Week <span class="sort">&darr;</span></th>
                   <th class="td-r">Deals</th>
-                  <th class="td-r">Gross</th>
-                  <th class="td-r">Deductions</th>
-                  <th class="td-r">Credits</th>
-                  <th class="td-r">Final Payable</th>
-                  <th>Status</th>
+                  <th class="td-r">1 gig</th>
+                  <th class="td-r">2 gig</th>
+                  <th class="td-r">Installed</th>
+                  <th class="td-r">Est. commission</th>
                 </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td class="td-mono td-strong">Aug 15</td><td class="td-mono td-r">19</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td class="td-mono td-r">&mdash;</td><td class="td-mono td-r">&mdash;</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td><span class="pill" data-tone="pos">Deposited</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono td-strong">Jul 31</td><td class="td-mono td-r">22</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td class="td-mono td-r">&mdash;</td><td class="td-mono td-r">&mdash;</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td><span class="pill" data-tone="pos">Deposited</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono td-strong">Jul 15</td><td class="td-mono td-r">17</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td class="td-mono td-r">&mdash;</td><td class="td-mono td-r">&mdash;</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td><span class="pill" data-tone="pos">Deposited</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono td-strong">Jun 30</td><td class="td-mono td-r">21</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td class="td-mono td-r">&mdash;</td><td class="td-mono td-r">&mdash;</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td><span class="pill" data-tone="pos">Deposited</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono td-strong">Aug 31</td><td class="td-mono td-r">6</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td class="td-mono td-r">&mdash;</td><td class="td-mono td-r">&mdash;</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td><span class="pill" data-tone="info">Projected</span></td>
-                </tr>
+              <tbody data-cm-body="weeks">
+                <tr><td colspan="6" class="tbl-msg">Loading your commission&hellip;</td></tr>
               </tbody>
             </table>
           </div>
         </div>
-        <p class="lede" style="margin-top:18px;font-size:14px">
-          Deduction and credit columns stay empty until the rate card is locked for the campaign. Housing, withholdings, incentives and overrides each get their own column once they do.
-        </p>
       </section>
 
-      <!-- ============ COMMISSION DETAILS ============ -->
-      <section class="ppane" data-pane="details" style="margin-top:20px">
-        <div class="sec-label" style="margin-top:0">
-          <div class="t">Every line, down to the install</div>
-          <div class="d">One row per deal. Projected payday is when the line is expected to clear, not when it was sold.</div>
-        </div>
+      <!-- ============ EVERY ORDER ============ -->
+      <section class="ppane" data-pane="lines" style="margin-top:20px">
         <div class="tbl-wrap">
           <div class="tbl-tools">
-            <input class="tbl-search" type="search" placeholder="Search customer, address, or order ID">
-            <button class="chip" type="button">Export CSV</button>
-            <span class="tbl-count">124 lines</span>
+            <input class="tbl-search" type="search" placeholder="Search client or order #" data-cm-search>
+            <button class="chip" type="button" data-cm-export>Export CSV</button>
+            <span class="tbl-count" data-cm-count="lines">&hellip;</span>
           </div>
           <div class="tbl-scroll">
-            <table class="tbl">
+            <table class="tbl" style="min-width:860px">
               <thead>
-                <tr><th>Order ID</th><th>Install</th><th>Activated</th><th>Plan</th><th class="td-r">Net Commission</th><th>Projected Payday</th><th>Status</th></tr>
+                <tr>
+                  <th>Order date <span class="sort">&darr;</span></th>
+                  <th>Order #</th>
+                  <th>Client</th>
+                  <th>Plan</th>
+                  <th>Install</th>
+                  <th>Stage</th>
+                  <th class="td-r">Est. commission</th>
+                </tr>
               </thead>
-              <tbody>
-                <tr>
-                  <td class="td-mono">EL-40219</td>
-                  <td><span class="td-strong">1482 Ridgeline Dr</span><span class="td-sub">Salt Lake City, UT</span></td>
-                  <td class="td-mono">Aug 18</td><td class="td-mono">1 gig</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td class="td-mono">Aug 31</td>
-                  <td><span class="pill" data-tone="warn">Pending clearance</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono">EL-40217</td>
-                  <td><span class="td-strong">907 Cordell Ave</span><span class="td-sub">Salt Lake City, UT</span></td>
-                  <td class="td-mono">Aug 18</td><td class="td-mono">500 meg</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td class="td-mono">Aug 31</td>
-                  <td><span class="pill" data-tone="warn">Pending clearance</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono">EL-40204</td>
-                  <td><span class="td-strong">55 Bellhaven Ct</span><span class="td-sub">Millcreek, UT</span></td>
-                  <td class="td-mono">Aug 17</td><td class="td-mono">1 gig</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td class="td-mono">Aug 31</td>
-                  <td><span class="pill" data-tone="warn">Pending clearance</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono">EL-40098</td>
-                  <td><span class="td-strong">120 Alder Park Way</span><span class="td-sub">Murray, UT</span></td>
-                  <td class="td-mono">Aug 04</td><td class="td-mono">2 gig</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td class="td-mono">Aug 15</td>
-                  <td><span class="pill" data-tone="pos">Cleared</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono">EL-40061</td>
-                  <td><span class="td-strong">88 Wexler Ln</span><span class="td-sub">Murray, UT</span></td>
-                  <td class="td-mono">Aug 05</td><td class="td-mono">1 gig</td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td class="td-mono">Aug 15</td>
-                  <td><span class="pill" data-tone="neg">Reversed</span></td>
-                </tr>
+              <tbody data-cm-body="lines">
+                <tr><td colspan="7" class="tbl-msg">Loading your orders&hellip;</td></tr>
               </tbody>
             </table>
           </div>
         </div>
       </section>
 
-      <!-- ============ ADJUSTMENTS ============ -->
-      <section class="ppane" data-pane="adjust" style="margin-top:20px">
-        <div class="sec-label" style="margin-top:0">
-          <div class="t">Chargebacks and reversals</div>
-          <div class="d">Every line that took money back, and exactly why. Nothing here is applied without a matching order.</div>
-        </div>
-        <div class="tbl-wrap">
-          <div class="tbl-tools">
-            <input class="tbl-search" type="search" placeholder="Search adjustments">
-            <button class="chip" type="button">Export CSV</button>
-            <span class="tbl-count">3 adjustments</span>
-          </div>
-          <div class="tbl-scroll">
-            <table class="tbl" style="min-width:820px">
-              <thead>
-                <tr><th>Applied</th><th>Order ID</th><th>Reason</th><th class="td-r">Amount</th><th>Type</th></tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td class="td-mono">Aug 15</td><td class="td-mono">EL-40061</td>
-                  <td><span class="td-strong">88 Wexler Ln</span><span class="td-sub">Disconnected 9 days after activation &mdash; inside the 120 day window</span></td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td><span class="pill" data-tone="neg">Chargeback</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono">Jul 31</td><td class="td-mono">EL-39804</td>
-                  <td><span class="td-strong">2044 Kestrel Rd</span><span class="td-sub">Disconnected 41 days after activation</span></td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td><span class="pill" data-tone="neg">Chargeback</span></td>
-                </tr>
-                <tr>
-                  <td class="td-mono">Jul 15</td><td class="td-mono">EL-39655</td>
-                  <td><span class="td-strong">907 Linden Grove</span><span class="td-sub">Churned before first payday &mdash; never paid, so nothing was clawed back</span></td>
-                  <td class="td-r"><span class="figure-pill">Add figure</span></td>
-                  <td><span class="pill" data-tone="warn">Unpaid loss</span></td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
-        </div>
-
-        <div class="sec-label">
-          <div class="t">Open disputes</div>
-          <div class="d">Think an adjustment is wrong? Open a dispute from the row and it lands here.</div>
-        </div>
-        <div class="tbl-wrap">
-          <div class="empty">
-            <div class="box"><i></i></div>
-            <h3>Nothing in dispute</h3>
-            <p>Every adjustment on your account has been accepted.</p>
-          </div>
-        </div>
-      </section>
+      <div class="sec-label">
+        <div class="t">Not tracked yet</div>
+        <div class="d">Paydays, deductions, credits and chargebacks aren't recorded anywhere the portal can read yet. They'll show up here once they are &mdash; until then, the figures above are your deals at the standard rate and nothing more.</div>
+      </div>
 
     </div>
   </div>
@@ -294,6 +171,7 @@
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
 <script src="portal-auth.js"></script>
 <script src="portal.js"></script>
+<script src="commission.js"></script>
 
 </body>
 </html>
