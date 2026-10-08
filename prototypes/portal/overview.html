@@ -125,26 +125,37 @@
       <!-- ---- money ---- -->
       <div class="sec-label">
         <div class="t">Money</div>
-        <div class="d">Waiting on a commission column in the Fiber Sales sheet &mdash; these go live the moment one exists</div>
+        <div class="d">From Payroll &middot; an order pays in the Monday&ndash;Sunday week it installs</div>
       </div>
       <div class="kpis">
         <article class="kpi" data-accent="pos">
-          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Cleared this period</span><span class="chev"></span></button>
-          <div class="kpi-v is-pending">Add figure</div>
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Pays this week</span><span class="chev"></span></button>
+          <div class="kpi-v" data-mn="thisTotal">&mdash;</div>
           <div class="kpi-fold">
-            <p class="kpi-sub">19 installs &middot; deposited Aug 15</p>
-            <p class="kpi-note">Commission that has finished its clearance window and been paid out to you. Once a line clears it cannot be reversed.</p>
-            <a class="kpi-link" href="commission.html">View commission</a>
+            <p class="kpi-sub"><span data-mn="thisCount">&mdash;</span> &middot; <span data-mn="thisRange">&mdash;</span></p>
+            <p class="kpi-flag" data-tone="warn" data-mn="thisFlag" hidden></p>
+            <p class="kpi-note">Installs dated this week, at the standard rate. This can still change until the owner closes the week &mdash; a cancelled order comes back out as a chargeback in a later week.</p>
+            <a class="kpi-link" href="payroll.html">View payroll</a>
+          </div>
+        </article>
+        <article class="kpi" data-accent="info">
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Paid last week</span><span class="chev"></span></button>
+          <div class="kpi-v" data-mn="lastTotal">&mdash;</div>
+          <div class="kpi-fold">
+            <p class="kpi-sub"><span data-mn="lastCount">&mdash;</span> &middot; <span data-mn="lastRange">&mdash;</span></p>
+            <p class="kpi-flag" data-tone="pos" data-mn="lastFlag" hidden></p>
+            <p class="kpi-note">Installs dated last week. Once the owner closes a week, what was paid is frozen and later rate changes can't rewrite it.</p>
+            <a class="kpi-link" href="payroll.html">View payroll</a>
           </div>
         </article>
         <article class="kpi" data-accent="warn">
-          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Pending clearance</span><span class="chev"></span></button>
-          <div class="kpi-v is-pending">Add figure</div>
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Waiting on install</span><span class="chev"></span></button>
+          <div class="kpi-v" data-mn="waitingTotal">&mdash;</div>
           <div class="kpi-fold">
-            <p class="kpi-sub">6 installs awaiting &middot; oldest 11 days</p>
-            <p class="kpi-flag" data-tone="warn">Reversible until it clears</p>
-            <p class="kpi-note">Installs that are done but still inside the clearance window. If the customer cancels before the window closes, the line reverses instead of paying.</p>
-            <a class="kpi-link" href="orders.html">View orders</a>
+            <p class="kpi-sub"><span data-mn="waitingCount">&mdash;</span><span data-mn="waitingOldest"></span></p>
+            <p class="kpi-flag" data-tone="warn">Not paid yet</p>
+            <p class="kpi-note">Orders you've sold that aren't installed yet, estimated at the standard rate. Each one pays in the week it installs, and not at all if it cancels first.</p>
+            <a class="kpi-link" href="commission.html">View commission</a>
           </div>
         </article>
       </div>
