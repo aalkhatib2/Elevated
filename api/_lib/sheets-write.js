@@ -20,14 +20,21 @@ async function writeFetch(path, { method = 'GET', params = {}, body } = {}) {
   const url = new URL(`https://sheets.googleapis.com/v4/spreadsheets/${sheetId}${path}`);
   for (const [key, value] of Object.entries(params)) url.searchParams.set(key, value);
 
-  const res = await fetch(url, {
-    method,
-    headers: {
-      Authorization: `Bearer ${token}`,
-      ...(body ? { 'Content-Type': 'application/json' } : {}),
-    },
-    body: body ? JSON.stringify(body) : undefined,
-  });
+  // The Sheets API allows ~60 requests/minute per user; a busy bot run can
+  // brush that, so back off on 429 instead of failing the run.
+  let res;
+  for (let attempt = 0; ; attempt++) {
+    res = await fetch(url, {
+      method,
+      headers: {
+        Authorization: `Bearer ${token}`,
+        ...(body ? { 'Content-Type': 'application/json' } : {}),
+      },
+      body: body ? JSON.stringify(body) : undefined,
+    });
+    if (res.status !== 429 || attempt >= 4) break;
+    await new Promise((r) => setTimeout(r, 5000 * (attempt + 1)));
+  }
   if (!res.ok) {
     const text = await res.text().catch(() => '');
     throw new Error(`Sheets API ${method} ${path} failed: ${res.status} ${text}`);
@@ -51,6 +58,30 @@ export function writeRange(range, values) {
     params: { valueInputOption: 'USER_ENTERED' },
     body: { range, majorDimension: 'ROWS', values },
   });
+}
+
+export function writeRanges(data) {
+  return writeFetch('/values:batchUpdate', {
+    method: 'POST',
+    body: { valueInputOption: 'USER_ENTERED', data },
+  });
+}
+
+export function appendRows(range, values) {
+  return writeFetch(`/values/${encodeURIComponent(range)}:append`, {
+    method: 'POST',
+    params: { valueInputOption: 'USER_ENTERED', insertDataOption: 'INSERT_ROWS' },
+    body: { majorDimension: 'ROWS', values },
+  });
+}
+
+export function clearRanges(ranges) {
+  return writeFetch('/values:batchClear', { method: 'POST', body: { ranges } });
+}
+
+export async function getSheetProps() {
+  const data = await writeFetch('', { params: { fields: 'sheets.properties(sheetId,title,index)' } });
+  return (data.sheets || []).map((s) => s.properties);
 }
 
 // Structural edits: add a tab, insert a row, duplicate a sheet.
