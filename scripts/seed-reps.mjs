@@ -24,8 +24,10 @@ const OUT_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'rep-lo
 //
 // full_name must match the "Sales Rep" column of the weekly sales tracker
 // EXACTLY (case/whitespace-tolerant) — a misspelling here silently orphans
-// that rep's orders. "Delany" has no last name in the sheet, so neither does
-// the login; update both together if one turns up.
+// that rep's orders. If the sheet's spelling changes, change it here and in the
+// database together — a roster name the database doesn't have makes this script
+// try to create a second login. A username, once issued, can stay as it was:
+// Delaney Leale's is still "Delany".
 //
 // recruited_by is another roster entry's username — who brought this rep on,
 // for My Team's downline and leaderboard. Leave unset when unknown.
@@ -34,7 +36,7 @@ const ROSTER = [
   { full_name: 'Alejandro Benitez', username: 'ABenitez', active: true },
   { full_name: 'Christian Dick', username: 'Christian', active: true, recruited_by: 'AAlkhatib' },
   { full_name: 'Christian Grey', username: 'CGrey', active: true },
-  { full_name: 'Delany', username: 'Delany', active: true },
+  { full_name: 'Delaney Leale', username: 'Delany', active: true },
   { full_name: 'Holden Mott', username: 'HMott', active: true },
   // Izaiah, Jahzir and Jorge were removed from the database on 2026-10-06/07;
   // inactive here so a re-run doesn't quietly recreate them.
