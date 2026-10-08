@@ -6,3 +6,6 @@ node_modules/
 
 .vercel
 .env*
+
+# Generated rep passwords from scripts/seed-reps.mjs
+*.local.csv

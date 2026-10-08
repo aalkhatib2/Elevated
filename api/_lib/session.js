@@ -51,11 +51,20 @@ export function verifySession(cookieValue) {
   return payload;
 }
 
+// The rep's password_changed_at, as a comparable string. The cookie carries
+// the value current at sign-in and getSessionRep requires an exact match, so
+// any later reset or change invalidates it — compared for equality, never as
+// a time, because the database clock and this server's clock can disagree.
+export function passwordStamp(passwordChangedAt) {
+  return passwordChangedAt ? new Date(passwordChangedAt).toISOString() : null;
+}
+
 export function createSessionCookie(rep) {
   const now = Date.now();
   const value = signSession({
     repId: rep.id,
     fullName: rep.full_name,
+    pwc: passwordStamp(rep.password_changed_at),
     iat: now,
     exp: now + MAX_AGE_SECONDS * 1000,
   });

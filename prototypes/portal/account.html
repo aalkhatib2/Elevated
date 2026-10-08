@@ -1,0 +1,103 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Account — Elevated Portal</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<div class="app">
+
+  <aside class="rail">
+    <a class="rail-brand" href="overview.html">
+      <img src="../../brand/wordmark-elevated-light.svg" alt="Elevated" width="5424" height="799">
+      <span class="rail-sub">Agent Portal</span>
+    </a>
+    <div class="rail-id">
+      <div class="rail-who"><span class="dot"></span><span data-field="fullName">&nbsp;</span></div>
+      <span class="rail-badge">Rep</span>
+      <dl class="rail-kv">
+        <dt>Team</dt><dd data-field="team">&mdash;</dd>
+        <dt>Division</dt><dd data-field="division">&mdash;</dd>
+        <dt>Market</dt><dd data-field="market">&mdash;</dd>
+        <dt>Rep code</dt><dd data-field="repCode">&mdash;</dd>
+      </dl>
+    </div>
+    <button class="rail-search" type="button">Quick search<span class="kbd">Ctrl K</span></button>
+    <nav class="rail-nav">
+      <a href="overview.html"><span class="sq"></span>Overview</a>
+      <a href="orders.html"><span class="sq"></span>Orders</a>
+      <a href="commission.html"><span class="sq"></span>Commission</a>
+      <a href="payroll.html"><span class="sq"></span>Payroll</a>
+      <a href="team.html"><span class="sq"></span>My Team</a>
+    </nav>
+    <div class="rail-foot">
+      <a href="account.html" aria-current="page">Account</a>
+      <a href="login.html" data-signout>Sign out</a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>Account</h1>
+        <div class="sub">Signed in as <span data-field="username">&hellip;</span></div>
+      </div>
+    </div>
+
+    <div class="pad">
+
+      <section class="setup-note" id="setupNote" hidden>
+        <p class="kicker">First sign-in</p>
+        <h2>Pick your own password</h2>
+        <p>The password you were given is temporary. Choose one only you know before you continue.</p>
+      </section>
+
+      <section class="acct-card">
+        <div class="acct-head">
+          <h2>Change password</h2>
+          <p>Changing it signs you out on every other phone or computer.</p>
+        </div>
+
+        <form id="pwForm" class="acct-form" novalidate>
+          <label class="field">
+            <span>Current password</span>
+            <input type="password" name="currentPassword" autocomplete="current-password" required>
+          </label>
+          <label class="field">
+            <span>New password</span>
+            <input type="password" name="newPassword" autocomplete="new-password" minlength="8" required aria-describedby="pwHint">
+          </label>
+          <label class="field">
+            <span>Confirm new password</span>
+            <input type="password" name="confirmPassword" autocomplete="new-password" minlength="8" required>
+          </label>
+          <p class="field-hint" id="pwHint">At least 8 characters. Don't use your username.</p>
+
+          <p class="form-msg" id="pwError" data-tone="error" role="alert" hidden></p>
+          <p class="form-msg" id="pwOk" data-tone="ok" role="status" hidden></p>
+
+          <button class="btn btn-primary" type="submit">
+            <span class="btn-text">Update password</span>
+            <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg>
+          </button>
+        </form>
+      </section>
+
+    </div>
+  </div>
+</div>
+
+<script src="portal-auth.js"></script>
+<script src="portal.js"></script>
+<script src="account.js"></script>
+
+</body>
+</html>

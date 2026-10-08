@@ -1,24 +1,19 @@
-import { readSessionFromRequest } from './_lib/session.js';
 import { sql } from './_lib/db.js';
-import { getOrdersForRep } from './_lib/sheets.js';
+import { getSessionRep } from './_lib/auth.js';
+import { getOrdersForRep, RATES } from './_lib/sheets.js';
+import { classifyOrder } from './_lib/payroll.js';
 
+// Office pay and office margin are deliberately left out: what the office
+// collects from the carrier is owners-only, and anything in this payload is
+// readable by the rep in their browser even if the page never shows it.
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const session = readSessionFromRequest(req);
-  if (!session) return res.status(401).json({ error: 'Not signed in' });
-
   try {
-    const repRows = await sql`
-      select full_name, rep_code, team, division, market
-      from reps
-      where id = ${session.repId}
-      limit 1
-    `;
-    const rep = repRows[0];
+    const rep = await getSessionRep(req);
     if (!rep) return res.status(401).json({ error: 'Not signed in' });
 
     const allReps = await sql`select full_name from reps`;
@@ -33,12 +28,10 @@ export default async function handler(req, res) {
         acc.orders += 1;
         acc.gigs += o.gigs || 0;
         if (o.repCommission != null) acc.repCommission += o.repCommission;
-        if (o.officePay != null) acc.officePay += o.officePay;
-        if (o.officeMargin != null) acc.officeMargin += o.officeMargin;
         if (o.pricedFrom === 'sheet') acc.pricedFromSheet += 1;
         return acc;
       },
-      { orders: 0, gigs: 0, repCommission: 0, officePay: 0, officeMargin: 0, pricedFromSheet: 0 }
+      { orders: 0, gigs: 0, repCommission: 0, pricedFromSheet: 0 }
     );
 
     return res.status(200).json({
@@ -54,6 +47,9 @@ export default async function handler(req, res) {
         asOf: new Date().toISOString(),
       },
       totals,
+      // The rep's own rate card, so the page can say what an estimate is
+      // based on without hard-coding numbers that could drift from RATES.
+      commissionRates: RATES.repCommission,
       orders: orders.map((o) => ({
         date: o.date,
         orderId: o.orderId,
@@ -62,9 +58,10 @@ export default async function handler(req, res) {
         status: o.status,
         week: o.week,
         installDate: o.installDate,
+        // Payroll's own rule, so Commission and Payroll never disagree on
+        // whether an order is installed, pending or cancelled.
+        stage: classifyOrder(o),
         repCommission: o.repCommission,
-        officePay: o.officePay,
-        officeMargin: o.officeMargin,
         pricedFrom: o.pricedFrom,
       })),
     });

@@ -7,8 +7,8 @@
 //   POST /api/payroll   { period }
 //        Owner only. Freezes a finished week into payroll_lines.
 
-import { readSessionFromRequest } from './_lib/session.js';
 import { sql } from './_lib/db.js';
+import { getSessionRep } from './_lib/auth.js';
 import { getAllOrders, normalizeName } from './_lib/sheets.js';
 import { addDays, buildPayroll, groupLines, payPeriodFor, toCsv } from './_lib/payroll.js';
 
@@ -46,18 +46,26 @@ function onlyRep(statement, fullName) {
   };
 }
 
+// What the office collects from the carrier is owners-only. Hiding it in the
+// page isn't enough — a rep can read the raw response — so it is removed here.
+function withoutOfficeFigures(statement) {
+  const strip = ({ officePay, officeMargin, ...rest }) => rest;
+  return {
+    ...statement,
+    reps: (statement.reps || []).map((r) => ({ ...strip(r), lines: r.lines.map(strip) })),
+    pending: (statement.pending || []).map(strip),
+    totals: statement.totals && strip(statement.totals),
+  };
+}
+
 export default async function handler(req, res) {
   if (req.method !== 'GET' && req.method !== 'POST') {
     res.setHeader('Allow', 'GET, POST');
     return res.status(405).json({ error: 'Method not allowed' });
   }
 
-  const session = readSessionFromRequest(req);
-  if (!session) return res.status(401).json({ error: 'Not signed in' });
-
   try {
-    const meRows = await sql`select id, full_name, role from reps where id = ${session.repId} limit 1`;
-    const me = meRows[0];
+    const me = await getSessionRep(req);
     if (!me) return res.status(401).json({ error: 'Not signed in' });
     const isOwner = me.role === 'owner';
 
@@ -134,9 +142,11 @@ export default async function handler(req, res) {
       const orders = await getAllOrders(reps.map((r) => r.full_name));
       statement = buildPayroll(orders, period.start, closedRows);
     }
-    if (!isOwner) statement = onlyRep(statement, me.full_name);
+    if (!isOwner) statement = withoutOfficeFigures(onlyRep(statement, me.full_name));
 
     if (req.query && req.query.format === 'csv') {
+      // The CSV carries office pay per line, and the button is owner-only.
+      if (!isOwner) return res.status(403).json({ error: 'Only the owner can export payroll' });
       res.setHeader('Content-Type', 'text/csv; charset=utf-8');
       res.setHeader('Content-Disposition', `attachment; filename="payroll-${period.start}.csv"`);
       return res.status(200).send(toCsv(statement));

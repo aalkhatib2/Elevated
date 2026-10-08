@@ -58,11 +58,13 @@ async function handleApi(req, res, pathname) {
   }
 
   req.body = await readBody(req);
+  req.query = Object.fromEntries(new URL(req.url, 'http://localhost').searchParams);
   res.status = function (code) { this.statusCode = code; return this; };
   res.json = function (obj) {
     if (!this.getHeader('Content-Type')) this.setHeader('Content-Type', 'application/json; charset=utf-8');
     this.end(JSON.stringify(obj));
   };
+  res.send = function (body) { this.end(body); };
 
   try {
     // Cache-bust the import so edits to api/*.js take effect without restarting.
