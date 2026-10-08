@@ -70,3 +70,8 @@ alter table reps add column if not exists must_change_password boolean not null 
 alter table reps add column if not exists password_changed_at  timestamptz;
 alter table reps add column if not exists failed_logins        integer not null default 0;
 alter table reps add column if not exists locked_until         timestamptz;
+
+-- Deactivated from the owner's Reps page. A deactivated rep can't sign in and
+-- any open session stops working, but the row stays so their orders still
+-- match a known rep and Payroll history keeps its link. Null = active.
+alter table reps add column if not exists disabled_at          timestamptz;
