@@ -1,8 +1,10 @@
 // Weekly payroll: turns the sheet's orders into a Motorsport-style statement.
 //
 // Rules (agreed with the owner):
-//   - A pay period is a Mon–Sun week.
-//   - An order is paid in the week of its *install date*, not its sold date.
+//   - A pay period is a Mon–Sun week of *install dates*, not sold dates.
+//   - Each week is paid on the Friday of the FOLLOWING week: installs Mon
+//     Oct 5 – Sun Oct 11 are paid Fri Oct 16. Nothing pays in the week it
+//     installs.
 //   - Sold-but-not-installed orders are listed as pending and roll forward.
 //   - An order cancelled after its week was closed is clawed back as a
 //     negative chargeback line in the next open week.
@@ -25,14 +27,31 @@ function parseISO(iso) {
 
 const toISO = (d) => d.toISOString().slice(0, 10);
 
-// The Mon–Sun week containing `iso`. Returns null for an unparseable date.
+// The Mon–Sun install week containing `iso`, and the Friday it is paid
+// (11 days after its Monday). Returns null for an unparseable date.
 export function payPeriodFor(iso) {
   const d = parseISO(iso);
   if (!d) return null;
   const sinceMonday = (d.getUTCDay() + 6) % 7; // Mon=0 … Sun=6
   const start = new Date(d.getTime() - sinceMonday * DAY_MS);
   const end = new Date(start.getTime() + 6 * DAY_MS);
-  return { key: toISO(start), start: toISO(start), end: toISO(end) };
+  const payday = new Date(start.getTime() + 11 * DAY_MS);
+  return { key: toISO(start), start: toISO(start), end: toISO(end), payday: toISO(payday) };
+}
+
+// The Friday an install on `iso` gets paid.
+export function paydayFor(iso) {
+  const p = payPeriodFor(iso);
+  return p ? p.payday : null;
+}
+
+// The install week paid on the first payday on or after `iso` — i.e. "what
+// gets paid this coming Friday" (on a Friday, that Friday's statement).
+export function payPeriodPaidOn(iso) {
+  const d = parseISO(iso);
+  if (!d) return null;
+  const toFriday = (5 - d.getUTCDay() + 7) % 7;
+  return payPeriodFor(toISO(new Date(d.getTime() + (toFriday - 11) * DAY_MS)));
 }
 
 export function addDays(iso, days) {

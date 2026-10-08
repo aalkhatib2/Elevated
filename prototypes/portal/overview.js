@@ -1,8 +1,9 @@
 /* Elevated portal — Overview live figures.
    Pulls the same /api/orders payload the Orders page uses and fills in the
    Road to Elevated rail plus the Volume cards. The Money cards read
-   /api/payroll — this week, last week and everything still waiting on an
-   install — so they can never disagree with the Payroll page. */
+   /api/payroll — the statement paid this coming Friday, the one paid the
+   Friday before, and everything still waiting on an install — so they can
+   never disagree with the Payroll page. */
 (function () {
 
   // The single source of truth for the rail. The markup's resting state
@@ -147,7 +148,7 @@
     put(prefix + 'Total', money.format(block.repTotal || 0));
     put(prefix + 'Count', installs.length + (installs.length === 1 ? ' install' : ' installs') +
       (backs.length ? ' · ' + money.format(backTotal) + ' in chargebacks' : ''));
-    put(prefix + 'Range', fmt(d.period.start) + ' – ' + fmt(d.period.end));
+    put(prefix + 'Range', 'Fri ' + fmt(d.period.payday) + ' · installs ' + fmt(d.period.start) + ' – ' + fmt(d.period.end));
 
     if (prefix === 'this') flag('thisFlag', d.closed ? 'Closed — this is final' : 'Open — can still change');
     else flag('lastFlag', d.closed ? 'Closed and frozen' : 'Not closed yet');

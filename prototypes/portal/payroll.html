@@ -49,12 +49,12 @@
     <div class="topbar">
       <div>
         <h1>Payroll</h1>
-        <div class="sub" data-pay-range>Weekly statement &middot; paid on install date</div>
+        <div class="sub" data-pay-range>Weekly statement &middot; each week's installs are paid the following Friday</div>
       </div>
       <div class="topbar-right">
         <div class="seg" data-pay-nav>
           <button type="button" data-pay-prev aria-label="Previous week">&larr; Prev</button>
-          <button type="button" data-pay-this aria-pressed="false">This week</button>
+          <button type="button" data-pay-this aria-pressed="false">Next payday</button>
           <button type="button" data-pay-next aria-label="Next week">Next &rarr;</button>
         </div>
         <button class="chip" type="button" data-pay-print>Print / Save PDF</button>
@@ -72,7 +72,7 @@
       <div data-pay-reps style="margin-top:20px"></div>
 
       <section data-pay-pending-wrap hidden style="margin-top:28px">
-        <div class="sec-label">Pending &mdash; sold, not installed yet. Not paid; rolls forward.</div>
+        <div class="sec-label">Pending &mdash; sold, not installed yet. Not paid; each one pays the Friday after the week it installs.</div>
         <div class="tbl-wrap" style="margin-top:12px">
           <div class="tbl-scroll">
             <table class="tbl" style="min-width:560px">

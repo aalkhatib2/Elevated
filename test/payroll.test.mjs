@@ -1,6 +1,6 @@
 import test from 'node:test';
 import assert from 'node:assert/strict';
-import { payPeriodFor, classifyOrder, buildPayroll, toCsv } from '../api/_lib/payroll.js';
+import { payPeriodFor, paydayFor, payPeriodPaidOn, classifyOrder, buildPayroll, toCsv } from '../api/_lib/payroll.js';
 
 const order = (o) => ({
   week: 'SEP28 to OCT4', date: '2026-09-28', salesRep: 'Adam Alkhatib', orderId: 'A1',
@@ -9,10 +9,27 @@ const order = (o) => ({
 });
 
 test('payPeriodFor: Monday and Sunday belong to the same Mon–Sun week', () => {
-  assert.deepEqual(payPeriodFor('2026-09-28'), { key: '2026-09-28', start: '2026-09-28', end: '2026-10-04' });
+  assert.deepEqual(payPeriodFor('2026-09-28'), { key: '2026-09-28', start: '2026-09-28', end: '2026-10-04', payday: '2026-10-09' });
   assert.equal(payPeriodFor('2026-10-04').start, '2026-09-28'); // Sunday
   assert.equal(payPeriodFor('2026-10-05').start, '2026-10-05'); // next Monday
   assert.equal(payPeriodFor('2026-02-30'), null);
+});
+
+test('an install is paid the Friday of the following week, never its own week', () => {
+  assert.equal(paydayFor('2026-10-07'), '2026-10-16'); // Wednesday -> next week's Friday
+  assert.equal(paydayFor('2026-10-05'), '2026-10-16'); // Monday
+  assert.equal(paydayFor('2026-10-09'), '2026-10-16'); // a Friday install still waits a week
+  assert.equal(paydayFor('2026-10-11'), '2026-10-16'); // Sunday
+  assert.equal(paydayFor('2026-10-12'), '2026-10-23'); // next Monday rolls to the Friday after
+  assert.equal(paydayFor('2026-12-30'), '2027-01-08'); // across a year end
+  assert.equal(paydayFor('nope'), null);
+});
+
+test('payPeriodPaidOn: the install week paid on the coming Friday', () => {
+  assert.equal(payPeriodPaidOn('2026-10-08').start, '2026-09-28'); // Thu -> Fri Oct 9 pays Sep 28–Oct 4
+  assert.equal(payPeriodPaidOn('2026-10-09').start, '2026-09-28'); // payday itself
+  assert.equal(payPeriodPaidOn('2026-10-10').start, '2026-10-05'); // Sat -> Fri Oct 16 pays Oct 5–11
+  assert.equal(payPeriodPaidOn('2026-10-12').payday, '2026-10-16');
 });
 
 test('classifyOrder', () => {
