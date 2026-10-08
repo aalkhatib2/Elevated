@@ -12,8 +12,11 @@ export default async function handler(req, res) {
     const me = await getSessionRep(req);
     if (!me) return res.status(401).json({ error: 'Not signed in' });
 
-    // Everyone, for the leaderboard and to find my own downline among them.
-    const allReps = await sql`select id, full_name, market, created_at, recruited_by from reps`;
+    // Everyone active, for the leaderboard and to find my own downline among
+    // them. Deactivated reps have left the team, so they drop off both.
+    const allReps = await sql`
+      select id, full_name, market, created_at, recruited_by from reps where disabled_at is null
+    `;
     const counts = await getOrderCountsByRep(allReps.map((r) => r.full_name));
     const countFor = (fullName) =>
       counts[fullName.trim().toLowerCase().replace(/\s+/g, ' ')] || 0;

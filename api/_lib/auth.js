@@ -17,13 +17,13 @@ export async function getSessionRep(req) {
   const rows = await sql`
     select id, full_name, username, rep_code, team, division, market, role,
            password_hash, must_change_password, password_changed_at,
-           failed_logins, locked_until
+           failed_logins, locked_until, disabled_at
     from reps
     where id = ${session.repId}
     limit 1
   `;
   const rep = rows[0];
-  if (!rep) return null;
+  if (!rep || rep.disabled_at) return null;
 
   if ((session.pwc ?? null) !== passwordStamp(rep.password_changed_at)) return null;
   return rep;

@@ -19,7 +19,7 @@ export default async function handler(req, res) {
   try {
     const rows = await sql`
       select id, full_name, username, password_hash, rep_code, team, division, market,
-             must_change_password, password_changed_at, locked_until
+             must_change_password, password_changed_at, locked_until, disabled_at
       from reps
       where lower(username) = lower(${username})
       limit 1
@@ -31,9 +31,10 @@ export default async function handler(req, res) {
       return res.status(429).json({ ok: false, error: lockedMessage });
     }
 
-    // Never reveal whether the username existed — same error either way.
-    if (!rep || !(await verifyPassword(password, rep.password_hash))) {
-      if (rep) await recordFailedPassword(rep.id);
+    // Never reveal whether the username existed — same error either way. A
+    // deactivated login gets that same error, so it looks like any other.
+    if (!rep || rep.disabled_at || !(await verifyPassword(password, rep.password_hash))) {
+      if (rep && !rep.disabled_at) await recordFailedPassword(rep.id);
       return res.status(401).json(GENERIC_ERROR);
     }
 

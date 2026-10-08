@@ -4,7 +4,7 @@
 // are used explicitly rather than tuned, and stored alongside the hash so
 // the cost can change later without invalidating existing passwords.
 
-import { randomBytes, scrypt as scryptCallback, timingSafeEqual } from 'node:crypto';
+import { randomBytes, randomInt, scrypt as scryptCallback, timingSafeEqual } from 'node:crypto';
 import { promisify } from 'node:util';
 
 const scrypt = promisify(scryptCallback);
@@ -13,6 +13,14 @@ const N = 16384;
 const R = 8;
 const P = 1;
 const KEYLEN = 64;
+
+// Temporary passwords the owner hands to a rep, who must replace it on first
+// sign-in. No 0/O or 1/l/I: these get read aloud or typed off a phone.
+const TEMP_ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789';
+export function generateTempPassword() {
+  const group = () => Array.from({ length: 4 }, () => TEMP_ALPHABET[randomInt(TEMP_ALPHABET.length)]).join('');
+  return `${group()}-${group()}-${group()}`;
+}
 
 export async function hashPassword(password) {
   const salt = randomBytes(16);

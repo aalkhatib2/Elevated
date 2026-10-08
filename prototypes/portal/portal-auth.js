@@ -22,6 +22,7 @@
       applyRep(data.rep);
       if (data.rep.role === 'owner') {
         document.querySelectorAll('[data-owner-only]').forEach(function (el) { el.hidden = false; });
+        document.querySelectorAll('.rail-badge').forEach(function (el) { el.textContent = 'Owner'; });
       }
     })
     .catch(function () {

@@ -11,12 +11,11 @@
 // so they don't end up in terminal scrollback or logs. Hand each rep theirs,
 // then delete the file.
 
-import { randomInt } from 'node:crypto';
 import { appendFileSync, existsSync, writeFileSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { neon } from '@neondatabase/serverless';
-import { hashPassword } from '../api/_lib/password.js';
+import { generateTempPassword as newPassword, hashPassword } from '../api/_lib/password.js';
 
 const OUT_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'rep-logins.local.csv');
 
@@ -46,13 +45,6 @@ const ROSTER = [
   { full_name: 'Roniel Mata', username: 'RMata', active: true },
   { full_name: 'Sanders Young', username: 'SYoung', active: true },
 ];
-
-// No 0/O, 1/l/I — these get read aloud or typed off a phone screen.
-const ALPHABET = 'abcdefghjkmnpqrstuvwxyz23456789';
-function newPassword() {
-  const group = () => Array.from({ length: 4 }, () => ALPHABET[randomInt(ALPHABET.length)]).join('');
-  return `${group()}-${group()}-${group()}`;
-}
 
 function parseArgs(argv) {
   const reset = [];

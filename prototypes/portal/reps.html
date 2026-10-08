@@ -1,0 +1,194 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Reps — Elevated Portal</title>
+<link rel="icon" type="image/png" sizes="32x32" href="../../favicon-32x32.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Oswald:wght@500;600;700&family=Manrope:wght@400;500;600;700&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="portal.css">
+</head>
+<body>
+
+<div class="app">
+
+  <aside class="rail">
+    <a class="rail-brand" href="overview.html">
+      <img src="../../brand/wordmark-elevated-light.svg" alt="Elevated" width="5424" height="799">
+      <span class="rail-sub">Agent Portal</span>
+    </a>
+    <div class="rail-id">
+      <div class="rail-who"><span class="dot"></span><span data-field="fullName">&nbsp;</span></div>
+      <span class="rail-badge">Rep</span>
+      <dl class="rail-kv">
+        <dt>Team</dt><dd data-field="team">&mdash;</dd>
+        <dt>Division</dt><dd data-field="division">&mdash;</dd>
+        <dt>Market</dt><dd data-field="market">&mdash;</dd>
+        <dt>Rep code</dt><dd data-field="repCode">&mdash;</dd>
+      </dl>
+    </div>
+    <button class="rail-search" type="button">Quick search<span class="kbd">Ctrl K</span></button>
+    <nav class="rail-nav">
+      <a href="overview.html"><span class="sq"></span>Overview</a>
+      <a href="orders.html"><span class="sq"></span>Orders</a>
+      <a href="commission.html"><span class="sq"></span>Commission</a>
+      <a href="payroll.html"><span class="sq"></span>Payroll</a>
+      <a href="team.html"><span class="sq"></span>My Team</a>
+      <a href="reps.html" aria-current="page" data-owner-only hidden><span class="sq"></span>Reps</a>
+    </nav>
+    <div class="rail-foot">
+      <a href="account.html">Account</a>
+      <a href="login.html" data-signout>Sign out</a>
+    </div>
+  </aside>
+
+  <div class="main">
+
+    <div class="topbar">
+      <div>
+        <h1>Reps</h1>
+        <div class="sub">Owner only &middot; logins for everyone on the team</div>
+      </div>
+      <div class="topbar-right">
+        <button class="btn btn-primary btn-sm" type="button" data-rp-add hidden>Add rep</button>
+      </div>
+    </div>
+
+    <div class="pad">
+
+      <div class="kpis" data-rp-kpis hidden>
+        <article class="kpi" data-accent="pos">
+          <div class="kpi-bar"><span class="kpi-k">Active logins</span></div>
+          <div class="kpi-v" data-rp="active">&mdash;</div>
+          <p class="kpi-sub"><span data-rp="deactivated">&mdash;</span> deactivated</p>
+        </article>
+        <article class="kpi" data-accent="warn">
+          <div class="kpi-bar"><span class="kpi-k">Still on a temporary password</span></div>
+          <div class="kpi-v" data-rp="temp">&mdash;</div>
+          <p class="kpi-sub"><span data-rp="never">&mdash;</span> have never signed in</p>
+        </article>
+        <article class="kpi" data-accent="info">
+          <div class="kpi-bar"><span class="kpi-k">In the sheet, no login</span></div>
+          <div class="kpi-v" data-rp="unmatched">&mdash;</div>
+          <p class="kpi-sub">Names in the Sales Rep column no login matches</p>
+        </article>
+      </div>
+
+      <section data-rp-unmatched-wrap hidden>
+        <div class="sec-label">
+          <div class="t">In the sheet, no login yet</div>
+          <div class="d">These names have orders in the Fiber Sales sheet but no login matches them. Create one, or if it's a misspelling of someone below, fix the name in the sheet instead.</div>
+        </div>
+        <div class="tbl-wrap">
+          <div class="tbl-scroll">
+            <table class="tbl" style="min-width:560px">
+              <thead><tr><th>Name in the sheet</th><th class="td-r">Orders</th><th>Last order</th><th class="td-r"></th></tr></thead>
+              <tbody data-rp-unmatched></tbody>
+            </table>
+          </div>
+        </div>
+      </section>
+
+      <div class="sec-label">
+        <div class="t">Everyone with a login</div>
+        <div class="d">Deactivating signs someone out straight away and can be undone. Their orders and payroll history stay.</div>
+      </div>
+      <div class="tbl-wrap">
+        <div class="tbl-tools">
+          <input class="tbl-search" type="search" placeholder="Search name or username" data-rp-search>
+          <span class="tbl-count" data-rp-count>&hellip;</span>
+        </div>
+        <div class="tbl-scroll">
+          <table class="tbl" style="min-width:1040px">
+            <thead>
+              <tr>
+                <th style="min-width:210px">Rep</th><th>Recruited by</th>
+                <th class="td-r">Orders</th><th>Last sign-in</th><th>Status</th><th class="td-r">Actions</th>
+              </tr>
+            </thead>
+            <tbody data-rp-body>
+              <tr><td colspan="6" class="tbl-msg">Loading reps&hellip;</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
+
+<!-- add / edit -->
+<dialog class="dlg" data-rp-form-dlg aria-labelledby="rpFormTitle">
+  <form method="dialog" class="dlg-body" data-rp-form novalidate>
+    <h2 id="rpFormTitle" data-rp-form-title>Add rep</h2>
+    <p class="dlg-lede" data-rp-form-lede>They'll get a temporary password to change on first sign-in.</p>
+    <label class="field">
+      <span>Full name</span>
+      <input name="fullName" autocomplete="off" list="rpSheetNames" required maxlength="100">
+    </label>
+    <p class="field-hint" data-rp-name-hint>Spell it exactly as it appears in the sheet's Sales Rep column.</p>
+    <datalist id="rpSheetNames"></datalist>
+    <label class="field">
+      <span>Username</span>
+      <input name="username" autocomplete="off" autocapitalize="none" spellcheck="false" required maxlength="40">
+    </label>
+    <div class="dlg-row">
+      <label class="field">
+        <span>Market</span>
+        <input name="market" autocomplete="off" maxlength="80" placeholder="e.g. Tampa">
+      </label>
+      <label class="field">
+        <span>Rep code</span>
+        <input name="repCode" autocomplete="off" maxlength="40" placeholder="Optional">
+      </label>
+    </div>
+    <label class="field">
+      <span>Recruited by</span>
+      <select name="recruitedBy"></select>
+    </label>
+    <p class="form-msg" data-tone="error" data-rp-form-error role="alert" hidden></p>
+    <div class="dlg-actions">
+      <button class="btn btn-ghost btn-sm" type="button" data-rp-cancel>Cancel</button>
+      <button class="btn btn-primary btn-sm" type="submit" data-rp-form-submit>Create login</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- confirm -->
+<dialog class="dlg" data-rp-confirm-dlg aria-labelledby="rpConfirmTitle">
+  <form method="dialog" class="dlg-body">
+    <h2 id="rpConfirmTitle" data-rp-confirm-title></h2>
+    <p class="dlg-lede" data-rp-confirm-text></p>
+    <div class="dlg-actions">
+      <button class="btn btn-ghost btn-sm" value="cancel">Cancel</button>
+      <button class="btn btn-primary btn-sm" value="ok" data-rp-confirm-ok>Confirm</button>
+    </div>
+  </form>
+</dialog>
+
+<!-- one-time password -->
+<dialog class="dlg" data-rp-pw-dlg aria-labelledby="rpPwTitle">
+  <form method="dialog" class="dlg-body">
+    <p class="kicker">Shown once</p>
+    <h2 id="rpPwTitle" data-rp-pw-title>Login ready</h2>
+    <p class="dlg-lede">Send this to <b data-rp-pw-name></b> privately. They'll pick their own password the first time they sign in. Once you close this, it can't be shown again &mdash; you'd reset it instead.</p>
+    <dl class="pw-card">
+      <dt>Username</dt><dd data-rp-pw-user></dd>
+      <dt>Temporary password</dt><dd data-rp-pw-pass></dd>
+    </dl>
+    <p class="form-msg" data-tone="ok" data-rp-pw-copied role="status" hidden>Copied</p>
+    <div class="dlg-actions">
+      <button class="btn btn-ghost btn-sm" type="button" data-rp-pw-copy>Copy sign-in details</button>
+      <button class="btn btn-primary btn-sm" value="done">Done</button>
+    </div>
+  </form>
+</dialog>
+
+<script src="portal-auth.js"></script>
+<script src="portal.js"></script>
+<script src="reps.js"></script>
+
+</body>
+</html>

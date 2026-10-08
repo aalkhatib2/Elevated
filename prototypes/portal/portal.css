@@ -41,6 +41,9 @@ a { color: inherit; text-decoration: none; }
 h1, h2, h3 { margin: 0; font-family: var(--head); font-weight: 600; text-transform: uppercase; line-height: 0.95; letter-spacing: 0.005em; }
 p { margin: 0; }
 button { font: inherit; color: inherit; }
+/* Components set their own display (nav links are flex), which would beat the
+   UA's [hidden] rule and show owner-only links to everyone. */
+[hidden] { display: none !important; }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
 
 .lede { color: var(--text-2); font-size: 15px; line-height: 1.65; max-width: 70ch; }
@@ -62,7 +65,7 @@ button { font: inherit; color: inherit; }
 }
 .btn-primary { background: var(--accent); color: var(--accent-ink); }
 .btn-primary:hover { background: var(--text); }
-.btn-ghost { border-color: var(--line-2); color: var(--text); }
+.btn-ghost { background: transparent; border-color: var(--line-2); color: var(--text); }
 .btn-ghost:hover { border-color: var(--text); }
 .btn-sm { min-height: 42px; padding: 0 20px; font-size: 13px; }
 .arrow { width: 16px; height: 16px; flex: none; transition: transform .3s var(--ease); }
@@ -381,13 +384,17 @@ table.tbl tr.tr-total td {
 .acct-form { display: grid; gap: 18px; padding: 26px 28px 28px; }
 .field { display: grid; gap: 8px; }
 .field span { font-family: var(--label); font-weight: 600; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-2); }
-.field input {
+.field input, .field select {
   width: 100%; height: 50px; padding: 0 16px;
   background: var(--bg); color: var(--text); border: 1px solid var(--line-2); border-radius: 0;
   font-family: var(--body); font-size: 16px; transition: border-color .2s, background-color .2s;
 }
-.field input:hover { border-color: var(--line-3); }
-.field input:focus-visible { outline: 1px solid var(--accent); outline-offset: -2px; border-color: var(--accent); background: var(--bg-3); }
+.field input:hover, .field select:hover { border-color: var(--line-3); }
+.field input:focus-visible, .field select:focus-visible { outline: 1px solid var(--accent); outline-offset: -2px; border-color: var(--accent); background: var(--bg-3); }
+.field input[readonly] { color: var(--text-2); background: var(--bg-2); border-style: dashed; }
+.field select { appearance: none; padding-right: 40px; cursor: pointer;
+  background-image: linear-gradient(45deg, transparent 50%, var(--text-2) 50%), linear-gradient(135deg, var(--text-2) 50%, transparent 50%);
+  background-position: right 20px center, right 15px center; background-size: 5px 5px; background-repeat: no-repeat; }
 .field-hint { margin-top: -6px; font-size: 13px; color: var(--muted); }
 .form-msg { display: flex; align-items: baseline; gap: 10px; font-size: 14px; color: var(--text); }
 .form-msg::before { content: ""; flex: none; width: 7px; height: 7px; transform: translateY(-1px); }
@@ -396,6 +403,40 @@ table.tbl tr.tr-total td {
 .form-msg[hidden] { display: none; }
 .acct-form .btn { justify-self: start; margin-top: 4px; }
 .acct-form .btn:disabled { cursor: progress; background: var(--text); }
+
+/* ---------------- reps (owner) ---------------- */
+.row-actions { display: inline-flex; gap: 6px; justify-content: flex-end; flex-wrap: nowrap; }
+.row-btn {
+  background: none; border: 1px solid var(--line-2); color: var(--text); cursor: pointer; padding: 6px 10px; white-space: nowrap;
+  font-family: var(--label); font-weight: 600; font-size: 11px; letter-spacing: 0.12em; text-transform: uppercase;
+  transition: border-color .2s, color .2s;
+}
+.row-btn:hover { border-color: var(--text); }
+.row-btn[data-act="disable"]:hover { border-color: var(--accent); color: var(--accent); }
+table.tbl tr.tr-off td { color: var(--muted); }
+table.tbl tr.tr-off .td-strong { color: var(--text-2); }
+.you-tag { margin-left: 6px; padding: 1px 6px; border: 1px solid var(--accent-line); color: var(--accent);
+  font-family: var(--label); font-weight: 600; font-size: 10px; letter-spacing: 0.12em; text-transform: uppercase; vertical-align: 2px; }
+.tbl-alert { padding: 14px 20px; border-bottom: 1px solid var(--line); }
+
+.dlg { width: min(560px, calc(100vw - 32px)); max-height: calc(100vh - 32px); padding: 0; color: var(--text);
+  background: var(--bg-2); border: 1px solid var(--line-2); border-radius: 0; }
+.dlg::backdrop { background: rgba(10,11,13,0.78); backdrop-filter: blur(4px); -webkit-backdrop-filter: blur(4px); }
+.dlg-body { display: grid; gap: 18px; padding: 28px; }
+.dlg-body h2 { font-size: 30px; }
+.dlg-body .kicker + h2 { margin-top: -4px; }
+.dlg-lede { font-size: 14.5px; color: var(--text-2); }
+.dlg-lede b { color: var(--text); font-weight: 600; }
+.dlg-row { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+.dlg-actions { display: flex; justify-content: flex-end; gap: 10px; flex-wrap: wrap; margin-top: 4px; }
+.pw-card { margin: 0; display: grid; grid-template-columns: auto 1fr; gap: 10px 18px; align-items: baseline;
+  padding: 18px 20px; background: var(--bg); border: 1px solid var(--accent-line); }
+.pw-card dt { font-family: var(--label); font-weight: 600; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
+.pw-card dd { margin: 0; font-size: 18px; font-weight: 600; letter-spacing: 0.04em; font-variant-numeric: tabular-nums; user-select: all; word-break: break-all; }
+@media (max-width: 640px) {
+  .dlg-row { grid-template-columns: 1fr; }
+  .dlg-actions .btn { flex: 1 1 auto; }
+}
 
 /* ---------------- responsive ---------------- */
 @media (max-width: 1180px) {
