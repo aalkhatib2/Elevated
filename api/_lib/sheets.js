@@ -348,6 +348,19 @@ export async function getAllOrders(knownFullNames = []) {
   return loadAllOrders(knownFullNames);
 }
 
+// Skips the 60s cache — the sales bot must dedupe against what is in the
+// sheet right now, not what a warm instance saw a minute ago.
+export async function getFreshOrders() {
+  cache = null;
+  return loadAllOrders();
+}
+
+// Read-only access to any range (e.g. the bot's "Bot" tab) for dashboards.
+export async function readSheetRange(range) {
+  const data = await sheetsFetch(`/values/${encodeURIComponent(range)}`, { valueRenderOption: 'FORMATTED_VALUE' });
+  return data.values || [];
+}
+
 export async function getOrdersForRep(fullName, knownFullNames = []) {
   const all = await loadAllOrders(knownFullNames);
   const target = normalizeName(fullName);

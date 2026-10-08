@@ -1,5 +1,12 @@
 {
   "crons": [
     { "path": "/api/monday-sync", "schedule": "59 3 * * *" }
-  ]
+  ],
+  "functions": {
+    "api/sales-bot.js": {
+      "maxDuration": 300,
+      "memory": 1024,
+      "includeFiles": "node_modules/{tesseract.js,tesseract.js-core}/**"
+    }
+  }
 }
