@@ -32,7 +32,7 @@ const OUT_FILE = path.join(path.dirname(fileURLToPath(import.meta.url)), 'rep-lo
 const ROSTER = [
   { full_name: 'Adam Alkhatib', username: 'AAlkhatib', rep_code: '4688257', market: 'Salt Lake City', role: 'owner', active: true },
   { full_name: 'Alejandro Benitez', username: 'ABenitez', active: true },
-  { full_name: 'Christian Dick', username: 'Christian', active: true, recruited_by: 'AAlkhatib' },
+  { full_name: 'Christian Dick', username: 'Christian', role: 'owner', active: true, recruited_by: 'AAlkhatib' },
   { full_name: 'Christian Grey', username: 'CGrey', active: true },
   { full_name: 'Delany', username: 'Delany', active: true },
   { full_name: 'Holden Mott', username: 'HMott', active: true },
