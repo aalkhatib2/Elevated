@@ -1,5 +1,6 @@
 /* Elevated portal — Payroll page.
-   Fetches /api/payroll for one Mon–Sun week and renders it the way the
+   Fetches /api/payroll for one Mon–Sun install week (paid the Friday of the
+   week after) and renders it the way the
    Motorsport "Sales reps" report reads: a block per rep, a line per order,
    a rep total, then the shop total. Owners also get Close week and CSV. */
 (function () {
@@ -55,7 +56,7 @@
 
   function closeWeek() {
     var p = state.data.period;
-    if (!confirm('Close ' + p.start + ' – ' + p.end + '? This freezes what each rep is paid for the week.')) return;
+    if (!confirm('Close installs ' + p.start + ' – ' + p.end + ' (paid Friday ' + p.payday + ')? This freezes what each rep is paid for the week.')) return;
     closeBtn.disabled = true;
     fetch('/api/payroll', {
       method: 'POST',
@@ -74,14 +75,14 @@
 
   function render(d) {
     var owner = d.viewer.isOwner;
-    rangeEl.textContent = fmtDate(d.period.start) + ' – ' + fmtDate(d.period.end) +
-      ' · ' + (d.closed ? 'Closed' : 'Open') + ' · paid on install date';
+    rangeEl.textContent = 'Installs ' + fmtDate(d.period.start) + ' – ' + fmtDate(d.period.end) +
+      ' · paid Friday ' + fmtDate(d.period.payday) + ' · ' + (d.closed ? 'Closed' : 'Open');
     closeBtn.hidden = !d.canClose;
     csvBtn.hidden = !owner;
 
     var t = d.totals;
     var cards = [
-      ['Installs paid', String(t.orders), 'In this week, by install date'],
+      ['Installs paid', String(t.orders), 'Installed this week · paid Fri ' + fmtDate(d.period.payday)],
       [owner ? 'Owed to reps' : 'You earn', money(t.repCommission), d.closed ? 'Frozen at close' : 'Live from the sheet']
     ];
     if (owner) {
@@ -98,7 +99,7 @@
         ' no rate (gig count not on the rate card) and counts as $0 until priced in the sheet.';
       msgEl.hidden = false;
     } else if (!d.reps.length) {
-      msgEl.textContent = 'No installs in this week.';
+      msgEl.textContent = 'No installs in this week, so nothing pays on Friday ' + fmtDate(d.period.payday) + '.';
       msgEl.hidden = false;
     } else {
       msgEl.hidden = true;
@@ -112,15 +113,16 @@
             (neg ? ' <span class="pill" data-tone="neg">Chargeback</span>' : '') + '</td>' +
           '<td><span class="td-strong">' + esc(l.clientName || '—') + '</span></td>' +
           '<td class="td-mono">' + (l.installDate || '—') + '</td>' +
+          '<td class="td-mono">Fri ' + fmtDate(l.payday || d.period.payday) + '</td>' +
           '<td class="td-mono">' + (l.gigs != null ? l.gigs + ' gig' : '—') + '</td>' +
           '<td class="td-r' + (neg ? ' pay-neg' : '') + '">' + (l.repCommission == null ? '—' : money(l.repCommission)) + '</td>' +
           '</tr>';
       }).join('');
       return '<section class="pay-rep"><h3>' + esc(r.rep) + '</h3>' +
-        '<div class="tbl-wrap"><div class="tbl-scroll"><table class="tbl" style="min-width:560px">' +
-        '<thead><tr><th>Order #</th><th>Client</th><th>Install date</th><th>Gigs</th><th class="td-r">Commission</th></tr></thead>' +
+        '<div class="tbl-wrap"><div class="tbl-scroll"><table class="tbl" style="min-width:680px">' +
+        '<thead><tr><th>Order #</th><th>Client</th><th>Install date</th><th>Paid on</th><th>Gigs</th><th class="td-r">Commission</th></tr></thead>' +
         '<tbody>' + rows +
-        '<tr class="pay-total"><td colspan="4">(' + r.orderCount + ') Rep total</td><td class="td-r">' + money(r.repTotal) + '</td></tr>' +
+        '<tr class="pay-total"><td colspan="5">(' + r.orderCount + ') Rep total</td><td class="td-r">' + money(r.repTotal) + '</td></tr>' +
         '</tbody></table></div></div></section>';
     }).join('');
 
@@ -129,7 +131,8 @@
     pendingBody.innerHTML = pend.map(function (l) {
       return '<tr><td>' + esc(l.rep) + '</td><td class="td-mono">' + esc(l.orderId || '—') + '</td><td>' +
         esc(l.clientName || '—') + '</td><td class="td-mono">' + (l.gigs != null ? l.gigs + ' gig' : '—') +
-        '</td><td class="td-mono">' + esc(l.soldDate || '') + '</td></tr>';
+        '</td><td class="td-mono">' + esc(l.soldDate || '') + '</td><td class="td-mono">' +
+        (l.expectedPayday ? 'Fri ' + fmtDate(l.expectedPayday) + ' once installed' : 'After install') + '</td></tr>';
     }).join('');
   }
 

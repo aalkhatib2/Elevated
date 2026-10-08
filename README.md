@@ -100,8 +100,10 @@ a spreadsheet the team already keeps.
   somewhere real.
 - **Payroll** (`payroll.html`, `api/payroll.js`, `api/_lib/payroll.js`): a
   Motorsport-style weekly statement — a Mon–Sun week, one block per rep, one
-  line per order, rep total, shop total. An order is paid in the week of its
-  **install date**; sold-not-installed orders are listed as pending and roll
+  line per order, rep total, shop total. Orders are grouped by the Mon–Sun
+  week of their **install date**, and each week is **paid the Friday of the
+  following week** (installs Oct 5–11 are paid Fri Oct 16; the page opens on
+  the statement paid this coming Friday); sold-not-installed orders are listed as pending and roll
   forward; an order cancelled after its week was paid becomes a negative
   chargeback in the next open week. Open weeks are computed live from the
   sheet; the owner's **Close week** freezes them into `pay_periods` /

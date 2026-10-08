@@ -172,8 +172,8 @@
 
     if (!rows.length) {
       linesBody.innerHTML = state.query
-        ? emptyRow(7, 'No matches', 'Nothing in this range matches “' + escapeHtml(state.query) + '”.')
-        : emptyRow(7, 'No deals in this range', 'Pick a wider range, or check back once this week’s orders are logged.');
+        ? emptyRow(8, 'No matches', 'Nothing in this range matches “' + escapeHtml(state.query) + '”.')
+        : emptyRow(8, 'No deals in this range', 'Pick a wider range, or check back once this week’s orders are logged.');
       return;
     }
 
@@ -185,6 +185,7 @@
           '<td>' + (o.clientName ? '<span class="td-strong">' + escapeHtml(o.clientName) + '</span>' : '<span class="td-sub" style="margin:0">—</span>') + '</td>' +
           '<td class="td-mono">' + (o.gigs != null ? o.gigs + ' gig' : '—') + '</td>' +
           '<td class="td-mono">' + (o.installDate ? formatDate(o.installDate) : '—') + '</td>' +
+          '<td class="td-mono">' + payCell(o) + '</td>' +
           '<td>' + stagePill(o.stage) + '</td>' +
           '<td class="td-r">' + (o.stage === 'cancelled'
             ? '<span class="td-sub" style="margin:0">Not counted</span>'
@@ -195,6 +196,14 @@
         '</tr>'
       );
     }).join('');
+  }
+
+  // Paid the Friday after the install week (installed Thu Oct 1 -> Fri Oct 9).
+  function payCell(o) {
+    if (o.payday) return (o.payday < todayISO() ? 'Paid' : 'Pays') + ' Fri ' + formatDate(o.payday);
+    if (o.stage === 'cancelled') return '—';
+    if (o.expectedPayday) return 'Fri ' + formatDate(o.expectedPayday) + '<span class="td-sub">once installed</span>';
+    return '<span class="td-sub" style="margin:0">After install</span>';
   }
 
   function stagePill(stage) {
@@ -223,9 +232,9 @@
 
   function exportCsv() {
     var rows = visibleLines();
-    var header = ['Order date', 'Order #', 'Client', 'Gigs', 'Install date', 'Stage', 'Est. commission', 'Priced from'];
+    var header = ['Order date', 'Order #', 'Client', 'Gigs', 'Install date', 'Paid on', 'Pays once installed', 'Stage', 'Est. commission', 'Priced from'];
     var lines = rows.map(function (o) {
-      return [o.date, o.orderId, o.clientName, o.gigs, o.installDate, o.stage, o.repCommission,
+      return [o.date, o.orderId, o.clientName, o.gigs, o.installDate, o.payday, o.expectedPayday, o.stage, o.repCommission,
         o.pricedFrom === 'sheet' ? 'sheet' : 'standard rate'].map(csvCell).join(',');
     });
     var blob = new Blob([header.join(',') + '\n' + lines.join('\n') + '\n'], { type: 'text/csv' });

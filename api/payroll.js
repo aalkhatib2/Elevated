@@ -1,16 +1,17 @@
 // Weekly payroll statements.
 //
 //   GET  /api/payroll?period=YYYY-MM-DD[&format=csv]
-//        Any day in the wanted Mon–Sun week (default: this week). Owners get
-//        every rep; a rep gets only their own lines. A closed week is read
-//        from the frozen snapshot, an open one is computed live from the sheet.
+//        Any day in the wanted Mon–Sun install week (default: the week paid
+//        this coming Friday — installs are paid the Friday of the week after).
+//        Owners get every rep; a rep gets only their own lines. A closed week
+//        is read from the frozen snapshot, an open one is computed live.
 //   POST /api/payroll   { period }
 //        Owner only. Freezes a finished week into payroll_lines.
 
 import { sql } from './_lib/db.js';
 import { getSessionRep } from './_lib/auth.js';
 import { getAllOrders, normalizeName } from './_lib/sheets.js';
-import { addDays, buildPayroll, groupLines, payPeriodFor, toCsv } from './_lib/payroll.js';
+import { addDays, buildPayroll, groupLines, payPeriodFor, payPeriodPaidOn, paydayFor, toCsv } from './_lib/payroll.js';
 
 // Dates and numerics are cast in SQL so the driver hands back plain strings
 // and numbers instead of Date / string-decimal objects.
@@ -70,9 +71,8 @@ export default async function handler(req, res) {
     const isOwner = me.role === 'owner';
 
     const today = new Date().toISOString().slice(0, 10);
-    const requested =
-      (req.method === 'POST' ? (req.body && req.body.period) : req.query && req.query.period) || today;
-    const period = payPeriodFor(requested);
+    const requested = req.method === 'POST' ? (req.body && req.body.period) : req.query && req.query.period;
+    const period = requested ? payPeriodFor(requested) : payPeriodPaidOn(today);
     if (!period) return res.status(400).json({ error: 'period must be a date like 2026-09-28' });
 
     const closedRows = await loadClosedLines();
@@ -135,12 +135,18 @@ export default async function handler(req, res) {
     // GET
     let statement;
     if (isClosed) {
-      const lines = await loadFrozenWeek(period.start);
+      const lines = (await loadFrozenWeek(period.start)).map((l) => ({ ...l, payday: period.payday }));
       statement = { period, ...groupLines(lines), pending: [], closed: true };
     } else {
       const reps = await sql`select full_name from reps`;
       const orders = await getAllOrders(reps.map((r) => r.full_name));
       statement = buildPayroll(orders, period.start, closedRows);
+      // A pending order with an install still ahead shows the Friday it would
+      // be paid if it installs that day; a missed appointment shows none.
+      statement.pending = statement.pending.map((l) => ({
+        ...l,
+        expectedPayday: l.installDate && l.installDate >= today ? paydayFor(l.installDate) : null,
+      }));
     }
     if (!isOwner) statement = withoutOfficeFigures(onlyRep(statement, me.full_name));
 

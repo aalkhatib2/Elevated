@@ -1,7 +1,7 @@
 import { sql } from './_lib/db.js';
 import { getSessionRep } from './_lib/auth.js';
 import { getOrdersForRep, RATES } from './_lib/sheets.js';
-import { classifyOrder } from './_lib/payroll.js';
+import { classifyOrder, paydayFor } from './_lib/payroll.js';
 
 // Office pay and office margin are deliberately left out: what the office
 // collects from the carrier is owners-only, and anything in this payload is
@@ -22,6 +22,7 @@ export default async function handler(req, res) {
       allReps.map((r) => r.full_name)
     );
     orders.sort((a, b) => (a.date < b.date ? 1 : a.date > b.date ? -1 : 0));
+    const today = new Date().toISOString().slice(0, 10);
 
     const totals = orders.reduce(
       (acc, o) => {
@@ -50,20 +51,28 @@ export default async function handler(req, res) {
       // The rep's own rate card, so the page can say what an estimate is
       // based on without hard-coding numbers that could drift from RATES.
       commissionRates: RATES.repCommission,
-      orders: orders.map((o) => ({
-        date: o.date,
-        orderId: o.orderId,
-        gigs: o.gigs,
-        clientName: o.clientName,
-        status: o.status,
-        week: o.week,
-        installDate: o.installDate,
+      orders: orders.map((o) => {
         // Payroll's own rule, so Commission and Payroll never disagree on
         // whether an order is installed, pending or cancelled.
-        stage: classifyOrder(o),
-        repCommission: o.repCommission,
-        pricedFrom: o.pricedFrom,
-      })),
+        const stage = classifyOrder(o);
+        return {
+          date: o.date,
+          orderId: o.orderId,
+          gigs: o.gigs,
+          clientName: o.clientName,
+          status: o.status,
+          week: o.week,
+          installDate: o.installDate,
+          stage,
+          // The Friday after the install week. Pending orders only get one
+          // while their install appointment is still ahead.
+          payday: stage === 'installed' ? paydayFor(o.installDate) : null,
+          expectedPayday:
+            stage === 'pending' && o.installDate && o.installDate >= today ? paydayFor(o.installDate) : null,
+          repCommission: o.repCommission,
+          pricedFrom: o.pricedFrom,
+        };
+      }),
     });
   } catch (err) {
     console.error('[orders] failed:', err);
