@@ -171,6 +171,7 @@ export function buildPayroll(orders, periodStart, closedLines = []) {
             kind: 'chargeback',
             repCommission: -(was.repCommission || 0),
             officePay: -(was.officePay || 0),
+            payday: period.payday,
           })
         );
       }
@@ -189,8 +190,9 @@ export function buildPayroll(orders, periodStart, closedLines = []) {
     // snapshot is paid now, flagged late, instead of falling through the gap.
     const lateInClosedWeek =
       isOpenWeek && order.installDate < period.start && closedWeeks.has(payPeriodFor(order.installDate).start);
-    if (inWeek) lines.push(toLine(order));
-    else if (lateInClosedWeek) lines.push(toLine(order, { late: true }));
+    // Every line on this statement is paid on the statement's payday.
+    if (inWeek) lines.push(toLine(order, { payday: period.payday }));
+    else if (lateInClosedWeek) lines.push(toLine(order, { late: true, payday: period.payday }));
   }
 
   return { period, ...groupLines(lines), pending, closed: false };
@@ -202,14 +204,14 @@ export function toCsv(statement) {
     const s = v == null ? '' : String(v);
     return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
   };
-  const header = ['Rep', 'Type', 'Order #', 'Client', 'Install date', 'Gigs', 'Rep commission', 'Office pay'];
+  const header = ['Rep', 'Type', 'Order #', 'Client', 'Install date', 'Paid on', 'Gigs', 'Rep commission', 'Office pay'];
   const rows = [header];
   for (const r of statement.reps) {
     for (const l of r.lines) {
-      rows.push([r.rep, l.kind, l.orderId, l.clientName, l.installDate, l.gigs, l.repCommission, l.officePay]);
+      rows.push([r.rep, l.kind, l.orderId, l.clientName, l.installDate, l.payday || statement.period.payday, l.gigs, l.repCommission, l.officePay]);
     }
-    rows.push([r.rep, 'REP TOTAL', '', '', '', '', r.repTotal, r.officePay]);
+    rows.push([r.rep, 'REP TOTAL', '', '', '', '', '', r.repTotal, r.officePay]);
   }
-  rows.push(['ALL REPS', 'TOTAL', '', '', '', '', statement.totals.repCommission, statement.totals.officePay]);
+  rows.push(['ALL REPS', 'TOTAL', '', '', '', '', '', statement.totals.repCommission, statement.totals.officePay]);
   return rows.map((r) => r.map(esc).join(',')).join('\n') + '\n';
 }

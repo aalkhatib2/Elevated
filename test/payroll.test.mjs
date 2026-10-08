@@ -106,4 +106,12 @@ test('csv escapes commas and totals each rep', () => {
   const csv = toCsv(buildPayroll([o], '2026-09-28'));
   assert.match(csv, /"Doe, Jane"/);
   assert.match(csv, /REP TOTAL/);
+  assert.match(csv, /2026-09-29,2026-10-09,/); // install date, then the Friday it is paid
+});
+
+test('the owner’s example: installed Thu Oct 1 is paid Fri Oct 9, and every line says so', () => {
+  assert.equal(paydayFor('2026-10-01'), '2026-10-09');
+  const p = buildPayroll([order({ orderId: 'X', installDate: '2026-10-01', status: 'Installed' })], '2026-10-01');
+  assert.equal(p.period.payday, '2026-10-09');
+  assert.equal(p.reps[0].lines[0].payday, '2026-10-09');
 });

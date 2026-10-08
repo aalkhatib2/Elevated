@@ -68,7 +68,7 @@
   }
 
   function renderLoading() {
-    tbody.innerHTML = '<tr><td colspan="6" class="tbl-msg">Loading your orders&hellip;</td></tr>';
+    tbody.innerHTML = '<tr><td colspan="7" class="tbl-msg">Loading your orders&hellip;</td></tr>';
   }
 
   function renderError() {
@@ -90,7 +90,7 @@
 
     if (state.filtered.length === 0) {
       tbody.innerHTML =
-        '<tr><td colspan="6" style="padding:0;border:none">' +
+        '<tr><td colspan="7" style="padding:0;border:none">' +
           '<div class="empty">' +
             '<div class="box"><i></i></div>' +
             '<h3>No orders yet</h3>' +
@@ -111,9 +111,23 @@
             : '<span style="color:var(--muted)">—</span>') + '</td>' +
           '<td class="td-mono">' + (o.gigs != null ? o.gigs + ' gig' : '—') + '</td>' +
           '<td>' + statusPill(o.status) + '</td>' +
+          '<td class="td-mono">' + payCell(o) + '</td>' +
         '</tr>'
       );
     }).join('');
+  }
+
+  // Paid the Friday after the install week (installed Thu Oct 1 -> Fri Oct 9).
+  function payCell(o) {
+    if (o.payday) return (o.payday < todayISO() ? 'Paid' : 'Pays') + ' Fri ' + formatDate(o.payday);
+    if (o.stage === 'cancelled') return '—';
+    if (o.expectedPayday) return 'Fri ' + formatDate(o.expectedPayday) + ' once installed';
+    return '<span style="color:var(--muted)">After install</span>';
+  }
+
+  function todayISO() {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
   }
 
   function statusPill(status) {

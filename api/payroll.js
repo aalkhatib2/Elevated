@@ -11,7 +11,7 @@
 import { sql } from './_lib/db.js';
 import { getSessionRep } from './_lib/auth.js';
 import { getAllOrders, normalizeName } from './_lib/sheets.js';
-import { addDays, buildPayroll, groupLines, payPeriodFor, payPeriodPaidOn, toCsv } from './_lib/payroll.js';
+import { addDays, buildPayroll, groupLines, payPeriodFor, payPeriodPaidOn, paydayFor, toCsv } from './_lib/payroll.js';
 
 // Dates and numerics are cast in SQL so the driver hands back plain strings
 // and numbers instead of Date / string-decimal objects.
@@ -135,12 +135,18 @@ export default async function handler(req, res) {
     // GET
     let statement;
     if (isClosed) {
-      const lines = await loadFrozenWeek(period.start);
+      const lines = (await loadFrozenWeek(period.start)).map((l) => ({ ...l, payday: period.payday }));
       statement = { period, ...groupLines(lines), pending: [], closed: true };
     } else {
       const reps = await sql`select full_name from reps`;
       const orders = await getAllOrders(reps.map((r) => r.full_name));
       statement = buildPayroll(orders, period.start, closedRows);
+      // A pending order with an install still ahead shows the Friday it would
+      // be paid if it installs that day; a missed appointment shows none.
+      statement.pending = statement.pending.map((l) => ({
+        ...l,
+        expectedPayday: l.installDate && l.installDate >= today ? paydayFor(l.installDate) : null,
+      }));
     }
     if (!isOwner) statement = withoutOfficeFigures(onlyRep(statement, me.full_name));
 

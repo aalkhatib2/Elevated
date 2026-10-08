@@ -113,15 +113,16 @@
             (neg ? ' <span class="pill" data-tone="neg">Chargeback</span>' : '') + '</td>' +
           '<td><span class="td-strong">' + esc(l.clientName || '—') + '</span></td>' +
           '<td class="td-mono">' + (l.installDate || '—') + '</td>' +
+          '<td class="td-mono">Fri ' + fmtDate(l.payday || d.period.payday) + '</td>' +
           '<td class="td-mono">' + (l.gigs != null ? l.gigs + ' gig' : '—') + '</td>' +
           '<td class="td-r' + (neg ? ' pay-neg' : '') + '">' + (l.repCommission == null ? '—' : money(l.repCommission)) + '</td>' +
           '</tr>';
       }).join('');
       return '<section class="pay-rep"><h3>' + esc(r.rep) + '</h3>' +
-        '<div class="tbl-wrap"><div class="tbl-scroll"><table class="tbl" style="min-width:560px">' +
-        '<thead><tr><th>Order #</th><th>Client</th><th>Install date</th><th>Gigs</th><th class="td-r">Commission</th></tr></thead>' +
+        '<div class="tbl-wrap"><div class="tbl-scroll"><table class="tbl" style="min-width:680px">' +
+        '<thead><tr><th>Order #</th><th>Client</th><th>Install date</th><th>Paid on</th><th>Gigs</th><th class="td-r">Commission</th></tr></thead>' +
         '<tbody>' + rows +
-        '<tr class="pay-total"><td colspan="4">(' + r.orderCount + ') Rep total</td><td class="td-r">' + money(r.repTotal) + '</td></tr>' +
+        '<tr class="pay-total"><td colspan="5">(' + r.orderCount + ') Rep total</td><td class="td-r">' + money(r.repTotal) + '</td></tr>' +
         '</tbody></table></div></div></section>';
     }).join('');
 
@@ -130,7 +131,8 @@
     pendingBody.innerHTML = pend.map(function (l) {
       return '<tr><td>' + esc(l.rep) + '</td><td class="td-mono">' + esc(l.orderId || '—') + '</td><td>' +
         esc(l.clientName || '—') + '</td><td class="td-mono">' + (l.gigs != null ? l.gigs + ' gig' : '—') +
-        '</td><td class="td-mono">' + esc(l.soldDate || '') + '</td></tr>';
+        '</td><td class="td-mono">' + esc(l.soldDate || '') + '</td><td class="td-mono">' +
+        (l.expectedPayday ? 'Fri ' + fmtDate(l.expectedPayday) + ' once installed' : 'After install') + '</td></tr>';
     }).join('');
   }
 
