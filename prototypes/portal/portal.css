@@ -373,9 +373,34 @@ table.tbl tr.tr-total td {
 /* ---------------- account ---------------- */
 .rail-foot a[aria-current="page"] { color: var(--text); }
 
-.setup-note { max-width: 640px; margin-bottom: 20px; padding: 26px 28px; background: var(--bg-2); border: 1px solid var(--accent-line); }
-.setup-note h2 { margin-top: 16px; font-size: 34px; }
-.setup-note p:last-child { margin-top: 12px; font-size: 15px; color: var(--text-2); max-width: 52ch; }
+/* First sign-in: portal-auth.js opens .setup-dlg over whatever page the rep
+   landed on and adds body.is-setup. The page itself is blurred (not only the
+   ::backdrop), so the effect holds in browsers without backdrop-filter. */
+body.is-setup { overflow: hidden; }
+body.is-setup .app, body.is-setup .fabs { filter: blur(14px) saturate(0.7); pointer-events: none; user-select: none; transition: filter .5s var(--ease); }
+.setup-dlg { width: min(460px, calc(100vw - 32px)); border-color: var(--accent-line); animation: setupIn .55s var(--ease) both; }
+.setup-dlg::backdrop { background: rgba(10,11,13,0.6); }
+.setup-body { gap: 16px; padding: 32px 32px 26px; }
+.setup-mark { height: 16px; width: auto; margin-bottom: 4px; }
+.setup-dlg .setup-body .kicker + h2 { margin-top: 14px; font-size: 34px; }
+.setup-body .btn { width: 100%; margin-top: 4px; }
+.setup-body .btn:disabled { cursor: progress; background: var(--text); }
+.setup-out {
+  justify-self: center; background: none; border: 0; padding: 6px; cursor: pointer;
+  font-family: var(--label); font-weight: 600; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
+  transition: color .2s;
+}
+.setup-out:hover { color: var(--text); }
+@keyframes setupIn { from { opacity: 0; transform: translateY(14px) scale(0.98); } }
+
+.toast {
+  position: fixed; z-index: 70; left: 50%; bottom: 28px; transform: translateX(-50%);
+  display: flex; align-items: center; gap: 10px; padding: 14px 18px;
+  background: var(--bg-2); border: 1px solid var(--line-2); color: var(--text); font-size: 14px;
+  animation: setupIn .4s var(--ease) both; transition: opacity .4s, transform .4s;
+}
+.toast::before { content: ""; width: 7px; height: 7px; flex: none; border-radius: 50%; background: var(--accent); }
+.toast.is-leaving { opacity: 0; transform: translate(-50%, 8px); }
 
 .acct-card { max-width: 640px; background: var(--bg-2); border: 1px solid var(--line); }
 .acct-head { padding: 24px 28px 22px; border-bottom: 1px solid var(--line); }
@@ -477,11 +502,15 @@ table.tbl tr.tr-off .td-strong { color: var(--text-2); }
   .kpi-v { font-size: 44px; }
   .build-team { padding: 24px 20px; }
   .build-team .btn, .acct-form .btn { width: 100%; justify-self: stretch; }
-  .acct-head, .acct-form, .setup-note { padding-left: 20px; padding-right: 20px; }
+  .acct-head, .acct-form { padding-left: 20px; padding-right: 20px; }
+  .setup-body { padding: 26px 20px 20px; }
+  .setup-dlg .setup-body .kicker + h2 { font-size: 28px; }
   .bt-title { font-size: 28px; }
 }
 
 @media (prefers-reduced-motion: reduce) {
   .road-paths path, .kpi.is-open .kpi-fold, .ppane.on { animation: none; }
   .road-paths, .road-rail .fill, .road-node { transition: none; }
+  .setup-dlg, .toast { animation: none; }
+  body.is-setup .app, body.is-setup .fabs, .toast { transition: none; }
 }
