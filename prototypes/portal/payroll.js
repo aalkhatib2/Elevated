@@ -2,7 +2,8 @@
    Fetches /api/payroll for one Mon–Sun install week (paid the Friday of the
    week after) and renders it the way the
    Motorsport "Sales reps" report reads: a block per rep, a line per order,
-   a rep total, then the shop total. Owners also get Close week and CSV. */
+   a rep total, then the shop total. Owners also get Close week and CSV, and
+   can open one rep's statement on its own (?rep=Full Name, from Reps). */
 (function () {
 
   var repsEl = document.querySelector('[data-pay-reps]');
@@ -15,9 +16,19 @@
   var pendingBody = document.querySelector('[data-pay-pending]');
   var closeBtn = document.querySelector('[data-pay-close]');
   var csvBtn = document.querySelector('[data-pay-csv]');
+  var filterEl = document.querySelector('[data-pay-filter]');
 
   var params = new URLSearchParams(location.search);
-  var state = { period: params.get('period') || '', data: null };
+  var state = { period: params.get('period') || '', rep: params.get('rep') || '', data: null };
+
+  // period and rep together, so stepping weeks keeps the one-rep view.
+  function query(extra) {
+    var q = new URLSearchParams(extra || {});
+    if (state.period) q.set('period', state.period);
+    if (state.rep) q.set('rep', state.rep);
+    var s = q.toString();
+    return s ? '?' + s : '';
+  }
 
   load();
 
@@ -26,21 +37,23 @@
   document.querySelector('[data-pay-this]').addEventListener('click', function () { go(''); });
   document.querySelector('[data-pay-print]').addEventListener('click', function () { window.print(); });
   csvBtn.addEventListener('click', function () {
-    location.href = '/api/payroll?format=csv&period=' + encodeURIComponent(state.data.period.start);
+    var q = new URLSearchParams({ format: 'csv', period: state.data.period.start });
+    if (state.rep) q.set('rep', state.rep);
+    location.href = '/api/payroll?' + q.toString();
   });
   closeBtn.addEventListener('click', closeWeek);
 
   function go(period) {
     if (period == null) return;
     state.period = period;
-    history.replaceState(null, '', period ? '?period=' + period : location.pathname);
+    history.replaceState(null, '', location.pathname + query());
     load();
   }
 
   function load() {
     msgEl.textContent = 'Loading statement…';
     msgEl.hidden = false;
-    fetch('/api/payroll' + (state.period ? '?period=' + encodeURIComponent(state.period) : ''), { credentials: 'same-origin' })
+    fetch('/api/payroll' + query(), { credentials: 'same-origin' })
       .then(function (res) {
         if (!res.ok) throw new Error('request failed: ' + res.status);
         return res.json();
@@ -80,10 +93,20 @@
     closeBtn.hidden = !d.canClose;
     csvBtn.hidden = !owner;
 
+    var oneRep = owner && d.filter && d.filter.rep;
+    filterEl.hidden = !oneRep;
+    if (oneRep) {
+      filterEl.querySelector('[data-pay-filter-name]').textContent = d.filter.rep;
+      var all = new URLSearchParams();
+      if (state.period) all.set('period', state.period);
+      filterEl.querySelector('[data-pay-filter-all]').href = location.pathname + (all.toString() ? '?' + all : '');
+      document.title = d.filter.rep + ' — Payroll — Elevated Portal';
+    }
+
     var t = d.totals;
     var cards = [
       ['Installs paid', String(t.orders), 'Installed this week · paid Fri ' + fmtDate(d.period.payday)],
-      [owner ? 'Owed to reps' : 'You earn', money(t.repCommission), d.closed ? 'Frozen at close' : 'Live from the sheet']
+      [oneRep ? 'Owed to ' + d.filter.rep.split(' ')[0] : owner ? 'Owed to reps' : 'You earn', money(t.repCommission), d.closed ? 'Frozen at close' : 'Live from the sheet']
     ];
     if (owner) {
       cards.push(['Office pay', money(t.officePay), 'Collected from the carrier']);
@@ -99,7 +122,8 @@
         ' no rate (gig count not on the rate card) and counts as $0 until priced in the sheet.';
       msgEl.hidden = false;
     } else if (!d.reps.length) {
-      msgEl.textContent = 'No installs in this week, so nothing pays on Friday ' + fmtDate(d.period.payday) + '.';
+      msgEl.textContent = (oneRep ? 'No installs for ' + d.filter.rep + ' in this week' : 'No installs in this week') +
+        ', so nothing pays on Friday ' + fmtDate(d.period.payday) + '.';
       msgEl.hidden = false;
     } else {
       msgEl.hidden = true;

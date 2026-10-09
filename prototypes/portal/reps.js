@@ -96,7 +96,9 @@
     }
     body.innerHTML = rows.map(function (r) {
       var you = r.id === state.viewerId;
-      var actions = [];
+      // Payroll first and for everyone, deactivated too: their history still matters.
+      var actions = ['<a class="row-btn" href="payroll.html?rep=' + escapeHtml(encodeURIComponent(r.fullName)) +
+        '" title="View ' + escapeHtml(r.fullName) + '’s payroll">Payroll</a>'];
       if (!r.disabled) actions.push(btn('edit', r.id, 'Edit'));
       if (r.locked) actions.push(btn('unlock', r.id, 'Unlock'));
       if (!r.disabled && !you) actions.push(btn('reset', r.id, 'Reset', 'Reset password'));
