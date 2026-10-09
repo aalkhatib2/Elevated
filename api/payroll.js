@@ -148,22 +148,32 @@ export default async function handler(req, res) {
         expectedPayday: l.installDate && l.installDate >= today ? paydayFor(l.installDate) : null,
       }));
     }
+    // An owner can narrow the statement to one rep (?rep=Full Name, from the
+    // Reps page). A rep always sees only themselves, so the param is ignored.
+    const repFilter = isOwner && typeof (req.query && req.query.rep) === 'string'
+      ? req.query.rep.trim().replace(/\s+/g, ' ').slice(0, 100)
+      : '';
     if (!isOwner) statement = withoutOfficeFigures(onlyRep(statement, me.full_name));
+    else if (repFilter) statement = onlyRep(statement, repFilter);
 
     if (req.query && req.query.format === 'csv') {
       // The CSV carries office pay per line, and the button is owner-only.
       if (!isOwner) return res.status(403).json({ error: 'Only the owner can export payroll' });
+      const slug = repFilter ? '-' + repFilter.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/^-|-$/g, '') : '';
       res.setHeader('Content-Type', 'text/csv; charset=utf-8');
-      res.setHeader('Content-Disposition', `attachment; filename="payroll-${period.start}.csv"`);
+      res.setHeader('Content-Disposition', `attachment; filename="payroll-${period.start}${slug}.csv"`);
       return res.status(200).send(toCsv(statement));
     }
 
     return res.status(200).json({
       ...statement,
       viewer: { isOwner, fullName: me.full_name },
+      filter: repFilter ? { rep: repFilter } : null,
       prevPeriod: addDays(period.start, -7),
       nextPeriod: addDays(period.start, 7),
-      canClose: isOwner && !statement.closed && period.end < today,
+      // Closing freezes the week for everyone, so it isn't offered from a
+      // one-rep view where it would look like it only affects that rep.
+      canClose: isOwner && !repFilter && !statement.closed && period.end < today,
     });
   } catch (err) {
     console.error('[payroll] failed:', err);
