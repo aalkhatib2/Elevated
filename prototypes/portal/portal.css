@@ -99,17 +99,6 @@ button { font: inherit; color: inherit; }
 .rail-kv dt { font-family: var(--label); font-weight: 600; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted); }
 .rail-kv dd { margin: 0; font-size: 13px; color: var(--text-2); text-align: right; font-variant-numeric: tabular-nums; }
 
-.rail-search {
-  margin: 18px 24px 10px; padding: 0 12px; height: 40px; width: calc(100% - 48px);
-  display: flex; align-items: center; gap: 10px; cursor: pointer;
-  background: var(--bg); border: 1px solid var(--line);
-  font-family: var(--label); font-weight: 500; font-size: 12px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--muted);
-  transition: border-color .2s, color .2s;
-}
-.rail-search:hover, .rail-search.is-pinged { border-color: var(--line-3); color: var(--text-2); }
-.rail-search.is-pinged { border-color: var(--accent); }
-.rail-search .kbd { margin-left: auto; border: 1px solid var(--line); padding: 2px 6px; font-size: 10px; letter-spacing: 0.06em; }
-
 .rail-nav { display: flex; flex-direction: column; padding: 8px 12px; }
 .rail-nav a {
   position: relative; display: flex; align-items: center; gap: 14px; padding: 13px 12px;
@@ -154,7 +143,6 @@ button { font: inherit; color: inherit; }
   transition: border-color .2s;
 }
 .chip:hover { border-color: var(--text); }
-.chip .sq { width: 7px; height: 7px; flex: none; background: currentColor; }
 
 /* ---------------- section labels ---------------- */
 .sec-label { margin: 52px 0 18px; }
@@ -348,20 +336,6 @@ table.tbl tr.tr-total td {
 .empty h3 { margin-top: 22px; font-size: 26px; }
 .empty p { margin: 10px auto 0; max-width: 46ch; font-size: 14.5px; color: var(--text-2); }
 
-/* ---------------- floating actions ---------------- */
-.fabs { position: fixed; right: 28px; bottom: 28px; z-index: 55; display: grid; gap: 12px; justify-items: end; }
-.fab {
-  position: relative; width: 52px; height: 52px; display: grid; place-items: center; cursor: pointer;
-  background: var(--bg-2); border: 1px solid var(--line-2); color: var(--text);
-  font-family: var(--label); font-weight: 600; font-size: 15px;
-  transition: border-color .2s, color .2s, background-color .2s;
-}
-.fab:hover { border-color: var(--text); background: var(--bg-3); }
-.fab svg { width: 18px; height: 18px; }
-.fab.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-.fab.primary:hover { background: var(--text); border-color: var(--text); }
-.fab .badge { position: absolute; top: -4px; right: -4px; width: 9px; height: 9px; border-radius: 50%; background: var(--accent); box-sizing: content-box; border: 2px solid var(--bg); }
-
 /* ---------------- build your team ---------------- */
 .build-team {
   display: flex; align-items: center; justify-content: space-between; gap: 28px; flex-wrap: wrap;
@@ -377,7 +351,7 @@ table.tbl tr.tr-total td {
    landed on and adds body.is-setup. The page itself is blurred (not only the
    ::backdrop), so the effect holds in browsers without backdrop-filter. */
 body.is-setup { overflow: hidden; }
-body.is-setup .app, body.is-setup .fabs { filter: blur(14px) saturate(0.7); pointer-events: none; user-select: none; transition: filter .5s var(--ease); }
+body.is-setup .app { filter: blur(14px) saturate(0.7); pointer-events: none; user-select: none; transition: filter .5s var(--ease); }
 .setup-dlg { width: min(460px, calc(100vw - 32px)); border-color: var(--accent-line); animation: setupIn .55s var(--ease) both; }
 .setup-dlg::backdrop { background: rgba(10,11,13,0.6); }
 .setup-body { gap: 16px; padding: 32px 32px 26px; }
@@ -485,7 +459,7 @@ table.tbl tr.tr-off .td-strong { color: var(--text-2); }
   }
   .rail-brand { padding: 16px 20px 12px; gap: 6px; }
   .rail-brand img { height: 16px; }
-  .rail-id, .rail-search { display: none; }
+  .rail-id { display: none; }
   .rail-foot { grid-row: 1; grid-column: 2; margin: 0; padding: 0 20px; border: 0; gap: 20px; }
   .rail-nav { grid-column: 1 / -1; flex-direction: row; overflow-x: auto; padding: 0 8px; border-top: 1px solid var(--line); }
   .rail-nav a { padding: 14px 12px; white-space: nowrap; }
@@ -497,13 +471,12 @@ table.tbl tr.tr-off .td-strong { color: var(--text-2); }
   .kpis { grid-template-columns: 1fr; }
   .road { padding: 24px 20px 22px; }
   .road-paths { -webkit-mask-image: linear-gradient(90deg, transparent, #000 90%); mask-image: linear-gradient(90deg, transparent, #000 90%); }
-  .fabs { right: 16px; bottom: 16px; }
 }
 @media (max-width: 640px) {
   .topbar h1 { font-size: 30px; }
   .topbar-right, .seg { width: 100%; }
   .seg { overflow-x: auto; }
-  .seg button { flex: 1 0 auto; }
+  .seg button { flex: 1 0 auto; padding: 0 8px; font-size: 11px; letter-spacing: 0.08em; }
   .road-pct { text-align: left; }
   .road-marks { height: 22px; }
   .road-mark .n { display: none; }
@@ -521,5 +494,5 @@ table.tbl tr.tr-off .td-strong { color: var(--text-2); }
   .road-paths path, .kpi.is-open .kpi-fold, .ppane.on { animation: none; }
   .road-paths, .road-rail .fill, .road-node { transition: none; }
   .setup-dlg, .toast { animation: none; }
-  body.is-setup .app, body.is-setup .fabs, .toast { transition: none; }
+  body.is-setup .app, .toast { transition: none; }
 }

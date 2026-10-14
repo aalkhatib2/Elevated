@@ -1,7 +1,7 @@
 /* Elevated portal — Orders page live data.
-   Fetches /api/orders, renders the Timeline table, and wires the two
-   controls that were previously inert decoration: the search box and the
-   All Time/Last Month/Last Week/This Week range buttons in the topbar. */
+   Fetches /api/orders, renders the Timeline table, and wires the search box,
+   the All Time/Last Month/Last Week/This Week range buttons in the topbar,
+   and Export CSV (exactly the rows currently shown). */
 (function () {
 
   var tbody = document.querySelector('[data-orders-body]');
@@ -10,6 +10,7 @@
   var countEl = document.querySelector('[data-orders-count]');
   var searchInput = document.querySelector('[data-orders-search]');
   var rangeButtons = document.querySelectorAll('[data-orders-range]');
+  var exportBtn = document.querySelector('[data-orders-export]');
 
   var state = { all: [], filtered: [], query: '', range: 'all' };
 
@@ -43,8 +44,20 @@
     });
   });
 
+  if (exportBtn) {
+    exportBtn.addEventListener('click', function () {
+      window.portalCsv(
+        'orders-' + state.range + '-' + window.portalToday() + '.csv',
+        ['Order date', 'Order #', 'Client', 'Gigs', 'Install date', 'Status in sheet', 'Stage'],
+        state.filtered.map(function (o) {
+          return [o.date, o.orderId, o.clientName, o.gigs, o.installDate, o.status, o.stage];
+        })
+      );
+    });
+  }
+
   function applyFilters() {
-    var cutoff = rangeCutoff(state.range);
+    var cutoff = window.portalRangeCutoff(state.range);
     state.filtered = state.all.filter(function (o) {
       if (cutoff && o.date < cutoff) return false;
       if (state.query) {
@@ -55,16 +68,6 @@
     });
     state.filtered.sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
     render();
-  }
-
-  function rangeCutoff(range) {
-    var now = new Date();
-    var d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
-    if (range === 'last-month') d.setUTCDate(d.getUTCDate() - 30);
-    else if (range === 'last-week') d.setUTCDate(d.getUTCDate() - 7);
-    else if (range === 'this-week') d.setUTCDate(d.getUTCDate() - d.getUTCDay() + (d.getUTCDay() === 0 ? -6 : 1)); // most recent Monday
-    else return null; // "all"
-    return d.toISOString().slice(0, 10);
   }
 
   function renderLoading() {

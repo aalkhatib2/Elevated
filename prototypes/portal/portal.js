@@ -20,6 +20,58 @@
     if (window.ScrollTrigger) gsap.registerPlugin(ScrollTrigger);
   }
 
+  /* Shared helpers for the page scripts (loaded before them). */
+
+  // First day included by a range button, as YYYY-MM-DD, or null for all time.
+  // One definition so Overview, Orders and Commission never disagree on a range.
+  window.portalRangeCutoff = function (range) {
+    var now = new Date();
+    var d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
+    if (range === 'last-month') d.setUTCDate(d.getUTCDate() - 30);
+    else if (range === 'last-week') d.setUTCDate(d.getUTCDate() - 7);
+    else if (range === 'this-week') d.setUTCDate(d.getUTCDate() - d.getUTCDay() + (d.getUTCDay() === 0 ? -6 : 1)); // most recent Monday
+    else return null;
+    return d.toISOString().slice(0, 10);
+  };
+
+  // Download rows as a CSV file. Quotes every cell and neutralises a leading
+  // =,+,-,@ so a client or rep name can't run as a formula when the file is
+  // opened in a spreadsheet.
+  window.portalCsv = function (filename, header, rows) {
+    var cell = function (v) {
+      var s = v == null ? '' : String(v);
+      if (/^[=+\-@]/.test(s)) s = "'" + s;
+      return '"' + s.replace(/"/g, '""') + '"';
+    };
+    var body = [header].concat(rows).map(function (r) { return r.map(cell).join(','); }).join('\n') + '\n';
+    var a = document.createElement('a');
+    a.href = URL.createObjectURL(new Blob([body], { type: 'text/csv' }));
+    a.download = filename;
+    document.body.appendChild(a);
+    a.click();
+    a.remove();
+    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
+  };
+
+  // [data-copy-link="relative/or/absolute/url"] copies that link, resolved
+  // against this page, and says so. Used for the interview link.
+  document.addEventListener('click', function (e) {
+    var btn = e.target.closest && e.target.closest('[data-copy-link]');
+    if (!btn) return;
+    var url = new URL(btn.getAttribute('data-copy-link'), location.href).href;
+    var done = function (msg) { if (window.portalToast) window.portalToast(msg); };
+    if (!navigator.clipboard) return done('Copy this link: ' + url);
+    navigator.clipboard.writeText(url).then(
+      function () { done('Interview link copied'); },
+      function () { done('Copy this link: ' + url); }
+    );
+  });
+
+  window.portalToday = function () {
+    var d = new Date();
+    return d.getFullYear() + '-' + String(d.getMonth() + 1).padStart(2, '0') + '-' + String(d.getDate()).padStart(2, '0');
+  };
+
   /* expandable KPI cards */
   document.querySelectorAll('.kpi-bar').forEach(function (bar) {
     bar.addEventListener('click', function () {
@@ -52,8 +104,10 @@
     });
   });
 
-  /* segmented controls: time range */
-  document.querySelectorAll('.seg').forEach(function (group) {
+  /* segmented controls: time range. Each page's script filters its own data;
+     this only moves the pressed state and says what the range covers —
+     data-range-note on the subtitle, since not every page's figures follow it. */
+  document.querySelectorAll('.seg:not([data-pay-nav])').forEach(function (group) {
     group.querySelectorAll('button').forEach(function (btn) {
       btn.addEventListener('click', function () {
         group.querySelectorAll('button').forEach(function (b) {
@@ -61,7 +115,7 @@
         });
         var sub = document.querySelector('.topbar .sub');
         if (sub) {
-          sub.textContent = btn.textContent + ' · Everything below respects this range';
+          sub.textContent = btn.textContent + ' · ' + (sub.dataset.rangeNote || 'Everything below respects this range');
           if (MOTION) gsap.fromTo(sub, { opacity: 0 }, { opacity: 1, duration: 0.25 });
         }
       });
@@ -85,15 +139,6 @@
         });
       });
     });
-  });
-
-  /* quick search affordance only */
-  document.addEventListener('keydown', function (e) {
-    if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === 'k') {
-      e.preventDefault();
-      var s = document.querySelector('.rail-search');
-      if (s) { s.classList.add('is-pinged'); setTimeout(function () { s.classList.remove('is-pinged'); }, 600); }
-    }
   });
 
   /* ------------------------------------------------------------------ *

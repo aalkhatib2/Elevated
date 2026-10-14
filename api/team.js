@@ -1,6 +1,7 @@
 import { sql } from './_lib/db.js';
 import { getSessionRep } from './_lib/auth.js';
-import { getOrderCountsByRep } from './_lib/sheets.js';
+import { getAllOrders, normalizeName } from './_lib/sheets.js';
+import { RANGES, rangeCutoff } from './_lib/range.js';
 
 export default async function handler(req, res) {
   if (req.method !== 'GET') {
@@ -17,9 +18,22 @@ export default async function handler(req, res) {
     const allReps = await sql`
       select id, full_name, market, created_at, recruited_by from reps where disabled_at is null
     `;
-    const counts = await getOrderCountsByRep(allReps.map((r) => r.full_name));
-    const countFor = (fullName) =>
-      counts[fullName.trim().toLowerCase().replace(/\s+/g, ' ')] || 0;
+    // ?range= narrows the counts shown (by order date); an unknown value is
+    // all time. Producing/Onboarding stays lifetime, so a rep doesn't flip
+    // to "Onboarding" just because the range is a quiet week.
+    const range = RANGES.includes(req.query && req.query.range) ? req.query.range : 'all';
+    const cutoff = rangeCutoff(range);
+    const orders = await getAllOrders(allReps.map((r) => r.full_name));
+    const lifetime = {};
+    const inRange = {};
+    for (const o of orders) {
+      const k = normalizeName(o.salesRep);
+      if (!k) continue;
+      lifetime[k] = (lifetime[k] || 0) + 1;
+      if (!cutoff || o.date >= cutoff) inRange[k] = (inRange[k] || 0) + 1;
+    }
+    const countFor = (fullName) => inRange[normalizeName(fullName)] || 0;
+    const everFor = (fullName) => lifetime[normalizeName(fullName)] || 0;
 
     const downline = allReps
       .filter((r) => r.recruited_by === me.id)
@@ -28,7 +42,7 @@ export default async function handler(req, res) {
         market: r.market,
         recruitedAt: r.created_at,
         installs: countFor(r.full_name),
-        status: countFor(r.full_name) > 0 ? 'Producing' : 'Onboarding',
+        status: everFor(r.full_name) > 0 ? 'Producing' : 'Onboarding',
       }))
       .sort((a, b) => b.installs - a.installs);
 
@@ -41,6 +55,7 @@ export default async function handler(req, res) {
       .sort((a, b) => b.installs - a.installs);
 
     return res.status(200).json({
+      range,
       rep: {
         fullName: me.full_name,
         repCode: me.rep_code,
