@@ -438,6 +438,15 @@ body.is-setup .app, body.is-setup .fabs { filter: blur(14px) saturate(0.7); poin
 }
 .row-btn:hover { border-color: var(--text); }
 .row-btn[data-act="disable"]:hover { border-color: var(--accent); color: var(--accent); }
+a.row-btn { display: inline-block; text-decoration: none; }
+
+/* Payroll narrowed to one rep (opened from the Reps page). */
+.pay-filter {
+  display: flex; align-items: flex-end; justify-content: space-between; gap: 20px; flex-wrap: wrap;
+  margin-bottom: 20px; padding: 22px 24px; background: var(--bg-2); border: 1px solid var(--accent-line);
+}
+.pay-filter h2 { margin-top: 12px; font-size: 32px; }
+.pay-filter-links { display: flex; gap: 8px; }
 table.tbl tr.tr-off td { color: var(--muted); }
 table.tbl tr.tr-off .td-strong { color: var(--text-2); }
 .you-tag { margin-left: 6px; padding: 1px 6px; border: 1px solid var(--accent-line); color: var(--accent);
