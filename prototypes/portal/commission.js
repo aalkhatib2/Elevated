@@ -60,25 +60,10 @@
 
   /* ---------------- derive ---------------- */
 
-  function todayISO() {
-    var d = new Date();
-    return d.getFullYear() + '-' + pad(d.getMonth() + 1) + '-' + pad(d.getDate());
-  }
-  function pad(n) { return String(n).padStart(2, '0'); }
-
-  // Same cutoffs as the Orders page, so the two never disagree on a range.
-  function rangeCutoff(range) {
-    var now = new Date();
-    var d = new Date(Date.UTC(now.getUTCFullYear(), now.getUTCMonth(), now.getUTCDate()));
-    if (range === 'last-month') d.setUTCDate(d.getUTCDate() - 30);
-    else if (range === 'last-week') d.setUTCDate(d.getUTCDate() - 7);
-    else if (range === 'this-week') d.setUTCDate(d.getUTCDate() - d.getUTCDay() + (d.getUTCDay() === 0 ? -6 : 1));
-    else return null;
-    return d.toISOString().slice(0, 10);
-  }
+  var todayISO = window.portalToday;
 
   function apply() {
-    var cutoff = rangeCutoff(state.range);
+    var cutoff = window.portalRangeCutoff(state.range);
     state.inRange = state.all
       .filter(function (o) { return !cutoff || o.date >= cutoff; })
       .sort(function (a, b) { return a.date < b.date ? 1 : a.date > b.date ? -1 : 0; });
@@ -231,28 +216,15 @@
   /* ---------------- export ---------------- */
 
   function exportCsv() {
-    var rows = visibleLines();
     var header = ['Order date', 'Order #', 'Client', 'Gigs', 'Install date', 'Paid on', 'Pays once installed', 'Stage', 'Est. commission', 'Priced from'];
-    var lines = rows.map(function (o) {
-      return [o.date, o.orderId, o.clientName, o.gigs, o.installDate, o.payday, o.expectedPayday, o.stage, o.repCommission,
-        o.pricedFrom === 'sheet' ? 'sheet' : 'standard rate'].map(csvCell).join(',');
-    });
-    var blob = new Blob([header.join(',') + '\n' + lines.join('\n') + '\n'], { type: 'text/csv' });
-    var a = document.createElement('a');
-    a.href = URL.createObjectURL(blob);
-    a.download = 'commission-' + state.range + '-' + todayISO() + '.csv';
-    document.body.appendChild(a);
-    a.click();
-    a.remove();
-    setTimeout(function () { URL.revokeObjectURL(a.href); }, 1000);
-  }
-
-  // Quotes every cell and neutralises a leading =,+,-,@ so a client name
-  // can't run as a formula when the file is opened in a spreadsheet.
-  function csvCell(v) {
-    var s = v == null ? '' : String(v);
-    if (/^[=+\-@]/.test(s)) s = "'" + s;
-    return '"' + s.replace(/"/g, '""') + '"';
+    window.portalCsv(
+      'commission-' + state.range + '-' + todayISO() + '.csv',
+      header,
+      visibleLines().map(function (o) {
+        return [o.date, o.orderId, o.clientName, o.gigs, o.installDate, o.payday, o.expectedPayday, o.stage, o.repCommission,
+        o.pricedFrom === 'sheet' ? 'sheet' : 'standard rate'];
+      })
+    );
   }
 
   /* ---------------- helpers ---------------- */

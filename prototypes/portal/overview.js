@@ -1,6 +1,8 @@
 /* Elevated portal — Overview live figures.
    Pulls the same /api/orders payload the Orders page uses and fills in the
-   Road to Elevated rail plus the Volume cards. The Money cards read
+   Road to Elevated rail plus the Volume cards. The range buttons move only
+   the Volume cards: the road is a running total toward 150 and the Money
+   cards are weekly by definition. The Money cards read
    /api/payroll — the statement paid this coming Friday, the one paid the
    Friday before, and everything still waiting on an install — so they can
    never disagree with the Payroll page. */
@@ -28,13 +30,25 @@
 
   /* ---------------- live figures ---------------- */
 
+  var state = { orders: [], range: 'all' };
+
+  document.querySelectorAll('[data-ov-range]').forEach(function (btn) {
+    btn.addEventListener('click', function () {
+      state.range = btn.dataset.ovRange;
+      render();
+    });
+  });
+
   if (Object.keys(els).length) {
     fetch('/api/orders', { credentials: 'same-origin' })
       .then(function (res) {
         if (!res.ok) throw new Error('request failed: ' + res.status);
         return res.json();
       })
-      .then(render)
+      .then(function (data) {
+        state.orders = (data && data.orders) || [];
+        render();
+      })
       .catch(function (err) {
         console.error('[overview] could not load figures', err);
         // Leave the em-dash resting state in place rather than showing a
@@ -43,21 +57,26 @@
       });
   }
 
-  function render(data) {
-    var orders = (data && data.orders) || [];
-    var count = orders.length;
+  function render() {
+    var all = state.orders;
+
+    // --- volume: follows the range ---
+    var cutoff = window.portalRangeCutoff(state.range);
+    var orders = cutoff ? all.filter(function (o) { return o.date >= cutoff; }) : all;
+    var vCount = orders.length;
     var oneGig = orders.filter(function (o) { return o.gigs === 1; }).length;
     var twoGig = orders.filter(function (o) { return o.gigs === 2; }).length;
     var gigs = orders.reduce(function (sum, o) { return sum + (o.gigs || 0); }, 0);
 
-    set('orders', count);
+    set('orders', vCount);
     set('gigs', gigs);
     set('oneGig', oneGig);
     set('twoGig', twoGig);
-    set('oneGigPct', pct(oneGig, count));
-    set('twoGigPct', pct(twoGig, count));
+    set('oneGigPct', pct(oneGig, vCount));
+    set('twoGigPct', pct(twoGig, vCount));
 
-    // --- rail ---
+    // --- rail: always everything ---
+    var count = all.length;
     var capped = Math.min(count, TARGET);
     var percent = Math.round((capped / TARGET) * 100);
     var remaining = Math.max(TARGET - count, 0);
