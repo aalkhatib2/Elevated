@@ -169,6 +169,9 @@
     });
   }
 
+  // Shared with the page scripts (e.g. "Link copied").
+  window.portalToast = toast;
+
   function toast(message) {
     var el = document.createElement('p');
     el.className = 'toast';

@@ -30,7 +30,6 @@
         <dt>Rep code</dt><dd data-field="repCode">&mdash;</dd>
       </dl>
     </div>
-    <button class="rail-search" type="button">Quick search<span class="kbd">Ctrl K</span></button>
     <nav class="rail-nav">
       <a href="overview.html"><span class="sq"></span>Overview</a>
       <a href="orders.html"><span class="sq"></span>Orders</a>
@@ -66,6 +65,17 @@
 
     <div class="pad">
 
+      <div class="pay-filter" data-pay-filter hidden>
+        <div>
+          <p class="kicker">One rep&rsquo;s statement</p>
+          <h2 data-pay-filter-name></h2>
+        </div>
+        <div class="pay-filter-links">
+          <a class="row-btn" href="payroll.html" data-pay-filter-all>All reps</a>
+          <a class="row-btn" href="reps.html">Back to Reps</a>
+        </div>
+      </div>
+
       <div class="kpis" data-pay-kpis style="grid-template-columns:repeat(auto-fit,minmax(200px,1fr))"></div>
 
       <div data-pay-msg class="tbl-msg" role="status" style="margin-top:16px"></div>
@@ -95,16 +105,12 @@
   .pay-total td { font-weight: 700; border-top: 1px solid currentColor; }
   .pay-neg { color: #e5484d; }
   @media print {
-    .rail, .fabs, .topbar-right, .ptabs { display: none !important; }
+    .rail, .topbar-right, .ptabs { display: none !important; }
     .app { display: block; }
     body { background: #fff; color: #000; }
   }
 </style>
 
-<div class="fabs">
-  <button class="fab" type="button" title="Reminders and what is new" aria-label="3 reminders">3<span class="badge"></span></button>
-  <button class="fab primary" type="button" title="Ask Ridge, your assistant" aria-label="Ask Ridge, your assistant"><svg viewBox="0 0 18 18" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M9 2 16 9 9 16 2 9Z"/></svg></button>
-</div>
 
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" integrity="sha256-krualkdvmD0hKivE9UyIkDnBaW3URh1ApzaGCThXD7s=" crossorigin="anonymous"></script>
 <script src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" integrity="sha256-sLFNZ7VbDEPHVqwLEGz8sJ0IeZRfbq1kRRBlsGcpFqI=" crossorigin="anonymous"></script>
