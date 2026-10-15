@@ -1,22 +1,25 @@
 import { sql } from './_lib/db.js';
 import { hashPassword, verifyPassword } from './_lib/password.js';
 import { createSessionCookie } from './_lib/session.js';
+import { blockCrossOrigin, noStore } from './_lib/http.js';
 import {
   checkNewPassword, clearFailedPasswords, getSessionRep, isLocked, lockedMessage, recordFailedPassword,
 } from './_lib/auth.js';
 
 export default async function handler(req, res) {
+  noStore(res);
   if (req.method !== 'POST') {
     res.setHeader('Allow', 'POST');
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
+  if (blockCrossOrigin(req, res)) return;
 
   try {
     const rep = await getSessionRep(req);
     if (!rep) return res.status(401).json({ ok: false, error: 'Your session ended. Sign in again.' });
 
     const { currentPassword, newPassword } = req.body || {};
-    if (!currentPassword || !newPassword) {
+    if (typeof currentPassword !== 'string' || typeof newPassword !== 'string' || !currentPassword || !newPassword) {
       return res.status(400).json({ ok: false, error: 'Enter your current password and a new one.' });
     }
 

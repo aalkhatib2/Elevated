@@ -8,6 +8,16 @@
 
   var here = location.pathname + location.search;
 
+  // A message queued just before a reload (see the password dialog below).
+  try {
+    var queued = sessionStorage.getItem('elevated-toast');
+    if (queued) {
+      sessionStorage.removeItem('elevated-toast');
+      document.addEventListener('DOMContentLoaded', function () { toast(queued); });
+      if (document.readyState !== 'loading') toast(queued);
+    }
+  } catch (err) {}
+
   fetch('/api/me', { credentials: 'same-origin' })
     .then(function (res) {
       if (!res.ok) return Promise.reject(res);
@@ -146,10 +156,11 @@
           }
           done = true;
           form.reset();
-          dlg.close();
-          dlg.remove();
-          document.body.classList.remove('is-setup');
-          toast('Password saved. You’re all set.');
+          // The API holds back page data until the issued password is
+          // replaced, so this page's data calls failed behind the dialog.
+          // Reload to fetch them for real; the toast survives the reload.
+          try { sessionStorage.setItem('elevated-toast', 'Password saved. You’re all set.'); } catch (err) {}
+          location.reload();
         })
         .catch(function () {
           btn.disabled = false;

@@ -12,6 +12,7 @@ import { sql } from './_lib/db.js';
 import { getSessionRep } from './_lib/auth.js';
 import { getAllOrders, normalizeName } from './_lib/sheets.js';
 import { addDays, buildPayroll, groupLines, payPeriodFor, payPeriodPaidOn, paydayFor, toCsv } from './_lib/payroll.js';
+import { blockCrossOrigin, noStore } from './_lib/http.js';
 
 // Dates and numerics are cast in SQL so the driver hands back plain strings
 // and numbers instead of Date / string-decimal objects.
@@ -60,14 +61,17 @@ function withoutOfficeFigures(statement) {
 }
 
 export default async function handler(req, res) {
+  noStore(res);
   if (req.method !== 'GET' && req.method !== 'POST') {
     res.setHeader('Allow', 'GET, POST');
     return res.status(405).json({ error: 'Method not allowed' });
   }
+  if (req.method === 'POST' && blockCrossOrigin(req, res)) return;
 
   try {
     const me = await getSessionRep(req);
     if (!me) return res.status(401).json({ error: 'Not signed in' });
+    if (me.must_change_password) return res.status(403).json({ error: 'Choose your own password first.', mustChangePassword: true });
     const isOwner = me.role === 'owner';
 
     const today = new Date().toISOString().slice(0, 10);
@@ -75,8 +79,12 @@ export default async function handler(req, res) {
     const period = requested ? payPeriodFor(requested) : payPeriodPaidOn(today);
     if (!period) return res.status(400).json({ error: 'period must be a date like 2026-09-28' });
 
-    const closedRows = await loadClosedLines();
-    const isClosed = (await sql`select 1 from pay_periods where period_start = ${period.start}`).length > 0;
+    // Independent reads, so they go out together.
+    const [closedRows, closedFlag] = await Promise.all([
+      loadClosedLines(),
+      sql`select 1 from pay_periods where period_start = ${period.start}`,
+    ]);
+    const isClosed = closedFlag.length > 0;
 
     if (req.method === 'POST') {
       if (!isOwner) return res.status(403).json({ error: 'Only the owner can close a week' });

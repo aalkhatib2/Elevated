@@ -80,15 +80,44 @@ const etStamp = (iso) =>
 
 // ---------- OCR ----------
 
+// Attachment URLs come from Discord's API, but they are still fetched from a
+// URL a poster influenced, so: Discord's CDN hosts only, no redirects, a size
+// cap and a timeout. An image that fails any check is treated as unreadable
+// (the post goes to review) rather than failing the whole run, which would
+// retry the same bad post forever.
+const IMAGE_HOSTS = new Set(['cdn.discordapp.com', 'media.discordapp.net']);
+const MAX_IMAGE_BYTES = 10 * 1024 * 1024;
+
+async function fetchAttachment(url) {
+  const u = new URL(url);
+  if (u.protocol !== 'https:' || !IMAGE_HOSTS.has(u.hostname)) throw new Error(`unexpected attachment host ${u.hostname}`);
+  const res = await fetch(u, { redirect: 'error', signal: AbortSignal.timeout(20_000) });
+  if (!res.ok) throw new Error(`attachment fetch ${res.status}`);
+  const declared = Number(res.headers.get('content-length'));
+  if (declared > MAX_IMAGE_BYTES) throw new Error('attachment too large');
+  const buf = Buffer.from(await res.arrayBuffer());
+  if (buf.length > MAX_IMAGE_BYTES) throw new Error('attachment too large');
+  return buf;
+}
+
 async function ocrImages(worker, attachments) {
   const parsed = [];
   for (const a of attachments) {
-    const buf = Buffer.from(await (await fetch(a.url)).arrayBuffer());
-    const { data } = await worker.recognize(buf);
-    parsed.push(parseOrderText(data.text));
+    try {
+      const { data } = await worker.recognize(await fetchAttachment(a.url));
+      parsed.push(parseOrderText(data.text));
+    } catch (err) {
+      console.warn('[sales-bot] skipped an attachment:', err.message);
+      parsed.push(parseOrderText(''));
+    }
   }
   return parsed;
 }
+
+// The Bot tab is written USER_ENTERED, so text that starts like a formula
+// would run as one. Nothing the bot logs should ever start that way, but a
+// Discord username or an OCR'd reason is outside input.
+const cell = (v) => (typeof v === 'string' && /^[=+\-@]/.test(v) ? `'${v}` : v);
 
 // ---------- run ----------
 
@@ -161,7 +190,7 @@ async function runPass({ live }) {
           etStamp(new Date().toISOString()), mode, `'${m.id}`, posted, m.author.username,
           fields.rep || '', fields.orderNumber || '', fields.gigs ?? '', fields.clientName || '',
           fields.installDate || '', fields.tab || '', fields.action, fields.reasons || '', link,
-        ];
+        ].map(cell);
         const rows = [];
         let outcome = null; // which reaction the post gets in live mode
 

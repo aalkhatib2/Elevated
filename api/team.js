@@ -2,8 +2,10 @@ import { sql } from './_lib/db.js';
 import { getSessionRep } from './_lib/auth.js';
 import { getAllOrders, normalizeName } from './_lib/sheets.js';
 import { RANGES, rangeCutoff } from './_lib/range.js';
+import { noStore } from './_lib/http.js';
 
 export default async function handler(req, res) {
+  noStore(res);
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
     return res.status(405).json({ error: 'Method not allowed' });
@@ -12,6 +14,7 @@ export default async function handler(req, res) {
   try {
     const me = await getSessionRep(req);
     if (!me) return res.status(401).json({ error: 'Not signed in' });
+    if (me.must_change_password) return res.status(403).json({ error: 'Choose your own password first.', mustChangePassword: true });
 
     // Everyone active, for the leaderboard and to find my own downline among
     // them. Deactivated reps have left the team, so they drop off both.

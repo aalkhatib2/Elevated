@@ -5,14 +5,14 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Elevated — Field Sales</title>
 <meta name="description" content="Elevated is a field sales organization. Learn the work, build a team, run a division of your own. Book an interview.">
-<link rel="canonical" href="https://joinelevated.net/">
+<link rel="canonical" href="https://www.joinelevated.net/">
 <meta name="theme-color" content="#0A0B0D">
 <meta property="og:type" content="website">
 <meta property="og:site_name" content="Elevated">
 <meta property="og:title" content="Elevated — Field Sales">
 <meta property="og:description" content="Learn the work, build a team, run a division of your own.">
-<meta property="og:url" content="https://joinelevated.net/">
-<meta property="og:image" content="https://joinelevated.net/og-image.jpg">
+<meta property="og:url" content="https://www.joinelevated.net/">
+<meta property="og:image" content="https://www.joinelevated.net/og-image.jpg">
 <meta name="twitter:card" content="summary_large_image">
 <link rel="icon" type="image/png" sizes="32x32" href="favicon-32x32.png">
 <link rel="icon" type="image/png" sizes="16x16" href="favicon-16x16.png">
@@ -317,6 +317,9 @@
   }
   .footer-hatch-wrap.in .footer-hatch { animation: hatchSlide 20s linear forwards; }
   @keyframes hatchSlide { to { background-position-x: 100%; } }
+  .footer-legal { max-width: 760px; margin: 28px auto 0; padding: 0 var(--pad); text-align: center; font-size: 13px; line-height: 1.65; color: var(--muted); }
+  .footer-legal a { color: var(--text-2); text-decoration: underline; text-underline-offset: 3px; }
+  .footer-legal a:hover { color: var(--text); }
   .footer-copy { margin-top: 32px; text-align: center; font-family: var(--label); font-size: 13px; font-weight: 500; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); }
   /* staggered entrance, in the component's order: logo, links, divider, copyright */
   .footer-logo.reveal { transition-delay: .1s; }
@@ -613,10 +616,15 @@
       <a href="#partners">Partners</a>
       <a href="apply.html">Join the Team</a>
       <a href="prototypes/portal/login.html">Rep Portal</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="disclosures.html">Disclosures</a>
     </nav>
   </div>
 
   <div class="footer-hatch-wrap reveal" aria-hidden="true"><div class="footer-hatch"></div></div>
+
+  <p class="footer-legal">Elevated is an independent marketing company. Partner names and logos belong to their owners and appear only to identify programs our team works on; they do not imply endorsement. Earnings are not guaranteed and vary with individual effort and results. See our <a href="disclosures.html">Income &amp; Business Disclosures</a>, <a href="privacy.html">Privacy Policy</a> and <a href="terms.html">Terms of Use</a>.</p>
 
   <p class="footer-copy reveal">&copy; <span id="yr">2026</span> Elevated Management Group</p>
 </footer>

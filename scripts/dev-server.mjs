@@ -8,7 +8,7 @@
 // req.body). Never deployed — scripts/ is excluded in .vercelignore.
 
 import http from 'node:http';
-import { createReadStream, existsSync, statSync } from 'node:fs';
+import { createReadStream, existsSync, readFileSync, statSync } from 'node:fs';
 import path from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 
@@ -40,7 +40,32 @@ const MIME = {
   '.webp': 'image/webp',
   '.ico': 'image/x-icon',
   '.svg': 'image/svg+xml',
+  '.woff2': 'font/woff2',
+  '.txt': 'text/plain; charset=utf-8',
+  '.xml': 'application/xml; charset=utf-8',
 };
+
+// The same response headers production gets from vercel.json (CSP, security
+// headers), so a CSP mistake shows up here first instead of on the live site.
+// Re-read per request so `node scripts/build-headers.mjs` applies immediately.
+// Vercel's sources here are plain paths plus (.*) groups, which read as regex.
+function configHeaders(pathname) {
+  let rules = [];
+  try {
+    rules = JSON.parse(readFileSync(path.join(ROOT, 'vercel.json'), 'utf8')).headers || [];
+  } catch {
+    return {};
+  }
+  const out = {};
+  for (const rule of rules) {
+    if (!new RegExp(`^${rule.source}$`).test(pathname)) continue;
+    for (const h of rule.headers) {
+      // The dev server never caches; skip production cache rules.
+      if (h.key.toLowerCase() !== 'cache-control') out[h.key] = h.value;
+    }
+  }
+  return out;
+}
 
 async function readBody(req) {
   let data = '';
@@ -81,6 +106,10 @@ async function handleApi(req, res, pathname) {
 
 function serveStatic(req, res, pathname) {
   let filePath = path.join(ROOT, pathname === '/' ? 'index.html' : pathname);
+  if (!filePath.startsWith(ROOT + path.sep) || /[\\/]\.env/.test(filePath)) {
+    res.writeHead(404, { 'Content-Type': 'text/plain' });
+    return res.end('Not found');
+  }
   if (existsSync(filePath) && statSync(filePath).isDirectory()) {
     filePath = path.join(filePath, 'index.html');
   }
@@ -90,6 +119,7 @@ function serveStatic(req, res, pathname) {
   }
   const ext = path.extname(filePath).toLowerCase();
   res.writeHead(200, {
+    ...configHeaders(pathname),
     'Content-Type': MIME[ext] || 'application/octet-stream',
     'Cache-Control': 'no-store', // dev server — never serve a stale cached copy
   });
@@ -99,7 +129,10 @@ function serveStatic(req, res, pathname) {
 const server = http.createServer(async (req, res) => {
   const url = new URL(req.url, `http://localhost:${PORT}`);
   const pathname = decodeURIComponent(url.pathname);
-  if (pathname.startsWith('/api/')) return handleApi(req, res, pathname);
+  if (pathname.startsWith('/api/')) {
+    for (const [k, v] of Object.entries(configHeaders(pathname))) res.setHeader(k, v);
+    return handleApi(req, res, pathname);
+  }
   return serveStatic(req, res, pathname);
 });
 

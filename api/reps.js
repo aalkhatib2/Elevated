@@ -16,6 +16,7 @@ import { sql } from './_lib/db.js';
 import { getSessionRep } from './_lib/auth.js';
 import { generateTempPassword, hashPassword } from './_lib/password.js';
 import { getAllOrders, normalizeName } from './_lib/sheets.js';
+import { blockCrossOrigin, noStore } from './_lib/http.js';
 
 const USERNAME_RE = /^[A-Za-z0-9._-]{2,40}$/;
 const UUID_RE = /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i;
@@ -209,11 +210,13 @@ export default async function handler(req, res) {
     return res.status(405).json({ ok: false, error: 'Method not allowed' });
   }
   // Responses can carry a one-time password; never let anything cache them.
-  res.setHeader('Cache-Control', 'no-store');
+  noStore(res);
+  if (req.method === 'POST' && blockCrossOrigin(req, res)) return;
 
   try {
     const me = await getSessionRep(req);
     if (!me) return res.status(401).json({ ok: false, error: 'Not signed in' });
+    if (me.must_change_password) return res.status(403).json({ ok: false, error: 'Choose your own password first.', mustChangePassword: true });
     if (me.role !== 'owner') return res.status(403).json({ ok: false, error: 'Only the owner can manage reps.' });
 
     if (req.method === 'GET') return res.status(200).json({ ok: true, viewerId: me.id, ...(await list()) });

@@ -1,0 +1,4 @@
+Contact: mailto:partners@joinelevated.net
+Expires: 2027-10-14T00:00:00.000Z
+Preferred-Languages: en
+Canonical: https://www.joinelevated.net/.well-known/security.txt
