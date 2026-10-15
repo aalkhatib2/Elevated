@@ -200,8 +200,12 @@ export function buildPayroll(orders, periodStart, closedLines = []) {
 
 // Statement lines as plain rows for a CSV export.
 export function toCsv(statement) {
+  // A client name typed into the sheet must not run as a formula when the
+  // owner opens this file in Excel. Numbers (including negative chargebacks)
+  // are left alone; only text that starts like a formula is defanged.
   const esc = (v) => {
-    const s = v == null ? '' : String(v);
+    let s = v == null ? '' : String(v);
+    if (typeof v === 'string' && /^[=+\-@\t\r]/.test(s)) s = `'${s}`;
     return /[",\n]/.test(s) ? `"${s.replace(/"/g, '""')}"` : s;
   };
   const header = ['Rep', 'Type', 'Order #', 'Client', 'Install date', 'Paid on', 'Gigs', 'Rep commission', 'Office pay'];

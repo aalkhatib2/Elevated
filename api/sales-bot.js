@@ -6,19 +6,13 @@
 // Vercel Cron sends) is accepted. With neither configured the endpoint refuses
 // everything, so it can't be triggered by accident.
 
-import { timingSafeEqual } from 'node:crypto';
 import { runSalesBot } from './_lib/sales-bot.js';
+import { bearerMatches, noStore } from './_lib/http.js';
 
-function authorized(header) {
-  const given = Buffer.from(String(header || ''));
-  return [process.env.SALES_BOT_SECRET, process.env.CRON_SECRET].some((secret) => {
-    if (!secret) return false;
-    const want = Buffer.from(`Bearer ${secret}`);
-    return want.length === given.length && timingSafeEqual(want, given);
-  });
-}
+const authorized = (header) => bearerMatches(header, process.env.SALES_BOT_SECRET, process.env.CRON_SECRET);
 
 export default async function handler(req, res) {
+  noStore(res);
   if (!authorized(req.headers.authorization)) {
     return res.status(401).json({ error: 'Unauthorized' });
   }

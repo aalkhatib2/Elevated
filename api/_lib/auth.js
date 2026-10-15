@@ -68,3 +68,45 @@ export function checkNewPassword(newPassword, { username }) {
 }
 
 export const lockedMessage = `Too many attempts. Try again in ${LOCK_MINUTES} minutes.`;
+
+// ---- sign-in throttle by address -------------------------------------------
+//
+// The per-account lock above stops one password being ground down, but not one
+// address spraying a common password across every username. This caps failed
+// sign-ins per address. Rows live a day (see scripts/schema.sql). If the table
+// has not been created yet the throttle steps aside rather than locking
+// everyone out, and says so in the logs.
+
+export const MAX_IP_FAILURES = 20;
+export const IP_WINDOW_MINUTES = 15;
+let warnedNoThrottleTable = false;
+
+function throttleUnavailable(err) {
+  if (!warnedNoThrottleTable) {
+    warnedNoThrottleTable = true;
+    console.error('[auth] sign-in address throttle disabled — run the login_failures migration in scripts/schema.sql:', err.message);
+  }
+}
+
+export async function ipThrottled(ip) {
+  try {
+    const [row] = await sql`
+      select count(*)::int as n from login_failures
+      where ip = ${ip} and at > now() - make_interval(mins => ${IP_WINDOW_MINUTES})
+    `;
+    return row.n >= MAX_IP_FAILURES;
+  } catch (err) {
+    throttleUnavailable(err);
+    return false;
+  }
+}
+
+export async function recordIpFailure(ip) {
+  try {
+    await sql`insert into login_failures (ip) values (${ip})`;
+    // Housekeeping: a small share of failures sweeps day-old rows.
+    if (Math.random() < 0.02) await sql`delete from login_failures where at < now() - interval '1 day'`;
+  } catch (err) {
+    throttleUnavailable(err);
+  }
+}

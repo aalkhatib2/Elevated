@@ -20,3 +20,19 @@ scripts/
 # prototypes/portal/ 404'd.
 prototypes/apply.html
 prototypes/calculator.html
+
+# Not part of the site. Some of these were being served publicly: the tests
+# (internal pay logic) and the Palmetto logo, which is deliberately kept off
+# the public site.
+test/
+README.md
+index.old.html
+og-image.old.jpg
+og-image.dune.jpg
+hero-bg.jpg
+wordmark-elevated.webp
+partner-palmetto-energy.png
+skills-lock.json
+
+# Internal documentation
+docs/

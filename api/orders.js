@@ -2,11 +2,13 @@ import { sql } from './_lib/db.js';
 import { getSessionRep } from './_lib/auth.js';
 import { getOrdersForRep, RATES } from './_lib/sheets.js';
 import { classifyOrder, paydayFor } from './_lib/payroll.js';
+import { noStore } from './_lib/http.js';
 
 // Office pay and office margin are deliberately left out: what the office
 // collects from the carrier is owners-only, and anything in this payload is
 // readable by the rep in their browser even if the page never shows it.
 export default async function handler(req, res) {
+  noStore(res);
   if (req.method !== 'GET') {
     res.setHeader('Allow', 'GET');
     return res.status(405).json({ error: 'Method not allowed' });
@@ -15,6 +17,8 @@ export default async function handler(req, res) {
   try {
     const rep = await getSessionRep(req);
     if (!rep) return res.status(401).json({ error: 'Not signed in' });
+    // A rep still on an issued password has to pick their own before any data.
+    if (rep.must_change_password) return res.status(403).json({ error: 'Choose your own password first.', mustChangePassword: true });
 
     const allReps = await sql`select full_name from reps`;
     const orders = await getOrdersForRep(

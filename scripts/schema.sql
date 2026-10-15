@@ -75,3 +75,13 @@ alter table reps add column if not exists locked_until         timestamptz;
 -- any open session stops working, but the row stays so their orders still
 -- match a known rep and Payroll history keeps its link. Null = active.
 alter table reps add column if not exists disabled_at          timestamptz;
+
+-- Sign-in throttle by address (api/_lib/auth.js). One row per failed sign-in;
+-- more than 20 in 15 minutes from one address is refused. Rows older than a
+-- day are swept as failures come in. Addresses are personal data: this table
+-- is the only place they are kept, and only for that day.
+create table if not exists login_failures (
+  ip text        not null,
+  at timestamptz not null default now()
+);
+create index if not exists login_failures_ip_at_idx on login_failures (ip, at);

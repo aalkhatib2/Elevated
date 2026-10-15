@@ -21,10 +21,10 @@
   }, 1500);
 </script>
 <link rel="preconnect" href="https://cdn.jsdelivr.net" crossorigin>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js"></script>
-<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollToPlugin.min.js"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/gsap.min.js" integrity="sha256-krualkdvmD0hKivE9UyIkDnBaW3URh1ApzaGCThXD7s=" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollTrigger.min.js" integrity="sha256-sLFNZ7VbDEPHVqwLEGz8sJ0IeZRfbq1kRRBlsGcpFqI=" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/SplitText.min.js" integrity="sha256-QZ9wJ6XwhqEst5iHNtj906btIgAilmHeJbZijKfO00Q=" crossorigin="anonymous"></script>
+<script defer src="https://cdn.jsdelivr.net/npm/gsap@3.15.0/dist/ScrollToPlugin.min.js" integrity="sha256-B8/TKOQQEq5gtWFMLlg5n8E6+LGux2X+vncNTrPmL80=" crossorigin="anonymous"></script>
 <script defer src="motion.js"></script>
 <style>/* Elevated — colour primitives.
    The identity is a locked dark cinematic monochrome. There is no light theme
@@ -640,6 +640,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
 .foot-links { display: flex; gap: 24px; }
 .foot-links a { font-family: var(--mono); font-size: var(--size-label-sm); letter-spacing: var(--track-foot); text-transform: uppercase; color: var(--muted); transition: color .2s; }
 .foot-links a:hover { color: var(--text); }
+.foot-note { flex-basis: 100%; letter-spacing: 0.04em; text-transform: none; }
 .foot p { font-family: var(--mono); font-size: var(--size-label-xs); letter-spacing: var(--track-foot); color: var(--muted); }
 </style>
 <style>
@@ -715,6 +716,12 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   }
   .field input:focus { outline: none; border-color: var(--steel); }
   .field input::placeholder { color: var(--muted); }
+
+  /* ---- contact consent ---- */
+  .consent { display: flex; gap: 14px; align-items: flex-start; margin-top: 30px; max-width: 620px; cursor: pointer; }
+  .consent input { flex: none; width: 20px; height: 20px; margin: 3px 0 0; accent-color: var(--steel); cursor: pointer; }
+  .consent span { font-size: 14px; line-height: 1.6; color: var(--text-2); }
+  .consent a { color: var(--text); text-decoration: underline; text-underline-offset: 3px; }
 
   /* ---- slots ---- */
   .slots { margin-top: 34px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; max-width: 620px; }
@@ -881,12 +888,16 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
         <section class="step" data-step="4">
           <p class="eyebrow">Question four of four</p>
           <h2 style="margin-top:18px">Book the interview</h2>
-          <p class="lede">Straight into a real calendar from this same page. Twenty minutes, on video, with the person who runs the campaign.</p>
+          <p class="lede">Pick the day and time window that suit you and we will confirm the exact time with you. Twenty minutes, on video, with the person who runs the campaign.</p>
           <div class="slots" id="days"></div>
           <p class="mono-label" id="timesLabel" style="margin-top:28px;display:none">Pick a time on <span id="timesLabelDay"></span></p>
           <div class="slots" id="times" hidden></div>
+          <label class="consent" for="consent">
+            <input type="checkbox" id="consent">
+            <span>I agree that Elevated may call, text or email me at the number and address I gave about this application and my interview. Message and data rates may apply; reply STOP to any text to opt out. I have read the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html" target="_blank" rel="noopener">Terms of Use</a>.</span>
+          </label>
           <div class="actions">
-            <button class="btn btn-primary" data-next="" disabled="">Confirm Interview</button>
+            <button class="btn btn-primary" data-next="" disabled="">Request Interview</button>
             <button class="back" data-back="">Back</button>
           </div>
           <p id="submitError" style="display:none;margin-top:16px;font-family:var(--mono);font-size:12px;letter-spacing:0.04em;color:#C97B7B">Something went wrong sending your application. Please try again.</p>
@@ -895,20 +906,20 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
         <!-- DONE -->
         <section class="step confirm" data-step="5">
           <svg class="confirm-check" viewBox="0 0 46 46" aria-hidden="true"><path d="M9 24 L19 34 L37 13"/></svg>
-          <p class="eyebrow">Confirmed</p>
-          <h2 style="margin-top:18px">You are booked.</h2>
-          <p class="lede">A calendar invite is on its way. If anything changes, reply to it — a person reads that inbox.</p>
+          <p class="eyebrow">Received</p>
+          <h2 style="margin-top:18px">We have your application.</h2>
+          <p class="lede">A recruiter will contact you by phone, text or email to confirm your interview time. To change anything, write to <a href="mailto:partners@joinelevated.net">partners@joinelevated.net</a>.</p>
           <div class="receipt">
             <div class="receipt-head">
-              <span class="mono-label" style="color:var(--text-2)">Application EL-2026-0871</span>
-              <span class="tag live"><span class="dot"></span>Interview set</span>
+              <span class="mono-label" style="color:var(--text-2)">Application received</span>
+              <span class="tag live"><span class="dot"></span>Request sent</span>
             </div>
             <div class="receipt-row"><span class="k">Full name</span><span class="v" data-fill="name">—</span></div>
             <div class="receipt-row"><span class="k">Phone</span><span class="v" data-fill="phone">—</span></div>
             <div class="receipt-row"><span class="k">Email</span><span class="v" data-fill="email">—</span></div>
             <div class="receipt-row"><span class="k">Experience</span><span class="v" data-fill="exp">—</span></div>
             <div class="receipt-row"><span class="k">Campaign</span><span class="v steel" data-fill="camp">—</span></div>
-            <div class="receipt-row"><span class="k">Interview</span><span class="v" data-fill="slot">—</span></div>
+            <div class="receipt-row"><span class="k">Requested slot</span><span class="v" data-fill="slot">—</span></div>
             <div class="receipt-row"><span class="k">Starting rung</span><span class="v">EL — Entry Level</span></div>
           </div>
           <div class="actions">
@@ -938,9 +949,13 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
     <div class="foot-links">
       <a href="index.html">Home</a>
       <a href="prototypes/portal/login.html">Rep Portal</a>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="disclosures.html">Disclosures</a>
       <a href="mailto:partners@joinelevated.net">Contact</a>
     </div>
     <p style="font-family:Courier New">Elevated Management Group</p>
+    <p class="foot-note">Elevated is an independent marketing company. Earnings are not guaranteed. Partner names belong to their owners and do not imply endorsement.</p>
   </div>
 </footer>
 
@@ -948,7 +963,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
 (function () {
   var WEB3FORMS_ACCESS_KEY = "b8dfee03-a76d-4f57-9200-a08274ab68f0";
 
-  var answers = { name: null, phone: null, email: null, exp: null, camp: null, day: null, time: null };
+  var answers = { name: null, phone: null, email: null, exp: null, camp: null, day: null, time: null, consent: false };
   var current = 1;
   var DAY_NAMES = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
   var TIME_FRAMES = ['9:00 AM – 12:00 PM', '12:00 PM – 3:00 PM', '3:00 PM – 6:00 PM', '6:00 PM – 9:00 PM'];
@@ -970,6 +985,8 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
         experience: a.exp,
         campaign: a.camp,
         interview_slot: a.day + ', ' + a.time,
+        contact_consent: 'Agreed on the form to be contacted by call, text or email about this application',
+        consent_recorded_at: new Date().toISOString(),
         botcheck: ''
       })
     }).then(function (r) { return r.json(); });
@@ -977,7 +994,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
 
   function showSubmitError(btn) {
     btn.disabled = false;
-    btn.textContent = 'Confirm Interview';
+    btn.textContent = 'Request Interview';
     var err = document.getElementById('submitError');
     if (err) {
       err.style.display = 'block';
@@ -1039,7 +1056,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   function validate() {
     var btn = document.querySelector('.step[data-step="' + current + '"] [data-next]');
     if (!btn) return;
-    var rules = { 1: !!(answers.name && answers.phone && answers.email), 2: !!answers.exp, 3: !!answers.camp, 4: !!(answers.day && answers.time) };
+    var rules = { 1: !!(answers.name && answers.phone && answers.email), 2: !!answers.exp, 3: !!answers.camp, 4: !!(answers.day && answers.time && answers.consent) };
     btn.disabled = !rules[current];
   }
 
@@ -1117,6 +1134,11 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
       return;
     }
     if (e.target.closest('[data-back]')) { show(Math.max(current - 1, 1)); return; }
+  });
+
+  document.getElementById('consent').addEventListener('change', function (e) {
+    answers.consent = e.target.checked;
+    validate();
   });
 
   ['fullName', 'phone', 'email'].forEach(function (id) {

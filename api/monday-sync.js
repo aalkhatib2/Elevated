@@ -9,10 +9,11 @@
 // do. Add ?dry=1 to force a dry run even in live mode.
 
 import { runMondaySync } from './_lib/monday-sync.js';
+import { bearerMatches, noStore } from './_lib/http.js';
 
 export default async function handler(req, res) {
-  const secret = process.env.CRON_SECRET;
-  if (!secret || req.headers.authorization !== `Bearer ${secret}`) {
+  noStore(res);
+  if (!bearerMatches(req.headers.authorization, process.env.CRON_SECRET)) {
     return res.status(401).json({ error: 'Unauthorized' });
   }
 
