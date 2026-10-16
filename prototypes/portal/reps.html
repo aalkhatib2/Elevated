@@ -13,6 +13,8 @@
 </head>
 <body>
 
+<a class="skip" href="#main">Skip to content</a>
+
 <div class="app">
 
   <aside class="rail">
@@ -21,7 +23,7 @@
       <span class="rail-sub">Agent Portal</span>
     </a>
     <div class="rail-id">
-      <div class="rail-who"><span class="dot"></span><span data-field="fullName">&nbsp;</span></div>
+      <div class="rail-who"><span class="dot" aria-hidden="true"></span><span data-field="fullName">&nbsp;</span></div>
       <span class="rail-badge">Rep</span>
       <dl class="rail-kv">
         <dt>Team</dt><dd data-field="team">&mdash;</dd>
@@ -31,12 +33,12 @@
       </dl>
     </div>
     <nav class="rail-nav">
-      <a href="overview.html"><span class="sq"></span>Overview</a>
-      <a href="orders.html"><span class="sq"></span>Orders</a>
-      <a href="commission.html"><span class="sq"></span>Commission</a>
-      <a href="payroll.html"><span class="sq"></span>Payroll</a>
-      <a href="team.html"><span class="sq"></span>My Team</a>
-      <a href="reps.html" aria-current="page" data-owner-only hidden><span class="sq"></span>Reps</a>
+      <a href="overview.html"><span class="sq" aria-hidden="true"></span>Overview</a>
+      <a href="orders.html"><span class="sq" aria-hidden="true"></span>Orders</a>
+      <a href="commission.html"><span class="sq" aria-hidden="true"></span>Commission</a>
+      <a href="payroll.html"><span class="sq" aria-hidden="true"></span>Payroll</a>
+      <a href="team.html"><span class="sq" aria-hidden="true"></span>My Team</a>
+      <a href="reps.html" aria-current="page" data-owner-only hidden><span class="sq" aria-hidden="true"></span>Reps</a>
     </nav>
     <div class="rail-foot">
       <a href="account.html">Account</a>
@@ -44,7 +46,7 @@
     </div>
   </aside>
 
-  <div class="main">
+  <main class="main" id="main">
 
     <div class="topbar">
       <div>
@@ -78,13 +80,13 @@
 
       <section data-rp-unmatched-wrap hidden>
         <div class="sec-label">
-          <div class="t">In the sheet, no login yet</div>
+          <h2 class="t">In the sheet, no login yet</h2>
           <div class="d">These names have orders in the Fiber Sales sheet but no login matches them. Create one, or if it's a misspelling of someone below, fix the name in the sheet instead.</div>
         </div>
         <div class="tbl-wrap">
           <div class="tbl-scroll">
             <table class="tbl" style="min-width:560px">
-              <thead><tr><th>Name in the sheet</th><th class="td-r">Orders</th><th>Last order</th><th class="td-r"></th></tr></thead>
+              <thead><tr><th>Name in the sheet</th><th class="td-r">Orders</th><th>Last order</th><th class="td-r"><span class="sr-only">Actions</span></th></tr></thead>
               <tbody data-rp-unmatched></tbody>
             </table>
           </div>
@@ -92,12 +94,12 @@
       </section>
 
       <div class="sec-label">
-        <div class="t">Everyone with a login</div>
+        <h2 class="t">Everyone with a login</h2>
         <div class="d">Deactivating signs someone out straight away and can be undone. Their orders and payroll history stay.</div>
       </div>
       <div class="tbl-wrap">
         <div class="tbl-tools">
-          <input class="tbl-search" type="search" placeholder="Search name or username" data-rp-search>
+          <input class="tbl-search" type="search" placeholder="Search name or username" aria-label="Search name or username" data-rp-search>
           <span class="tbl-count" data-rp-count>&hellip;</span>
         </div>
         <div class="tbl-scroll">
@@ -116,7 +118,7 @@
       </div>
 
     </div>
-  </div>
+  </main>
 </div>
 
 <!-- add / edit -->

@@ -57,6 +57,9 @@
   .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--pad); }
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  /* Skip link: off-screen until it takes keyboard focus, then pinned above the fixed header. */
+  .skip { position: fixed; z-index: 100; top: 12px; left: 12px; transform: translateY(-200%); background: var(--text); color: var(--bg); padding: 12px 18px; font-family: var(--label); font-weight: 600; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .skip:focus { transform: none; }
 
   .kicker {
     display: inline-flex; align-items: center; gap: 12px;
@@ -255,7 +258,8 @@
   .partner:hover { background: var(--bg-2); }
   .partner img { max-height: 58px; width: auto; filter: grayscale(1) brightness(1.6); opacity: .6; transition: filter .35s var(--ease), opacity .35s var(--ease); }
   .partner:hover img, .partner:focus-visible img { filter: none; opacity: 1; }
-  .partner-cta { grid-column: span 2; flex-direction: column; align-items: flex-start; justify-content: center; gap: 8px; background: var(--bg-2); }
+  /* Five logos: the CTA takes the rest of the last row (3 of 4 columns, then 1 of 2). */
+  .partner-cta { grid-column: span 3; flex-direction: column; align-items: flex-start; justify-content: center; gap: 8px; background: var(--bg-2); }
   .partner-cta b { font-family: var(--head); font-weight: 600; font-size: 18px; letter-spacing: 0.06em; text-transform: uppercase; }
   .partner-cta span { font-size: 15px; color: var(--accent); overflow-wrap: anywhere; }
   .partner-cta:hover { background: var(--bg-3); }
@@ -349,6 +353,7 @@
     .div-row { grid-template-columns: 60px 1fr auto; }
     .div-row p { grid-column: 2 / 4; grid-row: 2; }
     .partners { grid-template-columns: repeat(2, 1fr); }
+    .partner-cta { grid-column: span 1; }
   }
   @media (max-width: 860px) {
     .nav-links { display: none; }
@@ -377,7 +382,6 @@
     .partners { grid-template-columns: 1fr 1fr; }
     .partner { min-height: 110px; padding: 22px; }
     .partner img { max-height: 42px; }
-    .partner-cta { grid-column: 1 / -1; }
     .closing .btn { width: 100%; max-width: 360px; }
     .footer-nav { gap: 6px 12px; }
     .footer-nav a { padding: 8px 10px; }
@@ -389,6 +393,8 @@
 <script>document.documentElement.classList.add('js');</script>
 </head>
 <body>
+
+<a class="skip" href="#top">Skip to content</a>
 
 <header id="top-bar">
   <nav class="nav wrap" aria-label="Main">
@@ -564,15 +570,14 @@
         <p class="aside">The companies behind our campaigns.</p>
       </div>
       <div class="partners reveal">
-        <a class="partner" href="https://www.t-mobile.com/" target="_blank" rel="noopener"><img src="partner-tmobile.png" alt="T-Mobile" loading="lazy"></a>
-        <a class="partner" href="https://telehealth.micom.ai/" target="_blank" rel="noopener"><img src="partner-achilles.png" alt="Achilles Peptides" loading="lazy"></a>
-        <a class="partner" href="https://equityinsurancepartners.com/" target="_blank" rel="noopener"><img src="partner-equity-insurance.png" alt="Equity Insurance Partners" loading="lazy"></a>
-        <a class="partner" href="https://www.motorsportautoglass.com/" target="_blank" rel="noopener"><img src="partner-motorsport-autoglass.png" alt="Motorsport Autoglass" loading="lazy"></a>
-        <a class="partner" href="https://citrusglencapital.com/" target="_blank" rel="noopener"><img src="partner-citrus-glen.png" alt="Citrus Glen Capital" loading="lazy"></a>
-        <a class="partner" href="https://fatrat.ai/" target="_blank" rel="noopener"><img src="partner-fatrat.png" alt="FatRat" loading="lazy"></a>
+        <a class="partner" href="https://www.t-mobile.com/" target="_blank" rel="noopener"><img src="partner-tmobile.png" alt="T-Mobile" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
+        <a class="partner" href="https://telehealth.micom.ai/" target="_blank" rel="noopener"><img src="partner-achilles.png" alt="Achilles Peptides" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
+        <a class="partner" href="https://www.motorsportautoglass.com/" target="_blank" rel="noopener"><img src="partner-motorsport-autoglass.png" alt="Motorsport Autoglass" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
+        <a class="partner" href="https://citrusglencapital.com/" target="_blank" rel="noopener"><img src="partner-citrus-glen.png" alt="Citrus Glen Capital" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
+        <a class="partner" href="https://fatrat.ai/" target="_blank" rel="noopener"><img src="partner-fatrat.png" alt="FatRat" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
         <a class="partner partner-cta" href="mailto:partners@joinelevated.net">
           <b>Working with us?</b>
-          <span>partners@joinelevated.net</span>
+          <span>partners@<wbr>joinelevated.net</span>
         </a>
       </div>
     </div>
@@ -642,7 +647,14 @@
     }
     btn.addEventListener('click', function () { setMenu(btn.getAttribute('aria-expanded') !== 'true'); });
     menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+    // Escape closes it, and if focus was inside the menu it goes back to the button rather than
+    // being stranded on a link that just disappeared.
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || btn.getAttribute('aria-expanded') !== 'true') return;
+      var inMenu = menu.contains(document.activeElement);
+      setMenu(false);
+      if (inMenu) btn.focus();
+    });
 
     // reveals
     var els = document.querySelectorAll('.reveal');

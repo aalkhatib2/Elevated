@@ -18,7 +18,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-+rpp7OQTgAdHfCfHIRAlNx5kn9gY2RJWIZk1IA0zo6s=' 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw=' 'sha256-DhlgkGlgJdyQ4DVtBuoLQsO0kcduIgzMLmT60iHQeOE=' 'sha256-HqJrAt6R8G1n7S6hu7RD0OgnizTKGAaf/SBzZxj6iDE=' 'sha256-NZkDeT7WSYbrIkHXcCcBOisHBy6VD8hGtrgn2ZpbLm8=' 'sha256-OZl0fGAioxnAFoQZjB2WtZN8PnQG+ecdqRA/ND+XmQY=' 'sha256-hysXjSLLMCRrRinwLcYine9XpLrJlUgAJcTWBFokwi0=' 'sha256-kqPI938GR3grJmLPusHLKv/XSffuu7rc+MPGqAnpeXs=' 'sha256-lTXMGK1CGPj0isvU7A483Z+32Rzt1MZM4TIQ8edtRkU=' 'sha256-n2+GcAJo1JL7JWaU4o9Lmb3Fpmcej8vNpX9VaHXk2K0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw=' 'sha256-DhlgkGlgJdyQ4DVtBuoLQsO0kcduIgzMLmT60iHQeOE=' 'sha256-HqJrAt6R8G1n7S6hu7RD0OgnizTKGAaf/SBzZxj6iDE=' 'sha256-IpqkKimlXTIa3PF5wptt2DLwPZ7lScaeJZe1aPd2pfI=' 'sha256-NZkDeT7WSYbrIkHXcCcBOisHBy6VD8hGtrgn2ZpbLm8=' 'sha256-OZl0fGAioxnAFoQZjB2WtZN8PnQG+ecdqRA/ND+XmQY=' 'sha256-hysXjSLLMCRrRinwLcYine9XpLrJlUgAJcTWBFokwi0=' 'sha256-kqPI938GR3grJmLPusHLKv/XSffuu7rc+MPGqAnpeXs=' 'sha256-lTXMGK1CGPj0isvU7A483Z+32Rzt1MZM4TIQ8edtRkU=' 'sha256-n2+GcAJo1JL7JWaU4o9Lmb3Fpmcej8vNpX9VaHXk2K0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
         }
       ]
     },
@@ -27,7 +27,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-+rpp7OQTgAdHfCfHIRAlNx5kn9gY2RJWIZk1IA0zo6s=' 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw=' 'sha256-DhlgkGlgJdyQ4DVtBuoLQsO0kcduIgzMLmT60iHQeOE=' 'sha256-HqJrAt6R8G1n7S6hu7RD0OgnizTKGAaf/SBzZxj6iDE=' 'sha256-NZkDeT7WSYbrIkHXcCcBOisHBy6VD8hGtrgn2ZpbLm8=' 'sha256-OZl0fGAioxnAFoQZjB2WtZN8PnQG+ecdqRA/ND+XmQY=' 'sha256-hysXjSLLMCRrRinwLcYine9XpLrJlUgAJcTWBFokwi0=' 'sha256-kqPI938GR3grJmLPusHLKv/XSffuu7rc+MPGqAnpeXs=' 'sha256-lTXMGK1CGPj0isvU7A483Z+32Rzt1MZM4TIQ8edtRkU=' 'sha256-n2+GcAJo1JL7JWaU4o9Lmb3Fpmcej8vNpX9VaHXk2K0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-/x7W7R75k8Roq0WaVRQX9blP4OufE5xbAdzklGxsgpw=' 'sha256-DhlgkGlgJdyQ4DVtBuoLQsO0kcduIgzMLmT60iHQeOE=' 'sha256-HqJrAt6R8G1n7S6hu7RD0OgnizTKGAaf/SBzZxj6iDE=' 'sha256-IpqkKimlXTIa3PF5wptt2DLwPZ7lScaeJZe1aPd2pfI=' 'sha256-NZkDeT7WSYbrIkHXcCcBOisHBy6VD8hGtrgn2ZpbLm8=' 'sha256-OZl0fGAioxnAFoQZjB2WtZN8PnQG+ecdqRA/ND+XmQY=' 'sha256-hysXjSLLMCRrRinwLcYine9XpLrJlUgAJcTWBFokwi0=' 'sha256-kqPI938GR3grJmLPusHLKv/XSffuu7rc+MPGqAnpeXs=' 'sha256-lTXMGK1CGPj0isvU7A483Z+32Rzt1MZM4TIQ8edtRkU=' 'sha256-n2+GcAJo1JL7JWaU4o9Lmb3Fpmcej8vNpX9VaHXk2K0='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self'; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
         }
       ]
     },
@@ -36,7 +36,7 @@
       "headers": [
         {
           "key": "Content-Security-Policy",
-          "value": "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-WYJJiVu9BbTGCwLpC59l8yBZToDbFalPnbJlKBscIgI=' 'sha256-dfYmK1TLYG1oKNgr0crzhVgI/UzFNgeyMj9lLWe/Uok='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://api.web3forms.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
+          "value": "default-src 'self'; script-src 'self' https://cdn.jsdelivr.net 'sha256-WYJJiVu9BbTGCwLpC59l8yBZToDbFalPnbJlKBscIgI=' 'sha256-rHcMZX1LuLhnPXHMfXiUSKBvh86mzUPORahlqwkxPdw='; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: blob:; connect-src 'self' https://api.web3forms.com; manifest-src 'self'; object-src 'none'; base-uri 'self'; form-action 'self'; frame-ancestors 'none'; upgrade-insecure-requests"
         }
       ]
     },

@@ -13,6 +13,8 @@
 </head>
 <body>
 
+<a class="skip" href="#main">Skip to content</a>
+
 <div class="app">
 
   <aside class="rail">
@@ -21,7 +23,7 @@
       <span class="rail-sub">Agent Portal</span>
     </a>
     <div class="rail-id">
-      <div class="rail-who"><span class="dot"></span><span data-field="fullName">&nbsp;</span></div>
+      <div class="rail-who"><span class="dot" aria-hidden="true"></span><span data-field="fullName">&nbsp;</span></div>
       <span class="rail-badge">Rep</span>
       <dl class="rail-kv">
         <dt>Team</dt><dd data-field="team">&mdash;</dd>
@@ -31,12 +33,12 @@
       </dl>
     </div>
     <nav class="rail-nav">
-      <a href="overview.html"><span class="sq"></span>Overview</a>
-      <a href="orders.html"><span class="sq"></span>Orders</a>
-      <a href="commission.html" aria-current="page"><span class="sq"></span>Commission</a>
-      <a href="payroll.html"><span class="sq"></span>Payroll</a>
-      <a href="team.html"><span class="sq"></span>My Team</a>
-      <a href="reps.html" data-owner-only hidden><span class="sq"></span>Reps</a>
+      <a href="overview.html"><span class="sq" aria-hidden="true"></span>Overview</a>
+      <a href="orders.html"><span class="sq" aria-hidden="true"></span>Orders</a>
+      <a href="commission.html" aria-current="page"><span class="sq" aria-hidden="true"></span>Commission</a>
+      <a href="payroll.html"><span class="sq" aria-hidden="true"></span>Payroll</a>
+      <a href="team.html"><span class="sq" aria-hidden="true"></span>My Team</a>
+      <a href="reps.html" data-owner-only hidden><span class="sq" aria-hidden="true"></span>Reps</a>
     </nav>
     <div class="rail-foot">
       <a href="account.html">Account</a>
@@ -44,7 +46,7 @@
     </div>
   </aside>
 
-  <div class="main">
+  <main class="main" id="main">
 
     <div class="topbar">
       <div>
@@ -68,7 +70,7 @@
            estimate at the rate card the API sends with the orders. -->
       <div class="kpis">
         <article class="kpi" data-accent="info">
-          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Deals</span><span class="chev"></span></button>
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Deals</span><span class="chev" aria-hidden="true"></span></button>
           <div class="kpi-v" data-cm="deals">&mdash;</div>
           <div class="kpi-fold">
             <p class="kpi-sub"><span data-cm="oneGig">&mdash;</span> at 1 gig &middot; <span data-cm="twoGig">&mdash;</span> at 2 gig &middot; <span data-cm="cancelledCount">&mdash;</span> cancelled</p>
@@ -76,7 +78,7 @@
           </div>
         </article>
         <article class="kpi" data-accent="pos">
-          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Estimated commission</span><span class="chev"></span></button>
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Estimated commission</span><span class="chev" aria-hidden="true"></span></button>
           <div class="kpi-v" data-cm="estimated">&mdash;</div>
           <div class="kpi-fold">
             <p class="kpi-sub">At the standard rate: <span data-cm="rateCard">&mdash;</span></p>
@@ -86,7 +88,7 @@
           </div>
         </article>
         <article class="kpi" data-accent="pos">
-          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">On installed orders</span><span class="chev"></span></button>
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">On installed orders</span><span class="chev" aria-hidden="true"></span></button>
           <div class="kpi-v" data-cm="installed">&mdash;</div>
           <div class="kpi-fold">
             <p class="kpi-sub"><span data-cm="installedCount">&mdash;</span> installed &middot; <span data-cm="waitingCount">&mdash;</span> waiting on install</p>
@@ -110,7 +112,7 @@
             <table class="tbl" style="min-width:720px">
               <thead>
                 <tr>
-                  <th>Week <span class="sort">&darr;</span></th>
+                  <th aria-sort="descending">Week <span class="sort" aria-hidden="true">&darr;</span></th>
                   <th class="td-r">Deals</th>
                   <th class="td-r">1 gig</th>
                   <th class="td-r">2 gig</th>
@@ -130,7 +132,7 @@
       <section class="ppane" data-pane="lines" style="margin-top:20px">
         <div class="tbl-wrap">
           <div class="tbl-tools">
-            <input class="tbl-search" type="search" placeholder="Search client or order #" data-cm-search>
+            <input class="tbl-search" type="search" placeholder="Search client or order #" aria-label="Search client or order #" data-cm-search>
             <button class="chip" type="button" data-cm-export>Export CSV</button>
             <span class="tbl-count" data-cm-count="lines">&hellip;</span>
           </div>
@@ -138,7 +140,7 @@
             <table class="tbl" style="min-width:860px">
               <thead>
                 <tr>
-                  <th>Order date <span class="sort">&darr;</span></th>
+                  <th aria-sort="descending">Order date <span class="sort" aria-hidden="true">&darr;</span></th>
                   <th>Order #</th>
                   <th>Client</th>
                   <th>Plan</th>
@@ -157,13 +159,13 @@
       </section>
 
       <div class="sec-label">
-        <div class="t">What you get paid</div>
+        <h2 class="t">What you get paid</h2>
         <div class="d">This page is every deal you've written. Your weekly statement &mdash; what's paid each Friday for the previous week's installs, what's still pending, and any chargebacks &mdash; is on Payroll. Deductions and credits aren't tracked yet.</div>
         <a class="kpi-link" href="payroll.html">Open payroll</a>
       </div>
 
     </div>
-  </div>
+  </main>
 </div>
 
 

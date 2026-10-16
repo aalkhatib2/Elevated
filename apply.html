@@ -40,6 +40,7 @@
     --line: rgba(240,237,230,0.10);
     --line-2: rgba(240,237,230,0.18);
     --line-3: rgba(240,237,230,0.32);
+    --line-input: rgba(240,237,230,0.42);   /* text-field edges: 3.4:1+ so a field can be found (WCAG 1.4.11) */
     --text: #F0EDE6;
     --text-2: #B9B6AE;
     --muted: #8E8B84;
@@ -65,6 +66,13 @@
   p { margin: 0; }
   button { font: inherit; color: inherit; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  /* Skip link: off-screen until it takes keyboard focus. */
+  .skip { position: absolute; z-index: 100; top: 12px; left: 12px; transform: translateY(-200%); background: var(--text); color: var(--bg); padding: 12px 18px; font-family: var(--label); font-weight: 600; font-size: 13px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .skip:focus { transform: none; }
+  /* Step headings (and <main>, the skip target) take focus programmatically so
+     keyboard and screen-reader users land on the new question. Not controls: no ring. */
+  .step h2:focus, main:focus { outline: none; }
   .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--pad); }
 
   .kicker {
@@ -145,6 +153,8 @@
   .choice .cs { display: block; margin-top: 6px; font-size: 14.5px; line-height: 1.55; color: var(--muted); }
   .choice[aria-pressed="true"] { background: var(--bg-3); outline: 1px solid var(--accent-line); outline-offset: -1px; z-index: 1; }
   .choice[aria-pressed="true"]::after { background: var(--accent); border-color: var(--accent); }
+  /* Cards sit edge to edge, so lift the focused one or the next card paints over its ring. */
+  .choice:focus-visible, .slot:focus-visible { position: relative; z-index: 2; }
 
   .tag { display: inline-flex; align-items: center; gap: 8px; font-family: var(--label); font-weight: 600; font-size: 11px; letter-spacing: 0.14em; text-transform: uppercase; color: var(--text-2); }
   .tag .dot { width: 7px; height: 7px; border-radius: 50%; background: var(--accent); flex: none; }
@@ -154,11 +164,11 @@
   .field label { display: block; }
   .field input {
     width: 100%; height: 56px; margin-top: 10px; padding: 0 18px;
-    background: var(--bg-2); border: 1px solid var(--line-2); border-radius: 0;
+    background: var(--bg-2); border: 1px solid var(--line-input); border-radius: 0;
     color: var(--text); font-family: var(--body); font-size: 17px;
     transition: border-color .2s, background-color .2s;
   }
-  .field input:hover { border-color: var(--line-3); }
+  .field input:hover { border-color: var(--text-2); }
   .field input:focus-visible { outline: 1px solid var(--accent); outline-offset: -2px; border-color: var(--accent); background: var(--bg-3); }
   .field input::placeholder { color: var(--muted); }
 
@@ -192,6 +202,17 @@
   .back:hover { color: var(--text); }
   .form-error { margin-top: 18px; font-size: 14.5px; color: var(--text); }
   .form-error::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 10px; border-radius: 50%; background: var(--accent); vertical-align: 1px; }
+  .form-error[hidden] { display: none; }
+
+  /* inline errors. Continue is never disabled: pressing it with something
+     missing or wrong puts a message under each problem and focuses the first.
+     The words carry the error; the accent edge and dot only point at it. */
+  .field-error { margin-top: 10px; font-size: 14px; line-height: 1.5; color: var(--text); }
+  .field-error::before { content: ""; display: inline-block; width: 7px; height: 7px; margin-right: 10px; border-radius: 50%; background: var(--accent); vertical-align: 1px; }
+  .field-error[hidden] { display: none; }
+  .field input[aria-invalid="true"] { border-color: var(--accent); }
+  .choices + .field-error, .slots + .field-error { margin-top: 14px; }
+  .consent[data-invalid] { border-color: var(--accent); }
 
   /* live profile panel */
   .match { position: sticky; top: 104px; }
@@ -265,6 +286,8 @@
 </head>
 <body>
 
+<a class="skip" href="#main">Skip to the application</a>
+
 <header>
   <div class="wrap">
     <nav class="nav" aria-label="Main">
@@ -276,16 +299,17 @@
   </div>
 </header>
 
-<main class="shell">
+<main class="shell" id="main">
   <div class="wrap">
+    <h1 class="sr-only">Apply to Elevated</h1>
     <div class="apply-grid">
       <div>
-        <div class="rail" id="rail" data-reveal>
+        <div class="rail" id="rail" data-reveal role="list" aria-label="Application progress">
           <span class="rail-fill" aria-hidden="true"></span>
-          <div class="rail-step active" data-s="1"><div class="n">01</div><div class="t">Information</div></div>
-          <div class="rail-step" data-s="2"><div class="n">02</div><div class="t">Experience</div></div>
-          <div class="rail-step" data-s="3"><div class="n">03</div><div class="t">Campaign</div></div>
-          <div class="rail-step" data-s="4"><div class="n">04</div><div class="t">Interview</div></div>
+          <div class="rail-step active" data-s="1" role="listitem" aria-current="step"><div class="n">01</div><div class="t">Information</div></div>
+          <div class="rail-step" data-s="2" role="listitem"><div class="n">02</div><div class="t">Experience</div></div>
+          <div class="rail-step" data-s="3" role="listitem"><div class="n">03</div><div class="t">Campaign</div></div>
+          <div class="rail-step" data-s="4" role="listitem"><div class="n">04</div><div class="t">Interview</div></div>
         </div>
 
         <!-- The five steps share a host element so motion.js can tween its
@@ -295,30 +319,33 @@
         <!-- STEP 1 -->
         <section class="step on" data-step="1">
           <p class="kicker">Question one of four</p>
-          <h2>Apply</h2>
+          <h2 id="q1Title" tabindex="-1">Apply</h2>
           <p class="lede">Start with how to reach you.</p>
           <div class="field">
             <label class="label" for="fullName">Full name</label>
-            <input id="fullName" type="text" placeholder="e.g. Jordan Reyes" autocomplete="name">
+            <input id="fullName" required type="text" placeholder="e.g. Jordan Reyes" autocomplete="name">
+            <p class="field-error" id="fullNameErr" hidden></p>
           </div>
           <div class="field">
             <label class="label" for="phone">Phone number</label>
-            <input id="phone" type="tel" placeholder="e.g. (801) 555-0142" autocomplete="tel">
+            <input id="phone" required type="tel" placeholder="e.g. (801) 555-0142" autocomplete="tel">
+            <p class="field-error" id="phoneErr" hidden></p>
           </div>
           <div class="field">
             <label class="label" for="email">Email</label>
-            <input id="email" type="email" placeholder="e.g. jordan@email.com" autocomplete="email">
+            <input id="email" required type="email" placeholder="e.g. jordan@email.com" autocomplete="email">
+            <p class="field-error" id="emailErr" hidden></p>
           </div>
           <div class="actions">
-            <button class="btn btn-primary" data-next="" disabled="">Continue</button>
+            <button class="btn btn-primary" data-next="">Continue</button>
           </div>
         </section>
 
         <!-- STEP 2 -->
         <section class="step" data-step="2">
           <p class="kicker">Question two of four</p>
-          <h2>What have you sold?</h2>
-          <div class="choices" role="group">
+          <h2 id="q2Title" tabindex="-1">What have you sold?</h2>
+          <div class="choices" role="group" aria-labelledby="q2Title">
             <button class="choice" data-q="exp" data-val="Door to door" aria-pressed="false">
               <span class="ct">Door to door</span>
               <span class="cs">Fiber, solar, alarms, pest, roofing — anything on a doorstep.</span>
@@ -336,8 +363,9 @@
               <span class="cs">No sales history. Everyone starts at EL regardless.</span>
             </button>
           </div>
+          <p class="field-error" id="expErr" hidden></p>
           <div class="actions">
-            <button class="btn btn-primary" data-next="" disabled="">Continue</button>
+            <button class="btn btn-primary" data-next="">Continue</button>
             <button class="back" data-back="">Back</button>
           </div>
         </section>
@@ -345,20 +373,21 @@
         <!-- STEP 3 -->
         <section class="step" data-step="3">
           <p class="kicker">Question three of four</p>
-          <h2>Which campaign?</h2>
+          <h2 id="q3Title" tabindex="-1">Which campaign?</h2>
           <p class="lede">Pick the team you want to start on.</p>
-          <div class="choices one-col" id="campaignChoices">
+          <div class="choices one-col" id="campaignChoices" role="group" aria-labelledby="q3Title">
             <button class="choice" data-q="camp" data-val="Fiber Sales" aria-pressed="false">
-              <span class="ct">Fiber Sales <span class="tag"><span class="dot"></span>Live and hiring</span></span>
+              <span class="ct">Fiber Sales <span class="tag"><span class="dot" aria-hidden="true"></span>Live and hiring</span></span>
               <span class="cs">Verizon fiber contracts, door to door. Active territories.</span>
             </button>
             <button class="choice" data-q="camp" data-val="High-Ticket Virtual Sales" aria-pressed="false">
-              <span class="ct">High-Ticket Virtual Sales <span class="tag"><span class="dot"></span>Live and hiring</span></span>
+              <span class="ct">High-Ticket Virtual Sales <span class="tag"><span class="dot" aria-hidden="true"></span>Live and hiring</span></span>
               <span class="cs">Closing high-ticket wellness solutions, fully remote.</span>
             </button>
           </div>
+          <p class="field-error" id="campErr" hidden></p>
           <div class="actions">
-            <button class="btn btn-primary" data-next="" disabled="">Continue</button>
+            <button class="btn btn-primary" data-next="">Continue</button>
             <button class="back" data-back="">Back</button>
           </div>
         </section>
@@ -366,32 +395,35 @@
         <!-- STEP 4 -->
         <section class="step" data-step="4">
           <p class="kicker">Question four of four</p>
-          <h2>Book the interview</h2>
+          <h2 id="q4Title" tabindex="-1">Book the interview</h2>
           <p class="lede">Pick the day and time window that suit you and we will confirm the exact time with you. Twenty minutes, on video, with the person who runs the campaign.</p>
-          <div class="slots" id="days"></div>
+          <div class="slots" id="days" role="group" aria-label="Interview day"></div>
+          <p class="field-error" id="dayErr" hidden></p>
           <p class="label times-label" id="timesLabel" style="display:none">Pick a time on <span id="timesLabelDay"></span></p>
-          <div class="slots" id="times" hidden></div>
+          <div class="slots" id="times" role="group" aria-labelledby="timesLabel" hidden></div>
+          <p class="field-error" id="timeErr" hidden></p>
           <label class="consent" for="consent">
-            <input type="checkbox" id="consent">
-            <span>I agree that Elevated may call, text or email me at the number and address I gave about this application and my interview. Message and data rates may apply; reply STOP to any text to opt out. I have read the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html" target="_blank" rel="noopener">Terms of Use</a>.</span>
+            <input type="checkbox" id="consent" required>
+            <span>I agree that Elevated may call, text or email me at the number and address I gave about this application and my interview. Message and data rates may apply; reply STOP to any text to opt out. I have read the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy<span class="sr-only"> (opens in a new tab)</span></a> and <a href="terms.html" target="_blank" rel="noopener">Terms of Use<span class="sr-only"> (opens in a new tab)</span></a>.</span>
           </label>
+          <p class="field-error" id="consentErr" hidden></p>
           <div class="actions">
-            <button class="btn btn-primary" data-next="" disabled="">Request Interview</button>
+            <button class="btn btn-primary" data-next="">Request Interview</button>
             <button class="back" data-back="">Back</button>
           </div>
-          <p id="submitError" class="form-error" role="alert" style="display:none">Something went wrong sending your application. Please try again.</p>
+          <p id="submitError" class="form-error" role="alert" hidden></p>
         </section>
 
         <!-- DONE -->
         <section class="step confirm" data-step="5">
           <svg class="confirm-check" viewBox="0 0 46 46" aria-hidden="true"><path d="M9 24 L19 34 L37 13"/></svg>
           <p class="kicker">Received</p>
-          <h2>We have your application.</h2>
+          <h2 id="doneTitle" tabindex="-1">We have your application.</h2>
           <p class="lede">A recruiter will contact you by phone, text or email to confirm your interview time. To change anything, write to <a href="mailto:partners@joinelevated.net">partners@joinelevated.net</a>.</p>
           <div class="receipt">
             <div class="receipt-head">
               <span class="label">Application received</span>
-              <span class="tag"><span class="dot"></span>Request sent</span>
+              <span class="tag"><span class="dot" aria-hidden="true"></span>Request sent</span>
             </div>
             <div class="receipt-row"><span class="k">Full name</span><span class="v" data-fill="name">—</span></div>
             <div class="receipt-row"><span class="k">Phone</span><span class="v" data-fill="phone">—</span></div>
@@ -481,13 +513,20 @@
   function showSubmitError(btn) {
     btn.disabled = false;
     btn.textContent = 'Request Interview';
+    // Disabling the focused button dropped focus to the page; put it back so
+    // a keyboard user can retry straight away.
+    btn.focus();
     var err = document.getElementById('submitError');
     if (err) {
-      err.style.display = 'block';
+      // role="alert": shown first, then filled, so screen readers announce it.
+      err.hidden = false;
+      err.textContent = 'Something went wrong sending your application. Please try again.';
       // A submission failure that simply appears is easy to scroll past.
       if (window.ElevatedMotion) window.ElevatedMotion.error(err);
     }
   }
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function recommend() {
     if (answers.exp === 'Virtual Sales') return 'Virtual High Ticket';
@@ -539,11 +578,83 @@
     document.querySelectorAll('#campaignChoices .choice .rec').forEach(function (old) { old.remove(); });
   }
 
-  function validate() {
-    var btn = document.querySelector('.step[data-step="' + current + '"] [data-next]');
-    if (!btn) return;
-    var rules = { 1: !!(answers.name && answers.phone && answers.email), 2: !!answers.exp, 3: !!answers.camp, 4: !!(answers.day && answers.time && answers.consent) };
-    btn.disabled = !rules[current];
+  // ---- validation ----
+  // Continue stays enabled. Pressing it checks the step; each problem gets a
+  // message under its field (aria-invalid + aria-describedby) and focus goes
+  // to the first one, so keyboard and screen-reader users hear what to fix.
+  function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+  function validPhone(v) {
+    // US numbers: 10 digits, optionally a leading 1, any spaces or punctuation.
+    if (!/^[\d\s().+\-]+$/.test(v)) return false;
+    var d = v.replace(/\D/g, '');
+    return d.length === 10 || (d.length === 11 && d.charAt(0) === '1');
+  }
+
+  // key -> the element that is invalid (and takes focus), and its message
+  var TARGETS = {
+    name: ['#fullName', '#fullNameErr'], phone: ['#phone', '#phoneErr'], email: ['#email', '#emailErr'],
+    exp: ['.step[data-step="2"] .choices', '#expErr'], camp: ['#campaignChoices', '#campErr'],
+    day: ['#days', '#dayErr'], time: ['#times', '#timeErr'], consent: ['#consent', '#consentErr']
+  };
+  function target(key) {
+    return { el: document.querySelector(TARGETS[key][0]), msg: document.querySelector(TARGETS[key][1]) };
+  }
+
+  var STEP_KEYS = { 1: ['name', 'phone', 'email'], 2: ['exp'], 3: ['camp'], 4: ['day', 'time', 'consent'] };
+
+  function problem(key) {
+    switch (key) {
+      case 'name': return answers.name ? '' : 'Enter your full name.';
+      case 'phone': return !answers.phone ? 'Enter your phone number.'
+        : validPhone(answers.phone) ? '' : 'Enter a 10-digit US phone number, like (801) 555-0142.';
+      case 'email': return !answers.email ? 'Enter your email address.'
+        : validEmail(answers.email) ? '' : 'Enter an email address like jordan@email.com.';
+      case 'exp': return answers.exp ? '' : 'Pick the option closest to your sales experience.';
+      case 'camp': return answers.camp ? '' : 'Pick a campaign.';
+      case 'day': return answers.day ? '' : 'Pick a day for your interview.';
+      case 'time': return !answers.day || answers.time ? '' : 'Pick a time window.';
+      case 'consent': return answers.consent ? '' : 'Tick this box to agree to be contacted. We cannot book your interview without it.';
+    }
+    return '';
+  }
+
+  function setError(key, message) {
+    var t = target(key);
+    if (!t.el || !t.msg) return;
+    // aria-invalid only where ARIA allows it (inputs and the checkbox); a
+    // choice group carries the message as a description on its buttons.
+    var input = t.el.tagName === 'INPUT';
+    var described = input ? [t.el] : [t.el].concat(Array.prototype.slice.call(t.el.querySelectorAll('button')));
+    t.msg.textContent = message;
+    t.msg.hidden = !message;
+    if (input) { if (message) t.el.setAttribute('aria-invalid', 'true'); else t.el.removeAttribute('aria-invalid'); }
+    described.forEach(function (el) {
+      if (message) el.setAttribute('aria-describedby', t.msg.id); else el.removeAttribute('aria-describedby');
+    });
+    if (key === 'consent' && t.el.closest) {
+      var box = t.el.closest('.consent');
+      if (box) { if (message) box.setAttribute('data-invalid', ''); else box.removeAttribute('data-invalid'); }
+    }
+  }
+
+  // Once a message is showing, it clears as soon as the answer is fixed.
+  function recheck(key) {
+    if (!target(key).msg.hidden && !problem(key)) setError(key, '');
+  }
+
+  // Marks every problem on step n and focuses the first. True when the step is complete.
+  function checkStep(n) {
+    var first = null;
+    (STEP_KEYS[n] || []).forEach(function (key) {
+      var msg = problem(key);
+      setError(key, msg);
+      if (msg && !first) first = key;
+    });
+    if (!first) return true;
+    var t = target(first);
+    var focusEl = t.el.tagName === 'INPUT' ? t.el : (t.el.querySelector('[aria-pressed="true"]') || t.el.querySelector('button'));
+    if (focusEl) focusEl.focus();
+    return false;
   }
 
   function show(n) {
@@ -553,6 +664,7 @@
       var i = +r.dataset.s;
       r.classList.toggle('active', i === n);
       r.classList.toggle('done', i < n);
+      if (i === n) r.setAttribute('aria-current', 'step'); else r.removeAttribute('aria-current');
     });
     if (n === 3) markRecommended();
     if (n === 4) buildSlots();
@@ -569,8 +681,14 @@
         document.querySelector('[data-fill="' + k + '"]').textContent = fills[k];
       });
     }
-    validate();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+
+    // The button that was just pressed is now inside a hidden step, so focus
+    // would fall back to the top of the page. Move it to the new step's
+    // heading instead: keyboard users carry on from there, and screen readers
+    // read out the next question.
+    var heading = document.querySelector('.step[data-step="' + n + '"] h2');
+    if (heading) heading.focus({ preventScroll: true });
 
     // Hand the finished state change to the motion engine, which animates
     // the incoming step, tweens the host height so the card stops snapping
@@ -600,14 +718,19 @@
       }
 
       updatePanel();
-      validate();
+      recheck(q);
+      if (q === 'day') recheck('time');
       return;
     }
     if (e.target.closest('[data-next]')) {
       var nextBtn = e.target.closest('[data-next]');
+      if (nextBtn.disabled) return;   // already sending
+      if (!checkStep(current)) return;
       if (current === 4) {
+        // Never send without contact consent, whatever else passed.
+        if (!answers.consent) return;
         var err = document.getElementById('submitError');
-        if (err) err.style.display = 'none';
+        if (err) { err.hidden = true; err.textContent = ''; }
         nextBtn.disabled = true;
         nextBtn.textContent = 'Sending...';
         submitApplication(answers).then(function (res) {
@@ -624,7 +747,7 @@
 
   document.getElementById('consent').addEventListener('change', function (e) {
     answers.consent = e.target.checked;
-    validate();
+    recheck('consent');
   });
 
   ['fullName', 'phone', 'email'].forEach(function (id) {
@@ -632,7 +755,7 @@
       var key = id === 'fullName' ? 'name' : id;
       answers[key] = e.target.value.trim() ? e.target.value.trim() : null;
       updatePanel();
-      validate();
+      recheck(key);
     });
   });
 })();
