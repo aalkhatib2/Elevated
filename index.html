@@ -258,7 +258,8 @@
   .partner:hover { background: var(--bg-2); }
   .partner img { max-height: 58px; width: auto; filter: grayscale(1) brightness(1.6); opacity: .6; transition: filter .35s var(--ease), opacity .35s var(--ease); }
   .partner:hover img, .partner:focus-visible img { filter: none; opacity: 1; }
-  .partner-cta { grid-column: span 2; flex-direction: column; align-items: flex-start; justify-content: center; gap: 8px; background: var(--bg-2); }
+  /* Five logos: the CTA takes the rest of the last row (3 of 4 columns, then 1 of 2). */
+  .partner-cta { grid-column: span 3; flex-direction: column; align-items: flex-start; justify-content: center; gap: 8px; background: var(--bg-2); }
   .partner-cta b { font-family: var(--head); font-weight: 600; font-size: 18px; letter-spacing: 0.06em; text-transform: uppercase; }
   .partner-cta span { font-size: 15px; color: var(--accent); overflow-wrap: anywhere; }
   .partner-cta:hover { background: var(--bg-3); }
@@ -352,6 +353,7 @@
     .div-row { grid-template-columns: 60px 1fr auto; }
     .div-row p { grid-column: 2 / 4; grid-row: 2; }
     .partners { grid-template-columns: repeat(2, 1fr); }
+    .partner-cta { grid-column: span 1; }
   }
   @media (max-width: 860px) {
     .nav-links { display: none; }
@@ -380,7 +382,6 @@
     .partners { grid-template-columns: 1fr 1fr; }
     .partner { min-height: 110px; padding: 22px; }
     .partner img { max-height: 42px; }
-    .partner-cta { grid-column: 1 / -1; }
     .closing .btn { width: 100%; max-width: 360px; }
     .footer-nav { gap: 6px 12px; }
     .footer-nav a { padding: 8px 10px; }
@@ -434,7 +435,7 @@
       </div>
     </div>
     <div class="hero-foot">
-      <div><span class="dot" aria-hidden="true"></span>Three divisions hiring</div>
+      <div><span class="dot" aria-hidden="true"></span>Two divisions hiring</div>
       <div>Four ranks to partner</div>
       <div>Based in Tampa, Florida</div>
     </div>
@@ -495,9 +496,9 @@
       <div class="sec-head reveal">
         <div>
           <p class="kicker">Divisions</p>
-          <h2 id="divTitle">Three ways in</h2>
+          <h2 id="divTitle">Two ways in</h2>
         </div>
-        <p class="aside">Three live campaigns, each with its own route to the top. Pick the one that fits how you sell.</p>
+        <p class="aside">Two live campaigns, each with its own route to the top. Pick the one that fits how you sell.</p>
       </div>
 
       <div class="divs">
@@ -517,15 +518,6 @@
             <p class="div-status"><span class="dot" aria-hidden="true"></span>Live and hiring</p>
           </div>
           <p>Closing high-ticket peptide packages, fully remote with residual income. B2C and B2B.</p>
-          <a href="apply.html" class="btn">Join the Team <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
-        </article>
-        <article class="div-row reveal">
-          <span class="div-num">03</span>
-          <div>
-            <h3>Life Insurance</h3>
-            <p class="div-status"><span class="dot" aria-hidden="true"></span>Live and hiring</p>
-          </div>
-          <p>Remote sales for licensed producers. Active territories, taking reps now.</p>
           <a href="apply.html" class="btn">Join the Team <svg class="arrow" viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" aria-hidden="true"><path d="M2 8h11M9 4l4 4-4 4"/></svg></a>
         </article>
       </div>
@@ -580,13 +572,12 @@
       <div class="partners reveal">
         <a class="partner" href="https://www.t-mobile.com/" target="_blank" rel="noopener"><img src="partner-tmobile.png" alt="T-Mobile" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
         <a class="partner" href="https://telehealth.micom.ai/" target="_blank" rel="noopener"><img src="partner-achilles.png" alt="Achilles Peptides" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
-        <a class="partner" href="https://equityinsurancepartners.com/" target="_blank" rel="noopener"><img src="partner-equity-insurance.png" alt="Equity Insurance Partners" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
         <a class="partner" href="https://www.motorsportautoglass.com/" target="_blank" rel="noopener"><img src="partner-motorsport-autoglass.png" alt="Motorsport Autoglass" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
         <a class="partner" href="https://citrusglencapital.com/" target="_blank" rel="noopener"><img src="partner-citrus-glen.png" alt="Citrus Glen Capital" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
         <a class="partner" href="https://fatrat.ai/" target="_blank" rel="noopener"><img src="partner-fatrat.png" alt="FatRat" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
         <a class="partner partner-cta" href="mailto:partners@joinelevated.net">
           <b>Working with us?</b>
-          <span>partners@joinelevated.net</span>
+          <span>partners@<wbr>joinelevated.net</span>
         </a>
       </div>
     </div>

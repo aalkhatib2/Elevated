@@ -770,6 +770,17 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   .lede a { text-decoration: underline; text-underline-offset: 3px; }
   #submitError[hidden] { display: none; }
 
+  /* ---- inline errors ----
+     Continue is never disabled: pressing it with something missing or wrong
+     puts a message under each problem and focuses the first one. The message
+     is the cue, so the red is backed by text, not carried by colour alone. */
+  .field-error { margin-top: 10px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.04em; line-height: 1.5; color: #C97B7B; }
+  .field-error[hidden] { display: none; }
+  .field input[aria-invalid="true"] { border-color: #C97B7B; }
+  .field input[aria-invalid="true"]:focus { outline-color: #C97B7B; border-color: #C97B7B; }
+  .choices + .field-error, .slots + .field-error { margin-top: 14px; }
+  .consent + .field-error { margin-top: 12px; padding-left: 34px; }
+
   .confirm { max-width: 700px; }
   .confirm h2 { font-size: clamp(34px, 5vw, 64px); }
   .receipt { margin-top: 40px; border: 1px solid var(--line); }
@@ -834,17 +845,20 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
           <div class="field">
             <label class="mono-label" for="fullName">Full name</label>
             <input id="fullName" type="text" required placeholder="e.g. Jordan Reyes" autocomplete="name">
+            <p class="field-error" id="fullNameErr" hidden></p>
           </div>
           <div class="field">
             <label class="mono-label" for="phone">Phone number</label>
             <input id="phone" type="tel" required placeholder="e.g. (801) 555-0142" autocomplete="tel">
+            <p class="field-error" id="phoneErr" hidden></p>
           </div>
           <div class="field">
             <label class="mono-label" for="email">Email</label>
             <input id="email" type="email" required placeholder="e.g. jordan@email.com" autocomplete="email">
+            <p class="field-error" id="emailErr" hidden></p>
           </div>
           <div class="actions">
-            <button class="btn btn-primary" data-next="" disabled="">Continue</button>
+            <button class="btn btn-primary" data-next="">Continue</button>
           </div>
         </section>
 
@@ -870,8 +884,9 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
               <span class="cs">No sales history. Everyone starts at EL regardless.</span>
             </button>
           </div>
+          <p class="field-error" id="expErr" hidden></p>
           <div class="actions">
-            <button class="btn btn-primary" data-next="" disabled="">Continue</button>
+            <button class="btn btn-primary" data-next="">Continue</button>
             <button class="back" data-back="">Back</button>
           </div>
         </section>
@@ -890,13 +905,10 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
               <span class="ct">Virtual High Ticket <span class="tag live" style="margin-left:10px"><span class="dot" aria-hidden="true"></span>Live and hiring</span></span>
               <span class="cs">Closing high-ticket wellness solutions, fully remote.</span>
             </button>
-            <button class="choice" data-q="camp" data-val="Life Insurance" aria-pressed="false">
-              <span class="ct">Life Insurance <span class="tag live" style="margin-left:10px"><span class="dot" aria-hidden="true"></span>Live and hiring</span></span>
-              <span class="cs">Remote sales for licensed producers.</span>
-            </button>
           </div>
+          <p class="field-error" id="campErr" hidden></p>
           <div class="actions">
-            <button class="btn btn-primary" data-next="" disabled="">Continue</button>
+            <button class="btn btn-primary" data-next="">Continue</button>
             <button class="back" data-back="">Back</button>
           </div>
         </section>
@@ -907,14 +919,17 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
           <h2 style="margin-top:18px" id="q4Title" tabindex="-1">Book the interview</h2>
           <p class="lede">Pick the day and time window that suit you and we will confirm the exact time with you. Twenty minutes, on video, with the person who runs the campaign.</p>
           <div class="slots" id="days" role="group" aria-label="Interview day"></div>
+          <p class="field-error" id="dayErr" hidden></p>
           <p class="mono-label" id="timesLabel" style="margin-top:28px;display:none">Pick a time on <span id="timesLabelDay"></span></p>
           <div class="slots" id="times" role="group" aria-labelledby="timesLabel" hidden></div>
+          <p class="field-error" id="timeErr" hidden></p>
           <label class="consent" for="consent">
             <input type="checkbox" id="consent" required>
             <span>I agree that Elevated may call, text or email me at the number and address I gave about this application and my interview. Message and data rates may apply; reply STOP to any text to opt out. I have read the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy<span class="sr-only"> (opens in a new tab)</span></a> and <a href="terms.html" target="_blank" rel="noopener">Terms of Use<span class="sr-only"> (opens in a new tab)</span></a>.</span>
           </label>
+          <p class="field-error" id="consentErr" hidden></p>
           <div class="actions">
-            <button class="btn btn-primary" data-next="" disabled="">Request Interview</button>
+            <button class="btn btn-primary" data-next="">Request Interview</button>
             <button class="back" data-back="">Back</button>
           </div>
           <p id="submitError" role="alert" hidden style="margin-top:16px;font-family:var(--mono);font-size:12px;letter-spacing:0.04em;color:#C97B7B"></p>
@@ -1077,11 +1092,79 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
     document.querySelectorAll('#campaignChoices .choice .rec').forEach(function (old) { old.remove(); });
   }
 
-  function validate() {
-    var btn = document.querySelector('.step[data-step="' + current + '"] [data-next]');
-    if (!btn) return;
-    var rules = { 1: !!(answers.name && answers.phone && answers.email), 2: !!answers.exp, 3: !!answers.camp, 4: !!(answers.day && answers.time && answers.consent) };
-    btn.disabled = !rules[current];
+  // ---- validation ----
+  // Continue stays enabled. Pressing it checks the step; each problem gets a
+  // message under its field (aria-invalid + aria-describedby) and focus goes
+  // to the first one, so keyboard and screen-reader users hear what to fix.
+  function validEmail(v) { return /^[^\s@]+@[^\s@]+\.[^\s@]{2,}$/.test(v); }
+  function validPhone(v) {
+    // US numbers: 10 digits, optionally a leading 1, any spaces or punctuation.
+    if (!/^[\d\s().+\-]+$/.test(v)) return false;
+    var d = v.replace(/\D/g, '');
+    return d.length === 10 || (d.length === 11 && d.charAt(0) === '1');
+  }
+
+  // key -> the element that is invalid (and takes focus), and its message
+  var TARGETS = {
+    name: ['#fullName', '#fullNameErr'], phone: ['#phone', '#phoneErr'], email: ['#email', '#emailErr'],
+    exp: ['.step[data-step="2"] .choices', '#expErr'], camp: ['#campaignChoices', '#campErr'],
+    day: ['#days', '#dayErr'], time: ['#times', '#timeErr'], consent: ['#consent', '#consentErr']
+  };
+  function target(key) {
+    return { el: document.querySelector(TARGETS[key][0]), msg: document.querySelector(TARGETS[key][1]) };
+  }
+
+  var STEP_KEYS = { 1: ['name', 'phone', 'email'], 2: ['exp'], 3: ['camp'], 4: ['day', 'time', 'consent'] };
+
+  function problem(key) {
+    switch (key) {
+      case 'name': return answers.name ? '' : 'Enter your full name.';
+      case 'phone': return !answers.phone ? 'Enter your phone number.'
+        : validPhone(answers.phone) ? '' : 'Enter a 10-digit US phone number, like (801) 555-0142.';
+      case 'email': return !answers.email ? 'Enter your email address.'
+        : validEmail(answers.email) ? '' : 'Enter an email address like jordan@email.com.';
+      case 'exp': return answers.exp ? '' : 'Pick the option closest to your sales experience.';
+      case 'camp': return answers.camp ? '' : 'Pick a campaign.';
+      case 'day': return answers.day ? '' : 'Pick a day for your interview.';
+      case 'time': return !answers.day || answers.time ? '' : 'Pick a time window.';
+      case 'consent': return answers.consent ? '' : 'Tick this box to agree to be contacted. We cannot book your interview without it.';
+    }
+    return '';
+  }
+
+  function setError(key, message) {
+    var t = target(key);
+    if (!t.el || !t.msg) return;
+    // aria-invalid only where ARIA allows it (inputs and the checkbox); a
+    // choice group carries the message as a description on its buttons.
+    var input = t.el.tagName === 'INPUT';
+    var described = input ? [t.el] : [t.el].concat(Array.prototype.slice.call(t.el.querySelectorAll('button')));
+    t.msg.textContent = message;
+    t.msg.hidden = !message;
+    if (input) { if (message) t.el.setAttribute('aria-invalid', 'true'); else t.el.removeAttribute('aria-invalid'); }
+    described.forEach(function (el) {
+      if (message) el.setAttribute('aria-describedby', t.msg.id); else el.removeAttribute('aria-describedby');
+    });
+  }
+
+  // Once a message is showing, it clears as soon as the answer is fixed.
+  function recheck(key) {
+    if (!target(key).msg.hidden && !problem(key)) setError(key, '');
+  }
+
+  // Marks every problem on step n and focuses the first. True when the step is complete.
+  function checkStep(n) {
+    var first = null;
+    (STEP_KEYS[n] || []).forEach(function (key) {
+      var msg = problem(key);
+      setError(key, msg);
+      if (msg && !first) first = key;
+    });
+    if (!first) return true;
+    var t = target(first);
+    var focusEl = t.el.tagName === 'INPUT' ? t.el : (t.el.querySelector('[aria-pressed="true"]') || t.el.querySelector('button'));
+    if (focusEl) focusEl.focus();
+    return false;
   }
 
   function show(n) {
@@ -1108,7 +1191,6 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
         document.querySelector('[data-fill="' + k + '"]').textContent = fills[k];
       });
     }
-    validate();
     window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
 
     // The button that was just pressed is now inside a hidden step, so focus
@@ -1146,12 +1228,17 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
       }
 
       updatePanel();
-      validate();
+      recheck(q);
+      if (q === 'day') recheck('time');
       return;
     }
     if (e.target.closest('[data-next]')) {
       var nextBtn = e.target.closest('[data-next]');
+      if (nextBtn.disabled) return;   // already sending
+      if (!checkStep(current)) return;
       if (current === 4) {
+        // Never send without contact consent, whatever else passed.
+        if (!answers.consent) return;
         var err = document.getElementById('submitError');
         if (err) { err.hidden = true; err.textContent = ''; }
         nextBtn.disabled = true;
@@ -1170,7 +1257,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
 
   document.getElementById('consent').addEventListener('change', function (e) {
     answers.consent = e.target.checked;
-    validate();
+    recheck('consent');
   });
 
   ['fullName', 'phone', 'email'].forEach(function (id) {
@@ -1178,7 +1265,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
       var key = id === 'fullName' ? 'name' : id;
       answers[key] = e.target.value.trim() ? e.target.value.trim() : null;
       updatePanel();
-      validate();
+      recheck(key);
     });
   });
 })();

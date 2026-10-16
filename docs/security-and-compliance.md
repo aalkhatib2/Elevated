@@ -38,9 +38,10 @@ These cannot be done from the code. Each is a real exposure until it is done.
      claim; make sure reps never make health claims.
 4. **Fix site copy that no longer matches the business** (memory of
    2026-10-05: divisions are Fiber, Virtual High Ticket, Wireless):
-   - The landing page and the apply form still list **Life Insurance** as a
-     live, hiring division. Advertising a role that does not exist is a
-     misrepresentation risk.
+   - DONE 2026-10-16: **Life Insurance** removed from the landing page and
+     the apply form (it is no longer a division), along with the Equity
+     Insurance Partners logo that backed it. Wireless is not on the site yet;
+     it needs copy from the owner.
    - The Fiber card says "Fiber, solar, alarms, pest, autoglass"; the apply
      form says "Verizon fiber contracts", while the partner wall shows
      T-Mobile and the sales bot reads T-Mobile (`TMO…`) orders. Name only the
