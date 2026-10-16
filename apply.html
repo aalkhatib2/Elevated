@@ -44,7 +44,7 @@
   --text:#EDEEF0;          /* body default */
   --text-2:#A7ADB6;        /* lede + supporting paragraphs */
   --text-3:#C6CBD3;        /* lede when it sits on photography */
-  --muted:#767D87;         /* eyebrows, mono labels, footer, placeholders */
+  --muted:#7D848E;         /* eyebrows, mono labels, footer, placeholders. Was #767D87, which fell to 4.3:1 on --bg-3 (WCAG AA needs 4.5) */
 
   /* --- the single accent --- */
   --steel:#9DB6CE;         /* used identically in every section, never tinted */
@@ -326,7 +326,7 @@ a:hover{color:var(--steel)}
   --text:#EDEEF0;          /* body default */
   --text-2:#A7ADB6;        /* lede + supporting paragraphs */
   --text-3:#C6CBD3;        /* lede when it sits on photography */
-  --muted:#767D87;         /* eyebrows, mono labels, footer, placeholders */
+  --muted:#7D848E;         /* eyebrows, mono labels, footer, placeholders. Was #767D87, which fell to 4.3:1 on --bg-3 (WCAG AA needs 4.5) */
 
   /* --- the single accent --- */
   --steel:#9DB6CE;         /* used identically in every section, never tinted */
@@ -637,13 +637,23 @@ header { position: sticky; top: 0; z-index: 50; background: var(--header-fill); 
 
 footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 var(--footer-y-bottom); }
 .foot { display: flex; justify-content: space-between; align-items: center; gap: 20px; flex-wrap: wrap; }
-.foot-links { display: flex; gap: 24px; }
+.foot-links { display: flex; flex-wrap: wrap; gap: 12px 24px; }
 .foot-links a { font-family: var(--mono); font-size: var(--size-label-sm); letter-spacing: var(--track-foot); text-transform: uppercase; color: var(--muted); transition: color .2s; }
 .foot-links a:hover { color: var(--text); }
 .foot-note { flex-basis: 100%; letter-spacing: 0.04em; text-transform: none; }
 .foot p { font-family: var(--mono); font-size: var(--size-label-xs); letter-spacing: var(--track-foot); color: var(--muted); }
 </style>
 <style>
+  /* ---- accessibility furniture ---- */
+  :root { --input-line: rgba(255,255,255,0.36); }   /* 3.3:1 on --bg-2: a field's edge has to be seen (WCAG 1.4.11) */
+  :focus-visible { outline: 2px solid var(--steel); outline-offset: 3px; }
+  .sr-only { position: absolute; width: 1px; height: 1px; margin: -1px; padding: 0; border: 0; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .skip { position: absolute; z-index: 100; top: 12px; left: 12px; transform: translateY(-200%); background: var(--white); color: var(--bg); padding: 12px 18px; font-family: var(--mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .skip:focus { transform: none; color: var(--bg); }
+  /* Step headings take focus when a step opens, so keyboard and screen-reader users land on
+     the new question. They are not controls, so no ring. */
+  .step h2:focus, main:focus { outline: none; }
+
   .shell { padding: 56px 0 100px; }
   .apply-grid { display: grid; grid-template-columns: 1fr 400px; gap: 64px; align-items: start; }
 
@@ -710,11 +720,11 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   .field { margin-top: 34px; max-width: 460px; }
   .field label { display: block; }
   .field input {
-    width: 100%; margin-top: 12px; background: var(--bg-2); border: 1px solid var(--line);
+    width: 100%; margin-top: 12px; background: var(--bg-2); border: 1px solid var(--input-line);
     color: var(--text); padding: 16px 18px; font-family: var(--body); font-size: 17px; border-radius: 0;
     transition: border-color .2s;
   }
-  .field input:focus { outline: none; border-color: var(--steel); }
+  .field input:focus { outline: 1px solid var(--steel); outline-offset: -2px; border-color: var(--steel); }
   .field input::placeholder { color: var(--muted); }
 
   /* ---- contact consent ---- */
@@ -737,12 +747,14 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   #times { grid-template-columns: repeat(4, 1fr); max-width: 620px; }
 
   .actions { margin-top: 46px; display: flex; gap: 14px; align-items: center; flex-wrap: wrap; }
-  .back { font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); cursor: pointer; background: none; border: none; }
+  .back { min-height: 44px; padding: 0 10px; font-family: var(--mono); font-size: 11px; letter-spacing: 0.16em; text-transform: uppercase; color: var(--muted); cursor: pointer; background: none; border: none; }
   .back:hover { color: var(--text); }
 
   /* ---- live match panel ---- */
   .match { position: sticky; top: 96px; }
-  .match-inner { background: var(--bg-2); border: 1px solid var(--line-soft); padding: 28px; }
+  /* max-width, not a fixed width: a hard 370px overflowed (and was clipped on) 320px phones. */
+  .match-inner { max-width: 370px; background: var(--bg-2); border: 1px solid var(--line-soft); padding: 28px; }
+  @media (min-width: 1001px) { .match-inner { min-height: 584px; } }
   .match-head { display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid var(--line-soft); padding-bottom: 16px; }
   .match-row { padding: 16px 0; border-bottom: 1px solid var(--line-soft); }
   .match-row:last-of-type { border-bottom: none; }
@@ -754,6 +766,10 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   .match-verdict p { margin-top: 8px; font-size: 14px; color: var(--text-2); line-height: 1.55; }
 
   /* ---- confirmation ---- */
+  /* Links inside running copy need more than a hue shift: steel on --text-2 is barely different. */
+  .lede a { text-decoration: underline; text-underline-offset: 3px; }
+  #submitError[hidden] { display: none; }
+
   .confirm { max-width: 700px; }
   .confirm h2 { font-size: clamp(34px, 5vw, 64px); }
   .receipt { margin-top: 40px; border: 1px solid var(--line); }
@@ -777,7 +793,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
 </head>
 <body>
 
-
+<a class="skip" href="#main">Skip to the application</a>
 
 <div class="proto-flag">
 </div>
@@ -793,16 +809,17 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   </div>
 </header>
 
-<main class="shell">
+<main class="shell" id="main">
   <div class="wrap">
+    <h1 class="sr-only">Apply to Elevated</h1>
     <div class="apply-grid">
       <div>
-        <div class="rail" id="rail" data-reveal>
+        <div class="rail" id="rail" data-reveal role="list" aria-label="Application progress">
           <span class="rail-fill" aria-hidden="true"></span>
-          <div class="rail-step active" data-s="1"><div class="n">01</div><div class="t">Information</div></div>
-          <div class="rail-step" data-s="2"><div class="n">02</div><div class="t">Experience</div></div>
-          <div class="rail-step" data-s="3"><div class="n">03</div><div class="t">Campaign</div></div>
-          <div class="rail-step" data-s="4"><div class="n">04</div><div class="t">Interview</div></div>
+          <div class="rail-step active" data-s="1" role="listitem" aria-current="step"><div class="n">01</div><div class="t">Information</div></div>
+          <div class="rail-step" data-s="2" role="listitem"><div class="n">02</div><div class="t">Experience</div></div>
+          <div class="rail-step" data-s="3" role="listitem"><div class="n">03</div><div class="t">Campaign</div></div>
+          <div class="rail-step" data-s="4" role="listitem"><div class="n">04</div><div class="t">Interview</div></div>
         </div>
 
         <!-- The five steps share a host element so motion.js can tween its
@@ -812,19 +829,19 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
         <!-- STEP 1 -->
         <section class="step on" data-step="1">
           <p class="eyebrow">Question one of four</p>
-          <h2 style="margin-top:18px">APPLY</h2>
+          <h2 style="margin-top:18px" id="q1Title" tabindex="-1">APPLY</h2>
           <p class="lede" style="font-family:Times New Roman">Contact Info</p>
           <div class="field">
             <label class="mono-label" for="fullName">Full name</label>
-            <input id="fullName" type="text" placeholder="e.g. Jordan Reyes" autocomplete="name">
+            <input id="fullName" type="text" required placeholder="e.g. Jordan Reyes" autocomplete="name">
           </div>
           <div class="field">
             <label class="mono-label" for="phone">Phone number</label>
-            <input id="phone" type="tel" placeholder="e.g. (801) 555-0142" autocomplete="tel">
+            <input id="phone" type="tel" required placeholder="e.g. (801) 555-0142" autocomplete="tel">
           </div>
           <div class="field">
             <label class="mono-label" for="email">Email</label>
-            <input id="email" type="email" placeholder="e.g. jordan@email.com" autocomplete="email">
+            <input id="email" type="email" required placeholder="e.g. jordan@email.com" autocomplete="email">
           </div>
           <div class="actions">
             <button class="btn btn-primary" data-next="" disabled="">Continue</button>
@@ -834,8 +851,8 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
         <!-- STEP 2 -->
         <section class="step" data-step="2">
           <p class="eyebrow">Question two of four</p>
-          <h2 style="margin-top:18px">What have you sold?</h2>
-          <div class="choices" role="group">
+          <h2 style="margin-top:18px" id="q2Title" tabindex="-1">What have you sold?</h2>
+          <div class="choices" role="group" aria-labelledby="q2Title">
             <button class="choice" data-q="exp" data-val="Door to door" aria-pressed="false">
               <span class="ct">Door to door</span>
               <span class="cs">Fiber, solar, alarms, pest, roofing — anything on a doorstep.</span>
@@ -862,19 +879,19 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
         <!-- STEP 3 -->
         <section class="step" data-step="3">
           <p class="eyebrow">Question three of four</p>
-          <h2 style="margin-top:18px">Which campaign?</h2>
+          <h2 style="margin-top:18px" id="q3Title" tabindex="-1">Which campaign?</h2>
           <p class="lede" style="font-family:Times New Roman;font-size:27px">Your Future Starts Here</p>
-          <div class="choices" id="campaignChoices" style="grid-template-columns:1fr">
+          <div class="choices" id="campaignChoices" role="group" aria-labelledby="q3Title" style="grid-template-columns:1fr">
             <button class="choice" data-q="camp" data-val="Fiber" aria-pressed="false">
-              <span class="ct">Fiber <span class="tag live" style="margin-left:10px"><span class="dot"></span>Live and hiring</span></span>
+              <span class="ct">Fiber <span class="tag live" style="margin-left:10px"><span class="dot" aria-hidden="true"></span>Live and hiring</span></span>
               <span class="cs">Verizon fiber contracts, door to door. Active territories.</span>
             </button>
             <button class="choice" data-q="camp" data-val="Virtual High Ticket" aria-pressed="false">
-              <span class="ct">Virtual High Ticket <span class="tag live" style="margin-left:10px"><span class="dot"></span>Live and hiring</span></span>
+              <span class="ct">Virtual High Ticket <span class="tag live" style="margin-left:10px"><span class="dot" aria-hidden="true"></span>Live and hiring</span></span>
               <span class="cs">Closing high-ticket wellness solutions, fully remote.</span>
             </button>
             <button class="choice" data-q="camp" data-val="Life Insurance" aria-pressed="false">
-              <span class="ct">Life Insurance <span class="tag live" style="margin-left:10px"><span class="dot"></span>Live and hiring</span></span>
+              <span class="ct">Life Insurance <span class="tag live" style="margin-left:10px"><span class="dot" aria-hidden="true"></span>Live and hiring</span></span>
               <span class="cs">Remote sales for licensed producers.</span>
             </button>
           </div>
@@ -887,32 +904,32 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
         <!-- STEP 4 -->
         <section class="step" data-step="4">
           <p class="eyebrow">Question four of four</p>
-          <h2 style="margin-top:18px">Book the interview</h2>
+          <h2 style="margin-top:18px" id="q4Title" tabindex="-1">Book the interview</h2>
           <p class="lede">Pick the day and time window that suit you and we will confirm the exact time with you. Twenty minutes, on video, with the person who runs the campaign.</p>
-          <div class="slots" id="days"></div>
+          <div class="slots" id="days" role="group" aria-label="Interview day"></div>
           <p class="mono-label" id="timesLabel" style="margin-top:28px;display:none">Pick a time on <span id="timesLabelDay"></span></p>
-          <div class="slots" id="times" hidden></div>
+          <div class="slots" id="times" role="group" aria-labelledby="timesLabel" hidden></div>
           <label class="consent" for="consent">
-            <input type="checkbox" id="consent">
-            <span>I agree that Elevated may call, text or email me at the number and address I gave about this application and my interview. Message and data rates may apply; reply STOP to any text to opt out. I have read the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy</a> and <a href="terms.html" target="_blank" rel="noopener">Terms of Use</a>.</span>
+            <input type="checkbox" id="consent" required>
+            <span>I agree that Elevated may call, text or email me at the number and address I gave about this application and my interview. Message and data rates may apply; reply STOP to any text to opt out. I have read the <a href="privacy.html" target="_blank" rel="noopener">Privacy Policy<span class="sr-only"> (opens in a new tab)</span></a> and <a href="terms.html" target="_blank" rel="noopener">Terms of Use<span class="sr-only"> (opens in a new tab)</span></a>.</span>
           </label>
           <div class="actions">
             <button class="btn btn-primary" data-next="" disabled="">Request Interview</button>
             <button class="back" data-back="">Back</button>
           </div>
-          <p id="submitError" style="display:none;margin-top:16px;font-family:var(--mono);font-size:12px;letter-spacing:0.04em;color:#C97B7B">Something went wrong sending your application. Please try again.</p>
+          <p id="submitError" role="alert" hidden style="margin-top:16px;font-family:var(--mono);font-size:12px;letter-spacing:0.04em;color:#C97B7B"></p>
         </section>
 
         <!-- DONE -->
         <section class="step confirm" data-step="5">
           <svg class="confirm-check" viewBox="0 0 46 46" aria-hidden="true"><path d="M9 24 L19 34 L37 13"/></svg>
           <p class="eyebrow">Received</p>
-          <h2 style="margin-top:18px">We have your application.</h2>
+          <h2 style="margin-top:18px" id="doneTitle" tabindex="-1">We have your application.</h2>
           <p class="lede">A recruiter will contact you by phone, text or email to confirm your interview time. To change anything, write to <a href="mailto:partners@joinelevated.net">partners@joinelevated.net</a>.</p>
           <div class="receipt">
             <div class="receipt-head">
               <span class="mono-label" style="color:var(--text-2)">Application received</span>
-              <span class="tag live"><span class="dot"></span>Request sent</span>
+              <span class="tag live"><span class="dot" aria-hidden="true"></span>Request sent</span>
             </div>
             <div class="receipt-row"><span class="k">Full name</span><span class="v" data-fill="name">—</span></div>
             <div class="receipt-row"><span class="k">Phone</span><span class="v" data-fill="phone">—</span></div>
@@ -930,8 +947,8 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
       </div>
 
       <!-- MATCH PANEL -->
-      <aside class="match" data-reveal>
-        <div class="match-inner" style="width:370px;height:584px">
+      <aside class="match" data-reveal aria-label="Your profile so far">
+        <div class="match-inner">
           <div class="match-head">
             <span class="mono-label">Your PROFILE</span>
           </div>
@@ -995,13 +1012,20 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
   function showSubmitError(btn) {
     btn.disabled = false;
     btn.textContent = 'Request Interview';
+    // Disabling the focused button dropped focus to the page; put it back so
+    // a keyboard user can retry straight away.
+    btn.focus();
     var err = document.getElementById('submitError');
     if (err) {
-      err.style.display = 'block';
+      // role="alert": shown first, then filled, so screen readers announce it.
+      err.hidden = false;
+      err.textContent = 'Something went wrong sending your application. Please try again.';
       // A submission failure that simply appears is easy to scroll past.
       if (window.ElevatedMotion) window.ElevatedMotion.error(err);
     }
   }
+
+  var reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
   function recommend() {
     if (answers.exp === 'Virtual Sales') return 'Virtual High Ticket';
@@ -1067,6 +1091,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
       var i = +r.dataset.s;
       r.classList.toggle('active', i === n);
       r.classList.toggle('done', i < n);
+      if (i === n) r.setAttribute('aria-current', 'step'); else r.removeAttribute('aria-current');
     });
     if (n === 3) markRecommended();
     if (n === 4) buildSlots();
@@ -1084,7 +1109,14 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
       });
     }
     validate();
-    window.scrollTo({ top: 0, behavior: 'smooth' });
+    window.scrollTo({ top: 0, behavior: reduceMotion ? 'auto' : 'smooth' });
+
+    // The button that was just pressed is now inside a hidden step, so focus
+    // would fall back to the top of the page. Move it to the new step's
+    // heading instead: keyboard users carry on from there, and screen readers
+    // read out the next question.
+    var heading = document.querySelector('.step[data-step="' + n + '"] h2');
+    if (heading) heading.focus({ preventScroll: true });
 
     // Hand the finished state change to the motion engine, which animates
     // the incoming step, tweens the host height so the card stops snapping
@@ -1121,7 +1153,7 @@ footer { border-top: 1px solid var(--line-soft); padding: var(--footer-y-top) 0 
       var nextBtn = e.target.closest('[data-next]');
       if (current === 4) {
         var err = document.getElementById('submitError');
-        if (err) err.style.display = 'none';
+        if (err) { err.hidden = true; err.textContent = ''; }
         nextBtn.disabled = true;
         nextBtn.textContent = 'Sending...';
         submitApplication(answers).then(function (res) {

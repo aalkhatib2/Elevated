@@ -57,6 +57,9 @@
   .wrap { max-width: var(--wrap); margin: 0 auto; padding: 0 var(--pad); }
   .sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
   :focus-visible { outline: 2px solid var(--accent); outline-offset: 3px; }
+  /* Skip link: off-screen until it takes keyboard focus, then pinned above the fixed header. */
+  .skip { position: fixed; z-index: 100; top: 12px; left: 12px; transform: translateY(-200%); background: var(--text); color: var(--bg); padding: 12px 18px; font-family: var(--label); font-weight: 600; font-size: 14px; letter-spacing: 0.12em; text-transform: uppercase; }
+  .skip:focus { transform: none; }
 
   .kicker {
     display: inline-flex; align-items: center; gap: 12px;
@@ -390,6 +393,8 @@
 </head>
 <body>
 
+<a class="skip" href="#top">Skip to content</a>
+
 <header id="top-bar">
   <nav class="nav wrap" aria-label="Main">
     <a href="#top" class="nav-logo" aria-label="Elevated home"><img src="elevated-logo.webp" alt="Elevated" width="549" height="715"></a>
@@ -573,12 +578,12 @@
         <p class="aside">The companies behind our campaigns.</p>
       </div>
       <div class="partners reveal">
-        <a class="partner" href="https://www.t-mobile.com/" target="_blank" rel="noopener"><img src="partner-tmobile.png" alt="T-Mobile" loading="lazy"></a>
-        <a class="partner" href="https://telehealth.micom.ai/" target="_blank" rel="noopener"><img src="partner-achilles.png" alt="Achilles Peptides" loading="lazy"></a>
-        <a class="partner" href="https://equityinsurancepartners.com/" target="_blank" rel="noopener"><img src="partner-equity-insurance.png" alt="Equity Insurance Partners" loading="lazy"></a>
-        <a class="partner" href="https://www.motorsportautoglass.com/" target="_blank" rel="noopener"><img src="partner-motorsport-autoglass.png" alt="Motorsport Autoglass" loading="lazy"></a>
-        <a class="partner" href="https://citrusglencapital.com/" target="_blank" rel="noopener"><img src="partner-citrus-glen.png" alt="Citrus Glen Capital" loading="lazy"></a>
-        <a class="partner" href="https://fatrat.ai/" target="_blank" rel="noopener"><img src="partner-fatrat.png" alt="FatRat" loading="lazy"></a>
+        <a class="partner" href="https://www.t-mobile.com/" target="_blank" rel="noopener"><img src="partner-tmobile.png" alt="T-Mobile" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
+        <a class="partner" href="https://telehealth.micom.ai/" target="_blank" rel="noopener"><img src="partner-achilles.png" alt="Achilles Peptides" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
+        <a class="partner" href="https://equityinsurancepartners.com/" target="_blank" rel="noopener"><img src="partner-equity-insurance.png" alt="Equity Insurance Partners" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
+        <a class="partner" href="https://www.motorsportautoglass.com/" target="_blank" rel="noopener"><img src="partner-motorsport-autoglass.png" alt="Motorsport Autoglass" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
+        <a class="partner" href="https://citrusglencapital.com/" target="_blank" rel="noopener"><img src="partner-citrus-glen.png" alt="Citrus Glen Capital" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
+        <a class="partner" href="https://fatrat.ai/" target="_blank" rel="noopener"><img src="partner-fatrat.png" alt="FatRat" loading="lazy"><span class="sr-only"> (opens in a new tab)</span></a>
         <a class="partner partner-cta" href="mailto:partners@joinelevated.net">
           <b>Working with us?</b>
           <span>partners@joinelevated.net</span>
@@ -651,7 +656,14 @@
     }
     btn.addEventListener('click', function () { setMenu(btn.getAttribute('aria-expanded') !== 'true'); });
     menu.addEventListener('click', function (e) { if (e.target.closest('a')) setMenu(false); });
-    document.addEventListener('keydown', function (e) { if (e.key === 'Escape') setMenu(false); });
+    // Escape closes it, and if focus was inside the menu it goes back to the button rather than
+    // being stranded on a link that just disappeared.
+    document.addEventListener('keydown', function (e) {
+      if (e.key !== 'Escape' || btn.getAttribute('aria-expanded') !== 'true') return;
+      var inMenu = menu.contains(document.activeElement);
+      setMenu(false);
+      if (inMenu) btn.focus();
+    });
 
     // reveals
     var els = document.querySelectorAll('.reveal');

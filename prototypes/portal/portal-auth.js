@@ -176,8 +176,10 @@
     var el = document.createElement('p');
     el.className = 'toast';
     el.setAttribute('role', 'status');
-    el.textContent = message;
     document.body.appendChild(el);
+    // A live region that arrives already filled is often not read out; add
+    // it empty, then fill it a frame later so screen readers announce it.
+    setTimeout(function () { el.textContent = message; }, 50);
     setTimeout(function () { el.classList.add('is-leaving'); }, 3200);
     setTimeout(function () { el.remove(); }, 3700);
   }

@@ -13,6 +13,8 @@
 </head>
 <body>
 
+<a class="skip" href="#main">Skip to content</a>
+
 <div class="app">
 
   <aside class="rail">
@@ -21,7 +23,7 @@
       <span class="rail-sub">Agent Portal</span>
     </a>
     <div class="rail-id">
-      <div class="rail-who"><span class="dot"></span><span data-field="fullName">&nbsp;</span></div>
+      <div class="rail-who"><span class="dot" aria-hidden="true"></span><span data-field="fullName">&nbsp;</span></div>
       <span class="rail-badge">Rep</span>
       <dl class="rail-kv">
         <dt>Team</dt><dd data-field="team">&mdash;</dd>
@@ -31,12 +33,12 @@
       </dl>
     </div>
     <nav class="rail-nav">
-      <a href="overview.html"><span class="sq"></span>Overview</a>
-      <a href="orders.html"><span class="sq"></span>Orders</a>
-      <a href="commission.html"><span class="sq"></span>Commission</a>
-      <a href="payroll.html"><span class="sq"></span>Payroll</a>
-      <a href="team.html" aria-current="page"><span class="sq"></span>My Team</a>
-      <a href="reps.html" data-owner-only hidden><span class="sq"></span>Reps</a>
+      <a href="overview.html"><span class="sq" aria-hidden="true"></span>Overview</a>
+      <a href="orders.html"><span class="sq" aria-hidden="true"></span>Orders</a>
+      <a href="commission.html"><span class="sq" aria-hidden="true"></span>Commission</a>
+      <a href="payroll.html"><span class="sq" aria-hidden="true"></span>Payroll</a>
+      <a href="team.html" aria-current="page"><span class="sq" aria-hidden="true"></span>My Team</a>
+      <a href="reps.html" data-owner-only hidden><span class="sq" aria-hidden="true"></span>Reps</a>
     </nav>
     <div class="rail-foot">
       <a href="account.html">Account</a>
@@ -44,7 +46,7 @@
     </div>
   </aside>
 
-  <div class="main">
+  <main class="main" id="main">
 
     <div class="topbar">
       <div>
@@ -65,7 +67,7 @@
 
       <div class="kpis">
         <article class="kpi" data-accent="info">
-          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Reps under you</span><span class="chev"></span></button>
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Reps under you</span><span class="chev" aria-hidden="true"></span></button>
           <div class="kpi-v" data-team="repsUnderYou">&mdash;</div>
           <div class="kpi-fold">
             <p class="kpi-sub"><span data-team="producing">&mdash;</span> producing &middot; <span data-team="onboarding">&mdash;</span> onboarding</p>
@@ -73,7 +75,7 @@
           </div>
         </article>
         <article class="kpi" data-accent="pos">
-          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Team installs</span><span class="chev"></span></button>
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Team installs</span><span class="chev" aria-hidden="true"></span></button>
           <div class="kpi-v" data-team="teamInstalls">&mdash;</div>
           <div class="kpi-fold">
             <p class="kpi-sub"><span data-team="rangeLabel">All time</span> &middot; does not include your own orders</p>
@@ -81,7 +83,7 @@
           </div>
         </article>
         <article class="kpi" data-accent="warn">
-          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Override earned</span><span class="chev"></span></button>
+          <button class="kpi-bar" type="button" aria-expanded="false"><span class="kpi-k">Override earned</span><span class="chev" aria-hidden="true"></span></button>
           <div class="kpi-v is-pending">Add figure</div>
           <div class="kpi-fold">
             <p class="kpi-sub">Waiting on a commission column in the Fiber Sales sheet</p>
@@ -99,7 +101,7 @@
       <section class="ppane on" data-pane="downline" style="margin-top:20px">
         <div class="tbl-wrap">
           <div class="tbl-tools">
-            <input class="tbl-search" type="search" placeholder="Search your downline" data-team-search="downline">
+            <input class="tbl-search" type="search" placeholder="Search your downline" aria-label="Search your downline" data-team-search="downline">
             <button class="chip" type="button" data-team-export="downline">Export CSV</button>
             <span class="tbl-count" data-team-count="downline">&hellip;</span>
           </div>
@@ -120,12 +122,12 @@
       <!-- ============ LEADERBOARD ============ -->
       <section class="ppane" data-pane="board" style="margin-top:20px">
         <div class="sec-label" style="margin-top:0">
-          <div class="t">Team standings</div>
+          <h2 class="t">Team standings</h2>
           <div class="d">Everyone on Elevated, ranked by orders in the range above. Same numbers everyone else sees.</div>
         </div>
         <div class="tbl-wrap">
           <div class="tbl-tools">
-            <input class="tbl-search" type="search" placeholder="Search reps" data-team-search="leaderboard">
+            <input class="tbl-search" type="search" placeholder="Search reps" aria-label="Search reps" data-team-search="leaderboard">
             <button class="chip" type="button" data-team-export="leaderboard">Export CSV</button>
             <span class="tbl-count" data-team-count="leaderboard">&hellip;</span>
           </div>
@@ -143,7 +145,7 @@
       </section>
 
     </div>
-  </div>
+  </main>
 </div>
 
 

@@ -113,7 +113,9 @@ test('public pages link the privacy policy, terms and disclosures', () => {
 
 test('apply form will not submit without contact consent', () => {
   const html = read('apply.html');
-  assert.match(html, /<input type="checkbox" id="consent">/);
+  const box = html.match(/<input type="checkbox" id="consent"[^>]*>/);
+  assert.ok(box, 'consent checkbox present');
+  assert.ok(!/checked/.test(box[0]), 'consent is never pre-ticked');
   assert.match(html, /4: !!\(answers\.day && answers\.time && answers\.consent\)/);
   assert.ok(!html.includes('EL-2026-0871'), 'no fake application number');
 });

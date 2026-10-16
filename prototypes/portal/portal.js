@@ -122,12 +122,39 @@
     });
   });
 
-  /* page-level tabs */
-  document.querySelectorAll('.ptabs').forEach(function (group) {
-    var tabs = group.querySelectorAll('button');
+  /* page-level tabs. Wired as an ARIA tab set: each tab names its panel and
+     each panel its tab, only the selected tab is in the Tab order, and the
+     arrow keys (plus Home/End) move between tabs. */
+  document.querySelectorAll('.ptabs').forEach(function (group, g) {
+    var tabs = Array.prototype.slice.call(group.querySelectorAll('button'));
+    tabs.forEach(function (tab) {
+      var pane = document.querySelector('.ppane[data-pane="' + tab.dataset.pane + '"]');
+      tab.id = tab.id || 'tab-' + g + '-' + tab.dataset.pane;
+      tab.tabIndex = tab.getAttribute('aria-selected') === 'true' ? 0 : -1;
+      if (pane) {
+        pane.id = pane.id || 'pane-' + g + '-' + tab.dataset.pane;
+        pane.setAttribute('role', 'tabpanel');
+        pane.setAttribute('aria-labelledby', tab.id);
+        tab.setAttribute('aria-controls', pane.id);
+      }
+    });
+    group.addEventListener('keydown', function (e) {
+      var i = tabs.indexOf(document.activeElement);
+      if (i < 0) return;
+      var to = e.key === 'ArrowRight' ? (i + 1) % tabs.length
+        : e.key === 'ArrowLeft' ? (i - 1 + tabs.length) % tabs.length
+        : e.key === 'Home' ? 0 : e.key === 'End' ? tabs.length - 1 : -1;
+      if (to < 0) return;
+      e.preventDefault();
+      tabs[to].focus();
+      tabs[to].click();
+    });
     tabs.forEach(function (tab) {
       tab.addEventListener('click', function () {
-        tabs.forEach(function (t) { t.setAttribute('aria-selected', String(t === tab)); });
+        tabs.forEach(function (t) {
+          t.setAttribute('aria-selected', String(t === tab));
+          t.tabIndex = t === tab ? 0 : -1;
+        });
         document.querySelectorAll('.ppane').forEach(function (p) {
           var on = p.dataset.pane === tab.dataset.pane;
           p.classList.toggle('on', on);

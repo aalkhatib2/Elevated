@@ -13,6 +13,8 @@
 </head>
 <body>
 
+<a class="skip" href="#main">Skip to content</a>
+
 <div class="app">
 
   <aside class="rail">
@@ -21,7 +23,7 @@
       <span class="rail-sub">Agent Portal</span>
     </a>
     <div class="rail-id">
-      <div class="rail-who"><span class="dot"></span><span data-field="fullName">&nbsp;</span></div>
+      <div class="rail-who"><span class="dot" aria-hidden="true"></span><span data-field="fullName">&nbsp;</span></div>
       <span class="rail-badge">Rep</span>
       <dl class="rail-kv">
         <dt>Team</dt><dd data-field="team">&mdash;</dd>
@@ -31,12 +33,12 @@
       </dl>
     </div>
     <nav class="rail-nav">
-      <a href="overview.html"><span class="sq"></span>Overview</a>
-      <a href="orders.html"><span class="sq"></span>Orders</a>
-      <a href="commission.html"><span class="sq"></span>Commission</a>
-      <a href="payroll.html" aria-current="page"><span class="sq"></span>Payroll</a>
-      <a href="team.html"><span class="sq"></span>My Team</a>
-      <a href="reps.html" data-owner-only hidden><span class="sq"></span>Reps</a>
+      <a href="overview.html"><span class="sq" aria-hidden="true"></span>Overview</a>
+      <a href="orders.html"><span class="sq" aria-hidden="true"></span>Orders</a>
+      <a href="commission.html"><span class="sq" aria-hidden="true"></span>Commission</a>
+      <a href="payroll.html" aria-current="page"><span class="sq" aria-hidden="true"></span>Payroll</a>
+      <a href="team.html"><span class="sq" aria-hidden="true"></span>My Team</a>
+      <a href="reps.html" data-owner-only hidden><span class="sq" aria-hidden="true"></span>Reps</a>
     </nav>
     <div class="rail-foot">
       <a href="account.html">Account</a>
@@ -44,7 +46,7 @@
     </div>
   </aside>
 
-  <div class="main">
+  <main class="main" id="main">
 
     <div class="topbar">
       <div>
@@ -95,7 +97,7 @@
       </section>
 
     </div>
-  </div>
+  </main>
 </div>
 
 <style>

@@ -358,6 +358,11 @@
         ease: 'power2.inOut',
         scrollTo: isJoin ? { y: 'max', autoKill: true } : { y: id, offsetY: 68, autoKill: true }
       });
+      /* preventDefault also cancels the browser moving focus to the target,
+         which is the whole point of a skip link. Do it here instead. */
+      var target = document.querySelector(id);
+      if (!target.matches('a[href], button, input, select, textarea, [tabindex]')) target.setAttribute('tabindex', '-1');
+      target.focus({ preventScroll: true });
     });
   }
 
