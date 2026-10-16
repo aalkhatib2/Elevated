@@ -26,7 +26,7 @@ shared motion script and the image assets.
   Postgres `reps` table, and a Google Sheets read pipeline for Orders
 
 Landing page sections, in order: sticky nav → hero → **The Ladder** (Your Growth,
-EL/STL/STC/JP) → **Campaigns** (Fiber, Virtual High Ticket) →
+EL/STL/STC/JP) → **Campaigns** (Fiber Sales, High-Ticket Virtual Sales) →
 **Our movement** (the 5 core values) → **Our Partners** → **Become Elevated**
 closing → footer.
 
